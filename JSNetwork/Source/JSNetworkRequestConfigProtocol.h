@@ -1,5 +1,5 @@
 //
-//  JSRequestProtocol.h
+//  JSNetworkRequestConfigProtocol.h
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/17.
@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JSNetworkPluginProtocol.h"
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
     JSRequestMethodGET = 0,
@@ -26,7 +27,7 @@ typedef NS_ENUM(NSInteger, JSResponseSerializerType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol JSRequestProtocol <NSObject>
+@protocol JSNetworkRequestConfigProtocol <NSObject>
 
 - (NSString *)baseUrl;
 
@@ -36,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)requestArgument;
 
+- (nullable id)requestBody;
+
 - (JSRequestMethod)requestMethod;
 
 - (JSRequestSerializerType)requestSerializerType;
@@ -44,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
+- (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
 
 @end
 

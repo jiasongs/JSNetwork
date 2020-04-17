@@ -7,16 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JSRequestProtocol.h"
-#import <AFNetworking.h>
+#import "JSNetworkRequestConfigProtocol.h"
+#import "JSNetworkRequestProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^JSRequestCompletionBlock)(void);
+typedef void (^JSRequestCompletionBlock)(id<JSNetworkRequestProtocol>);
 
 @interface JSNetworkProvider : NSObject
 
-+ (void)request:(id<JSRequestProtocol>)request complete:(JSRequestCompletionBlock)complete;
++ (void)requestConfig:(id<JSNetworkRequestConfigProtocol>)config complete:(JSRequestCompletionBlock)complete;
 
 @end
 

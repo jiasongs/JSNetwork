@@ -10,7 +10,7 @@
 
 @interface JSNetworkAgent ()
 
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, id<JSRequestProtocol>> *requestsRecord;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, id<JSNetworkRequestProtocol>> *requestsRecord;
 @property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
@@ -38,31 +38,75 @@
     return self;;
 }
 
-- (void)addRequest:(id<JSRequestProtocol>)request {
-    [request.requestTask resume];
+- (void)addRequest:(id<JSNetworkRequestProtocol>)request {
+    NSArray<id<JSNetworkPluginProtocol>> *plugins = [request.requestConfig requestPlugins];
+    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+        [plugin requestWillStart:request.requestConfig];
+    }
+    [request start];
+    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+        [plugin requestDidStart:request.requestConfig];
+    }
+    [request requestCompleteFilter:^{
+        for (id<JSNetworkPluginProtocol> plugin in plugins) {
+            [plugin requestWillStop:request.requestConfig];
+        }
+        /// 移除
+        for (id<JSNetworkPluginProtocol> plugin in plugins) {
+            [plugin requestDidStop:request.requestConfig];
+        }
+    }];
+    [request requestFailedFilter:^{
+        for (id<JSNetworkPluginProtocol> plugin in plugins) {
+            [plugin requestWillStop:request.requestConfig];
+        }
+        /// 移除
+        for (id<JSNetworkPluginProtocol> plugin in plugins) {
+            [plugin requestDidStop:request.requestConfig];
+        }
+    }];
     [self addRequestToRecord:request];
 }
 
-- (void)cancelRequest:(id<JSRequestProtocol>)request {
-    [request.requestTask cancel];
+- (void)removeRequest:(id<JSNetworkRequestProtocol>)request {
+    [request cancel];
     [self removeRequestFromRecord:request];
 }
 
 - (void)cancelAllRequests {
+    [_requestsRecord removeAllObjects];
+}
+
+- (void)addRequestToRecord:(id<JSNetworkRequestProtocol>)request {
+    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    [_requestsRecord setValue:request forKey:request.taskIdentifier];
+    dispatch_semaphore_signal(_lock);
+}
+
+- (void)removeRequestFromRecord:(id<JSNetworkRequestProtocol>)request {
+    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    [_requestsRecord removeObjectForKey:request.taskIdentifier];
+    dispatch_semaphore_signal(_lock);
+}
+
+@end
+
+@implementation JSNetworkAgent (RequestPlugin)
+
+- (void)toggleWillStartWithPlugins:(id<JSNetworkRequestProtocol>)request {
     
 }
 
-- (void)addRequestToRecord:(id<JSRequestProtocol>)request {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
-    _requestsRecord[@(request.requestTask.taskIdentifier)] = request;
-    dispatch_semaphore_signal(_lock);
+- (void)toggleDidStartWithPlugins:(NSArray<id<JSNetworkPluginProtocol>> *)plugins {
+    
 }
 
-- (void)removeRequestFromRecord:(id<JSRequestProtocol>)request {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
-    [_requestsRecord removeObjectForKey:@(request.requestTask.taskIdentifier)];
-    dispatch_semaphore_signal(_lock);
+- (void)toggleWillStopWithPlugins:(NSArray<id<JSNetworkPluginProtocol>> *)plugins {
+   
 }
 
+- (void)toggleDidStopWithPlugins:(NSArray<id<JSNetworkPluginProtocol>> *)plugins {
+    
+}
 
 @end

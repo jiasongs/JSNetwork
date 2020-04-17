@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4B4A0483A9B06E7AC56AC73D /* libPods-JSNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D79F7AEDED30EF14855375A /* libPods-JSNetwork.a */; };
+		7AE05C462449E17400B71A11 /* JSNetworkRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE05C452449E17400B71A11 /* JSNetworkRequest.m */; };
+		7AE05C4A2449F0C300B71A11 /* JSNetworkConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE05C492449F0C300B71A11 /* JSNetworkConfig.m */; };
+		7AE05C4D2449F4E100B71A11 /* JSNetworkResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE05C4C2449F4E100B71A11 /* JSNetworkResponse.m */; };
 		7AEE41042449AFDA0039ACE7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEE41032449AFDA0039ACE7 /* AppDelegate.m */; };
 		7AEE41072449AFDA0039ACE7 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEE41062449AFDA0039ACE7 /* SceneDelegate.m */; };
 		7AEE410A2449AFDA0039ACE7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEE41092449AFDA0039ACE7 /* ViewController.m */; };
@@ -17,10 +20,18 @@
 		7AEE41152449AFDB0039ACE7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEE41142449AFDB0039ACE7 /* main.m */; };
 		7AEE411F2449B5370039ACE7 /* JSNetworkProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEE411E2449B5370039ACE7 /* JSNetworkProvider.m */; };
 		7AEE41222449C3280039ACE7 /* JSNetworkAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEE41212449C3280039ACE7 /* JSNetworkAgent.m */; };
-		7AEE41252449C6900039ACE7 /* JSNetworkRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AEE41242449C6900039ACE7 /* JSNetworkRequest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7AE05C432449DF5400B71A11 /* JSNetworkRequestProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkRequestProtocol.h; sourceTree = "<group>"; };
+		7AE05C442449E17400B71A11 /* JSNetworkRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkRequest.h; sourceTree = "<group>"; };
+		7AE05C452449E17400B71A11 /* JSNetworkRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkRequest.m; sourceTree = "<group>"; };
+		7AE05C472449EACD00B71A11 /* JSNetworkPluginProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkPluginProtocol.h; sourceTree = "<group>"; };
+		7AE05C482449F0C300B71A11 /* JSNetworkConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkConfig.h; sourceTree = "<group>"; };
+		7AE05C492449F0C300B71A11 /* JSNetworkConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkConfig.m; sourceTree = "<group>"; };
+		7AE05C4B2449F4E100B71A11 /* JSNetworkResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkResponse.h; sourceTree = "<group>"; };
+		7AE05C4C2449F4E100B71A11 /* JSNetworkResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkResponse.m; sourceTree = "<group>"; };
+		7AE05C4E2449F4FC00B71A11 /* JSNetworkResponseProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkResponseProtocol.h; sourceTree = "<group>"; };
 		7AEE40FF2449AFDA0039ACE7 /* JSNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AEE41022449AFDA0039ACE7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7AEE41032449AFDA0039ACE7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -33,13 +44,11 @@
 		7AEE41112449AFDB0039ACE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AEE41132449AFDB0039ACE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AEE41142449AFDB0039ACE7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		7AEE411C2449B22C0039ACE7 /* JSRequestProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSRequestProtocol.h; sourceTree = "<group>"; };
+		7AEE411C2449B22C0039ACE7 /* JSNetworkRequestConfigProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkRequestConfigProtocol.h; sourceTree = "<group>"; };
 		7AEE411D2449B5370039ACE7 /* JSNetworkProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkProvider.h; sourceTree = "<group>"; };
 		7AEE411E2449B5370039ACE7 /* JSNetworkProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkProvider.m; sourceTree = "<group>"; };
 		7AEE41202449C3280039ACE7 /* JSNetworkAgent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkAgent.h; sourceTree = "<group>"; };
 		7AEE41212449C3280039ACE7 /* JSNetworkAgent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkAgent.m; sourceTree = "<group>"; };
-		7AEE41232449C6900039ACE7 /* JSNetworkRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkRequest.h; sourceTree = "<group>"; };
-		7AEE41242449C6900039ACE7 /* JSNetworkRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkRequest.m; sourceTree = "<group>"; };
 		7D79F7AEDED30EF14855375A /* libPods-JSNetwork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JSNetwork.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0CFD853D2E1BAF1F5761F28 /* Pods-JSNetwork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetwork.debug.xcconfig"; path = "Target Support Files/Pods-JSNetwork/Pods-JSNetwork.debug.xcconfig"; sourceTree = "<group>"; };
 		E08FB13C1A047899A5D8BA86 /* Pods-JSNetwork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetwork.release.xcconfig"; path = "Target Support Files/Pods-JSNetwork/Pods-JSNetwork.release.xcconfig"; sourceTree = "<group>"; };
@@ -105,13 +114,20 @@
 		7AEE411B2449B1F10039ACE7 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				7AEE411C2449B22C0039ACE7 /* JSRequestProtocol.h */,
+				7AE05C432449DF5400B71A11 /* JSNetworkRequestProtocol.h */,
+				7AEE411C2449B22C0039ACE7 /* JSNetworkRequestConfigProtocol.h */,
+				7AE05C4E2449F4FC00B71A11 /* JSNetworkResponseProtocol.h */,
+				7AE05C472449EACD00B71A11 /* JSNetworkPluginProtocol.h */,
 				7AEE411D2449B5370039ACE7 /* JSNetworkProvider.h */,
 				7AEE411E2449B5370039ACE7 /* JSNetworkProvider.m */,
 				7AEE41202449C3280039ACE7 /* JSNetworkAgent.h */,
 				7AEE41212449C3280039ACE7 /* JSNetworkAgent.m */,
-				7AEE41232449C6900039ACE7 /* JSNetworkRequest.h */,
-				7AEE41242449C6900039ACE7 /* JSNetworkRequest.m */,
+				7AE05C442449E17400B71A11 /* JSNetworkRequest.h */,
+				7AE05C452449E17400B71A11 /* JSNetworkRequest.m */,
+				7AE05C4B2449F4E100B71A11 /* JSNetworkResponse.h */,
+				7AE05C4C2449F4E100B71A11 /* JSNetworkResponse.m */,
+				7AE05C482449F0C300B71A11 /* JSNetworkConfig.h */,
+				7AE05C492449F0C300B71A11 /* JSNetworkConfig.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -222,11 +238,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AEE411F2449B5370039ACE7 /* JSNetworkProvider.m in Sources */,
+				7AE05C4A2449F0C300B71A11 /* JSNetworkConfig.m in Sources */,
 				7AEE410A2449AFDA0039ACE7 /* ViewController.m in Sources */,
-				7AEE41252449C6900039ACE7 /* JSNetworkRequest.m in Sources */,
 				7AEE41042449AFDA0039ACE7 /* AppDelegate.m in Sources */,
+				7AE05C462449E17400B71A11 /* JSNetworkRequest.m in Sources */,
 				7AEE41152449AFDB0039ACE7 /* main.m in Sources */,
 				7AEE41072449AFDA0039ACE7 /* SceneDelegate.m in Sources */,
+				7AE05C4D2449F4E100B71A11 /* JSNetworkResponse.m in Sources */,
 				7AEE41222449C3280039ACE7 /* JSNetworkAgent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

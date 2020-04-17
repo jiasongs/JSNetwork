@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JSRequestProtocol.h"
+#import "JSNetworkRequestProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
-- (void)addRequest:(id<JSRequestProtocol>)request;
+- (void)addRequest:(id<JSNetworkRequestProtocol>)request;
 
-- (void)cancelRequest:(id<JSRequestProtocol>)request;
+- (void)removeRequest:(id<JSNetworkRequestProtocol>)request;
 
 - (void)cancelAllRequests;
 
