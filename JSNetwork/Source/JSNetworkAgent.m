@@ -59,22 +59,22 @@
 
 - (void)removeRequest:(id<JSNetworkRequestProtocol>)request {
     NSParameterAssert(request);
-    if ([request isExecuting]) {
+    if (request.isExecuting) {
         [request cancel];
+    } else {
+        [request clearAllCallBack];
+        [self removeRequestFromRecord:request];
     }
-    [request clearAllCallBack];
-    [self removeRequestFromRecord:request];
 }
 
 - (void)handleRequest:(id<JSNetworkRequestProtocol>)request {
     NSParameterAssert(request);
-//    dispatch_async(request.requestInterface.processingQueue, ^{
-//        
-//    });
-    NSArray *plugins = request.requestInterface.allPlugins;
-    [self toggleWillStartWithPlugins:plugins request:request];
-    [self addRequest:request];
-    [self toggleDidStartWithPlugins:plugins request:request];
+    dispatch_async(request.requestInterface.processingQueue, ^{
+        NSArray *plugins = request.requestInterface.allPlugins;
+        [self toggleWillStartWithPlugins:plugins request:request];
+        [self addRequest:request];
+        [self toggleDidStartWithPlugins:plugins request:request];
+    });    
 }
 
 - (void)handleResponseWithTask:(NSURLSessionTask *)task
@@ -83,24 +83,21 @@
     NSParameterAssert(task);
     id<JSNetworkRequestProtocol> request = [self getRequestWithTask:task];
     NSParameterAssert(request);
-    if (!request) return;
-//    dispatch_async(request.requestInterface.processingQueue, ^{
-//
-//    });
-    /// 处理响应
-    [request.response handleRequestResult:request.requestTask responseObject:responseObject error:error];
-    NSArray *plugins = request.requestInterface.allPlugins;
-    [self toggleWillStopWithPlugins:plugins request:request];
-    @autoreleasepool {
-        for (JSNetworkRequestCompletedFilter block in request.completedFilters) {
-            block(request);
-        }
-    }
-    [self toggleDidStopWithPlugins:plugins request:request];
-    [self removeRequest:request];
-//    dispatch_async(request.requestInterface.completionQueue, ^{
-//
-//    });
+    dispatch_async(request.requestInterface.processingQueue, ^{
+        /// 处理响应
+        [request.response handleRequestResult:request.requestTask responseObject:responseObject error:error];
+        dispatch_async(request.requestInterface.completionQueue, ^{
+            NSArray *plugins = request.requestInterface.allPlugins;
+            [self toggleWillStopWithPlugins:plugins request:request];
+            @autoreleasepool {
+                for (JSNetworkRequestCompletedFilter block in request.completedFilters) {
+                    block(request);
+                }
+            }
+            [self toggleDidStopWithPlugins:plugins request:request];
+            [self removeRequest:request];
+        });
+    });
 }
 
 - (void)addRequestToRecord:(id<JSNetworkRequestProtocol>)request {
@@ -116,6 +113,7 @@
 }
 
 @end
+
 
 @implementation JSNetworkAgent (Plugin)
 

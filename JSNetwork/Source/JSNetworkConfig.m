@@ -38,7 +38,7 @@
         _plugins = [NSMutableArray array];
         _timeoutInterval = 20;
         _responseClass = JSNetworkResponse.class;
-        _processingQueue = dispatch_get_main_queue();
+        _processingQueue = dispatch_queue_create("com.jsnetwork.networkagent.processing", DISPATCH_QUEUE_CONCURRENT);
         _completionQueue = dispatch_get_main_queue();
     }
     return self;

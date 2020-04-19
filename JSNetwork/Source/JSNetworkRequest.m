@@ -37,8 +37,12 @@
     NSParameterAssert(interface);
     NSParameterAssert(taskCompleted);
     _requestInterface = interface;
+    static AFHTTPSessionManager *manger = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        manger = [AFHTTPSessionManager manager];
+    });
     BOOL useFormData = false;
-    AFHTTPSessionManager *manger = [AFHTTPSessionManager manager];
     AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
     if ([interface.originalConfig respondsToSelector:@selector(requestSerializerType)]) {
         switch (interface.originalConfig.requestSerializerType) {
@@ -97,10 +101,8 @@
                 self.downloadProgress(downloadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
-            _requestTask;
             taskCompleted(task, responseObject, nil);
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            _requestTask;
             taskCompleted(task, nil, error);
         }];
     }
