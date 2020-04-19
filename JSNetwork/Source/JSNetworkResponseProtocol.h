@@ -12,9 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol JSNetworkResponseProtocol <NSObject>
 
-@property (nonatomic, assign) BOOL successful;
-@property (nonatomic, copy) NSString *message;
-@property (nonatomic, copy) id contentData;
+- (void)handleRequestResult:(NSURLSessionTask *)task responseObject:(nullable id)responseObject error:(nullable NSError *)error;
+- (NSHTTPURLResponse *)originalResponse;
+- (NSInteger)responseStatusCode;
+- (NSDictionary *)responseHeaders;
+- (id)responseObject;
+- (NSError *)error;
 
 @end
 

@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		4B4A0483A9B06E7AC56AC73D /* libPods-JSNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D79F7AEDED30EF14855375A /* libPods-JSNetwork.a */; };
+		7A05DC18244AAE5800D71C5C /* CnodeApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05DC17244AAE5800D71C5C /* CnodeApi.m */; };
+		7A05DC1B244AAF1F00D71C5C /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A05DC1A244AAF1F00D71C5C /* TestViewController.m */; };
+		7A437119244B56A800C9EA95 /* JSNetworkInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437118244B56A800C9EA95 /* JSNetworkInterface.m */; };
+		7A43711F244B5E5600C9EA95 /* NSDictionary+JSURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A43711E244B5E5600C9EA95 /* NSDictionary+JSURL.m */; };
+		7A437122244B5E7C00C9EA95 /* NSString+JSURLCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437121244B5E7C00C9EA95 /* NSString+JSURLCode.m */; };
+		7A43712A244BE60A00C9EA95 /* JSNetworkLoggerPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437129244BE60A00C9EA95 /* JSNetworkLoggerPlugin.m */; };
 		7AE05C462449E17400B71A11 /* JSNetworkRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE05C452449E17400B71A11 /* JSNetworkRequest.m */; };
 		7AE05C4A2449F0C300B71A11 /* JSNetworkConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE05C492449F0C300B71A11 /* JSNetworkConfig.m */; };
 		7AE05C4D2449F4E100B71A11 /* JSNetworkResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE05C4C2449F4E100B71A11 /* JSNetworkResponse.m */; };
@@ -23,6 +29,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7A05DC16244AAE5800D71C5C /* CnodeApi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CnodeApi.h; sourceTree = "<group>"; };
+		7A05DC17244AAE5800D71C5C /* CnodeApi.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CnodeApi.m; sourceTree = "<group>"; };
+		7A05DC19244AAF1F00D71C5C /* TestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
+		7A05DC1A244AAF1F00D71C5C /* TestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
+		7A05DC1C244AC3E300D71C5C /* JSNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetwork.h; sourceTree = "<group>"; };
+		7A437117244B56A800C9EA95 /* JSNetworkInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkInterface.h; sourceTree = "<group>"; };
+		7A437118244B56A800C9EA95 /* JSNetworkInterface.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkInterface.m; sourceTree = "<group>"; };
+		7A43711D244B5E5600C9EA95 /* NSDictionary+JSURL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+JSURL.h"; sourceTree = "<group>"; };
+		7A43711E244B5E5600C9EA95 /* NSDictionary+JSURL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+JSURL.m"; sourceTree = "<group>"; };
+		7A437120244B5E7C00C9EA95 /* NSString+JSURLCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+JSURLCode.h"; sourceTree = "<group>"; };
+		7A437121244B5E7C00C9EA95 /* NSString+JSURLCode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSURLCode.m"; sourceTree = "<group>"; };
+		7A437128244BE60A00C9EA95 /* JSNetworkLoggerPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkLoggerPlugin.h; sourceTree = "<group>"; };
+		7A437129244BE60A00C9EA95 /* JSNetworkLoggerPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkLoggerPlugin.m; sourceTree = "<group>"; };
 		7AE05C432449DF5400B71A11 /* JSNetworkRequestProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkRequestProtocol.h; sourceTree = "<group>"; };
 		7AE05C442449E17400B71A11 /* JSNetworkRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSNetworkRequest.h; sourceTree = "<group>"; };
 		7AE05C452449E17400B71A11 /* JSNetworkRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSNetworkRequest.m; sourceTree = "<group>"; };
@@ -74,6 +93,64 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7A05DC1D244AC56900D71C5C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7AEE41022449AFDA0039ACE7 /* AppDelegate.h */,
+				7AEE41032449AFDA0039ACE7 /* AppDelegate.m */,
+				7AEE41052449AFDA0039ACE7 /* SceneDelegate.h */,
+				7AEE41062449AFDA0039ACE7 /* SceneDelegate.m */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		7A05DC20244B525200D71C5C /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				7AE05C432449DF5400B71A11 /* JSNetworkRequestProtocol.h */,
+				7AEE411C2449B22C0039ACE7 /* JSNetworkRequestConfigProtocol.h */,
+				7AE05C4E2449F4FC00B71A11 /* JSNetworkResponseProtocol.h */,
+				7AE05C472449EACD00B71A11 /* JSNetworkPluginProtocol.h */,
+			);
+			name = Protocol;
+			sourceTree = "<group>";
+		};
+		7A05DC21244B526300D71C5C /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				7A05DC1C244AC3E300D71C5C /* JSNetwork.h */,
+				7AEE411D2449B5370039ACE7 /* JSNetworkProvider.h */,
+				7AEE411E2449B5370039ACE7 /* JSNetworkProvider.m */,
+				7AEE41202449C3280039ACE7 /* JSNetworkAgent.h */,
+				7AEE41212449C3280039ACE7 /* JSNetworkAgent.m */,
+				7A437117244B56A800C9EA95 /* JSNetworkInterface.h */,
+				7A437118244B56A800C9EA95 /* JSNetworkInterface.m */,
+				7AE05C482449F0C300B71A11 /* JSNetworkConfig.h */,
+				7AE05C492449F0C300B71A11 /* JSNetworkConfig.m */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		7A437125244BE56000C9EA95 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				7A43711D244B5E5600C9EA95 /* NSDictionary+JSURL.h */,
+				7A43711E244B5E5600C9EA95 /* NSDictionary+JSURL.m */,
+				7A437120244B5E7C00C9EA95 /* NSString+JSURLCode.h */,
+				7A437121244B5E7C00C9EA95 /* NSString+JSURLCode.m */,
+			);
+			name = Category;
+			sourceTree = "<group>";
+		};
+		7A437127244BE59000C9EA95 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				7A437128244BE60A00C9EA95 /* JSNetworkLoggerPlugin.h */,
+				7A437129244BE60A00C9EA95 /* JSNetworkLoggerPlugin.m */,
+			);
+			name = Plugins;
+			sourceTree = "<group>";
+		};
 		7AEE40F62449AFDA0039ACE7 = {
 			isa = PBXGroup;
 			children = (
@@ -95,11 +172,12 @@
 		7AEE41012449AFDA0039ACE7 /* JSNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				7A05DC1D244AC56900D71C5C /* App */,
 				7AEE411B2449B1F10039ACE7 /* Source */,
-				7AEE41022449AFDA0039ACE7 /* AppDelegate.h */,
-				7AEE41032449AFDA0039ACE7 /* AppDelegate.m */,
-				7AEE41052449AFDA0039ACE7 /* SceneDelegate.h */,
-				7AEE41062449AFDA0039ACE7 /* SceneDelegate.m */,
+				7A05DC19244AAF1F00D71C5C /* TestViewController.h */,
+				7A05DC1A244AAF1F00D71C5C /* TestViewController.m */,
+				7A05DC16244AAE5800D71C5C /* CnodeApi.h */,
+				7A05DC17244AAE5800D71C5C /* CnodeApi.m */,
 				7AEE41082449AFDA0039ACE7 /* ViewController.h */,
 				7AEE41092449AFDA0039ACE7 /* ViewController.m */,
 				7AEE410B2449AFDA0039ACE7 /* Main.storyboard */,
@@ -114,20 +192,14 @@
 		7AEE411B2449B1F10039ACE7 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				7AE05C432449DF5400B71A11 /* JSNetworkRequestProtocol.h */,
-				7AEE411C2449B22C0039ACE7 /* JSNetworkRequestConfigProtocol.h */,
-				7AE05C4E2449F4FC00B71A11 /* JSNetworkResponseProtocol.h */,
-				7AE05C472449EACD00B71A11 /* JSNetworkPluginProtocol.h */,
-				7AEE411D2449B5370039ACE7 /* JSNetworkProvider.h */,
-				7AEE411E2449B5370039ACE7 /* JSNetworkProvider.m */,
-				7AEE41202449C3280039ACE7 /* JSNetworkAgent.h */,
-				7AEE41212449C3280039ACE7 /* JSNetworkAgent.m */,
+				7A437125244BE56000C9EA95 /* Category */,
+				7A05DC20244B525200D71C5C /* Protocol */,
+				7A437127244BE59000C9EA95 /* Plugins */,
+				7A05DC21244B526300D71C5C /* Core */,
 				7AE05C442449E17400B71A11 /* JSNetworkRequest.h */,
 				7AE05C452449E17400B71A11 /* JSNetworkRequest.m */,
 				7AE05C4B2449F4E100B71A11 /* JSNetworkResponse.h */,
 				7AE05C4C2449F4E100B71A11 /* JSNetworkResponse.m */,
-				7AE05C482449F0C300B71A11 /* JSNetworkConfig.h */,
-				7AE05C492449F0C300B71A11 /* JSNetworkConfig.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -241,11 +313,17 @@
 				7AE05C4A2449F0C300B71A11 /* JSNetworkConfig.m in Sources */,
 				7AEE410A2449AFDA0039ACE7 /* ViewController.m in Sources */,
 				7AEE41042449AFDA0039ACE7 /* AppDelegate.m in Sources */,
+				7A05DC18244AAE5800D71C5C /* CnodeApi.m in Sources */,
 				7AE05C462449E17400B71A11 /* JSNetworkRequest.m in Sources */,
+				7A437119244B56A800C9EA95 /* JSNetworkInterface.m in Sources */,
 				7AEE41152449AFDB0039ACE7 /* main.m in Sources */,
+				7A05DC1B244AAF1F00D71C5C /* TestViewController.m in Sources */,
 				7AEE41072449AFDA0039ACE7 /* SceneDelegate.m in Sources */,
+				7A43711F244B5E5600C9EA95 /* NSDictionary+JSURL.m in Sources */,
+				7A43712A244BE60A00C9EA95 /* JSNetworkLoggerPlugin.m in Sources */,
 				7AE05C4D2449F4E100B71A11 /* JSNetworkResponse.m in Sources */,
 				7AEE41222449C3280039ACE7 /* JSNetworkAgent.m in Sources */,
+				7A437122244B5E7C00C9EA95 /* NSString+JSURLCode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

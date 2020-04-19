@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@protocol JSNetworkRequestProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-- (void)requestWillStart:(id)request;
-- (void)requestDidStart:(id)request;
-- (void)requestWillStop:(id)request;
-- (void)requestDidStop:(id)request;
+- (void)requestWillStart:(id<JSNetworkRequestProtocol>)request;
+- (void)requestDidStart:(id<JSNetworkRequestProtocol>)request;
+- (void)requestWillStop:(id<JSNetworkRequestProtocol>)request;
+- (void)requestDidStop:(id<JSNetworkRequestProtocol>)request;
 
 @end
 

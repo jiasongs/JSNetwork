@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JSNetworkPluginProtocol.h"
+@protocol JSNetworkPluginProtocol;
+@protocol JSNetworkRequestProtocol;
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
     JSRequestMethodGET = 0,
@@ -29,13 +30,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol JSNetworkRequestConfigProtocol <NSObject>
 
-- (NSString *)baseUrl;
+@required
 
 - (NSString *)requestUrl;
 
-- (NSTimeInterval)requestTimeoutInterval;
+@optional
 
-- (nullable id)requestArgument;
+- (NSString *)baseUrl;
+
+- (nullable NSDictionary *)requestArgument;
 
 - (nullable id)requestBody;
 
@@ -45,9 +48,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (JSResponseSerializerType)responseSerializerType;
 
+- (NSTimeInterval)requestTimeoutInterval;
+
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
+- (NSString *)urlFilterWithURL:(NSString *)URL;
+
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
+
 
 @end
 

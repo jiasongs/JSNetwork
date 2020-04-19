@@ -1,17 +1,18 @@
 //
-//  JSNetworkRequest.h
+//  CnodeApi.h
 //  JSNetwork
 //
-//  Created by jiasong on 2020/4/17.
+//  Created by jiasong on 2020/4/18.
 //  Copyright © 2020 jiasong. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-@protocol JSNetworkRequestProtocol;
+#import "JSNetwork.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JSNetworkRequest : NSObject <JSNetworkRequestProtocol>
+@interface CnodeApi : NSObject <JSNetworkRequestConfigProtocol>
+
 
 
 @end

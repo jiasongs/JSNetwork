@@ -7,16 +7,51 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JSNetworkRequestConfigProtocol.h"
-#import "JSNetworkRequestProtocol.h"
+@protocol JSNetworkRequestConfigProtocol;
+@protocol JSNetworkRequestProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^JSRequestCompletionBlock)(id<JSNetworkRequestProtocol>);
-
 @interface JSNetworkProvider : NSObject
 
-+ (void)requestConfig:(id<JSNetworkRequestConfigProtocol>)config complete:(JSRequestCompletionBlock)complete;
++ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config;
+
++ (id<JSNetworkRequestProtocol>)requestwithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
++ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                         uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
++ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                         downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
++ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                   uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                         downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
++ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
+                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
+                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
++ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
+                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
+                         uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
++ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
+                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
+                         downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
++ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
+                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
+                         uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                       downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
+
 
 @end
 

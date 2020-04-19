@@ -7,39 +7,51 @@
 //
 
 #import "JSNetworkResponse.h"
+#import "JSNetworkResponseProtocol.h"
+
+@interface JSNetworkResponse () {
+    NSURLSessionTask *_requestTask;
+    NSError *_error;
+    id _responseObject;
+}
+
+@end
 
 @implementation JSNetworkResponse
 
-@synthesize successful = _successful;
-@synthesize contentData = _contentData;
-@synthesize message = _message;
-
-#pragma mark - setter
-
-- (void)setSuccessful:(BOOL)successful {
-    _successful = successful;
+- (void)handleRequestResult:(NSURLSessionTask *)task responseObject:(id)responseObject error:(NSError *)error {
+    _requestTask = task;
+    _error = error;
+    _responseObject = responseObject;
 }
 
-- (void)setContentData:(id)contentData {
-    _contentData = contentData;
+- (NSHTTPURLResponse *)originalResponse {
+    return (NSHTTPURLResponse *)_requestTask.response;
 }
 
-- (void)setMessage:(NSString *)message {
-    _message = message;
+- (NSInteger)responseStatusCode {
+    return self.originalResponse.statusCode;
 }
 
-#pragma mark - getter
-
-- (BOOL)successful {
-    return _successful;
+- (NSDictionary *)responseHeaders {
+    return self.originalResponse.allHeaderFields;
 }
 
-- (id)contentData {
-    return _contentData;
+- (id)responseObject  {
+    return _responseObject;
 }
 
-- (NSString *)message {
-    return _message;
+- (NSError *)error  {
+    return _error;
 }
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<%@: %p> { responseStatusCode: %@ } { error: %@ }", NSStringFromClass([self class]), self, @(self.responseStatusCode), self.error];
+}
+
+- (void)dealloc {
+    NSLog(@"JSNetworkResponse - 已经释放");
+}
+
 
 @end

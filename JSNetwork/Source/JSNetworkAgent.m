@@ -7,6 +7,12 @@
 //
 
 #import "JSNetworkAgent.h"
+#import "JSNetworkRequestConfigProtocol.h"
+#import "JSNetworkResponseProtocol.h"
+#import "JSNetworkPluginProtocol.h"
+#import "JSNetworkRequestProtocol.h"
+#import "JSNetworkInterface.h"
+#import "JSNetworkConfig.h"
 
 @interface JSNetworkAgent ()
 
@@ -18,16 +24,16 @@
 @implementation JSNetworkAgent
 
 + (instancetype)sharedInstance {
-  static dispatch_once_t onceToken;
-  static JSNetworkAgent *instance = nil;
-  dispatch_once(&onceToken,^{
-    instance = [[super allocWithZone:NULL] init];
-  });
-  return instance;
+    static dispatch_once_t onceToken;
+    static JSNetworkAgent *instance = nil;
+    dispatch_once(&onceToken,^{
+        instance = [[super allocWithZone:NULL] init];
+    });
+    return instance;
 }
 
 + (id)allocWithZone:(struct _NSZone *)zone {
-  return [self sharedInstance];
+    return [self sharedInstance];
 }
 
 - (instancetype)init {
@@ -39,37 +45,31 @@
 }
 
 - (void)addRequest:(id<JSNetworkRequestProtocol>)request {
-    NSArray<id<JSNetworkPluginProtocol>> *plugins = [request.requestConfig requestPlugins];
-    for (id<JSNetworkPluginProtocol> plugin in plugins) {
-        [plugin requestWillStart:request.requestConfig];
-    }
-    [request start];
-    for (id<JSNetworkPluginProtocol> plugin in plugins) {
-        [plugin requestDidStart:request.requestConfig];
-    }
-    [request requestCompleteFilter:^{
-        for (id<JSNetworkPluginProtocol> plugin in plugins) {
-            [plugin requestWillStop:request.requestConfig];
-        }
-        /// 移除
-        for (id<JSNetworkPluginProtocol> plugin in plugins) {
-            [plugin requestDidStop:request.requestConfig];
-        }
-    }];
-    [request requestFailedFilter:^{
-        for (id<JSNetworkPluginProtocol> plugin in plugins) {
-            [plugin requestWillStop:request.requestConfig];
-        }
-        /// 移除
-        for (id<JSNetworkPluginProtocol> plugin in plugins) {
-            [plugin requestDidStop:request.requestConfig];
-        }
-    }];
+    NSParameterAssert(request);
     [self addRequestToRecord:request];
+    NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedInstance.plugins];
+    if ([request.requestInterface.config respondsToSelector:@selector(requestPlugins)]) {
+        [plugins addObjectsFromArray:request.requestInterface.config.requestPlugins];
+    }
+    [self toggleWillStartWithPlugins:plugins request:request];
+    __weak typeof(self) weakSelf = self;
+    [request requestCompletePreprocessor:^(id<JSNetworkRequestProtocol> aRequest, id responseObject, NSError *error) {
+        __strong typeof(weakSelf) self = weakSelf;
+        [self toggleWillStopWithPlugins:plugins request:aRequest];
+        [aRequest.response handleRequestResult:aRequest.requestTask responseObject:responseObject error:error];
+    }];
+    [request requestCompletedFilter:^(id<JSNetworkRequestProtocol> aRequest) {
+        __strong typeof(weakSelf) self = weakSelf;
+        [self toggleDidStopWithPlugins:plugins request:aRequest];
+    }];
+    [request start];
+    [self toggleDidStartWithPlugins:plugins request:request];
 }
 
 - (void)removeRequest:(id<JSNetworkRequestProtocol>)request {
-    [request cancel];
+    if (request.isExecuting) {
+        [request cancel];
+    }
     [self removeRequestFromRecord:request];
 }
 
@@ -89,24 +89,36 @@
     dispatch_semaphore_signal(_lock);
 }
 
-@end
-
-@implementation JSNetworkAgent (RequestPlugin)
-
-- (void)toggleWillStartWithPlugins:(id<JSNetworkRequestProtocol>)request {
-    
+- (void)toggleWillStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+        if ([plugin respondsToSelector:@selector(requestWillStart:)]) {
+            [plugin requestWillStart:request];
+        }
+    }
 }
 
-- (void)toggleDidStartWithPlugins:(NSArray<id<JSNetworkPluginProtocol>> *)plugins {
-    
+- (void)toggleDidStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+        if ([plugin respondsToSelector:@selector(requestDidStart:)]) {
+            [plugin requestDidStart:request];
+        }
+    }
 }
 
-- (void)toggleWillStopWithPlugins:(NSArray<id<JSNetworkPluginProtocol>> *)plugins {
-   
+- (void)toggleWillStopWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+        if ([plugin respondsToSelector:@selector(requestWillStop:)]) {
+            [plugin requestWillStop:request];
+        }
+    }
 }
 
-- (void)toggleDidStopWithPlugins:(NSArray<id<JSNetworkPluginProtocol>> *)plugins {
-    
+- (void)toggleDidStopWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+        if ([plugin respondsToSelector:@selector(requestDidStop:)]) {
+            [plugin requestDidStop:request];
+        }
+    }
 }
 
 @end
