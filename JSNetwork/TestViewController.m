@@ -8,7 +8,11 @@
 
 #import "TestViewController.h"
 #import "JSNetwork.h"
-#import "CnodeApi.h"
+#import "CnodeAPI.h"
+#import "NetworkToastPlugin.h"
+#import "NetworkLoggerPlugin.h"
+#import "NetworkResponse.h"
+#import "JSNetworkProvider+Promises.h"
 
 @interface TestViewController ()
 
@@ -18,25 +22,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    JSNetworkConfig.sharedInstance.debugLogEnabled = true;
-    [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"123456"}];
-    [JSNetworkConfig.sharedInstance addHTTPHeaderFields:@{@"userName": @"123"}];
-    CnodeApi *api = [CnodeApi new];
-    [JSNetworkProvider requestWithConfig:api uploadProgress:^(NSProgress *uploadProgress) {
-        NSLog(@"uploadProgress - %@", uploadProgress);
-    } downloadProgress:^(NSProgress *downloadProgress) {
-        NSLog(@"requestDownloadProgress - %@", downloadProgress);
-    } completed:^(id<JSNetworkRequestProtocol> aRequest) {
-        NSLog(@"requestCompletedFilter - %@", aRequest);
-    }];
+    static BOOL marker = false;
+    if (!marker) {
+        /// 全局配置
+        JSNetworkConfig.sharedInstance.debugLogEnabled = true;
+        [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"123456"}];
+        [JSNetworkConfig.sharedInstance addHTTPHeaderFields:@{@"userName": @"123"}];
+        [JSNetworkConfig.sharedInstance addPlugins:NetworkLoggerPlugin.new];
+        JSNetworkConfig.sharedInstance.responseClass = NetworkResponse.class;
+        marker = true;
+    }
+    [self onPress:nil];
 }
 
 - (void)dealloc {
     NSLog(@"TestViewController - 已经释放");
 }
 
-- (IBAction)onPress:(id)sender {
-    
+- (IBAction)onPress:(nullable id)sender {
+    /// 发起请求
+    CnodeAPI *api = [CnodeAPI new];
+    [[JSNetworkProvider requestWithConfig:api uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
+        NSLog(@"uploadProgress - %@", uploadProgress);
+    } downloadProgress:^(NSProgress * downloadProgress) {
+        NSLog(@"requestDownloadProgress - %@", downloadProgress);
+    }] then:^id (id<JSNetworkRequestProtocol> value) {
+        NetworkResponse *response = value.response;
+        NSLog(@"requestCompletedFilter - %@", response);
+        return nil;
+    }];
 }
 
 @end

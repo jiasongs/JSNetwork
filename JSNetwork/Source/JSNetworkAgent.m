@@ -46,35 +46,34 @@
 
 - (void)addRequest:(id<JSNetworkRequestProtocol>)request {
     NSParameterAssert(request);
-    [self addRequestToRecord:request];
-    NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedInstance.plugins];
-    if ([request.requestInterface.config respondsToSelector:@selector(requestPlugins)]) {
-        [plugins addObjectsFromArray:request.requestInterface.config.requestPlugins];
-    }
+    NSArray *plugins = [self getAllPluginsWithRequest:request];
     [self toggleWillStartWithPlugins:plugins request:request];
-    __weak typeof(self) weakSelf = self;
-    [request requestCompletePreprocessor:^(id<JSNetworkRequestProtocol> aRequest, id responseObject, NSError *error) {
-        __strong typeof(weakSelf) self = weakSelf;
-        [self toggleWillStopWithPlugins:plugins request:aRequest];
-        [aRequest.response handleRequestResult:aRequest.requestTask responseObject:responseObject error:error];
-    }];
-    [request requestCompletedFilter:^(id<JSNetworkRequestProtocol> aRequest) {
-        __strong typeof(weakSelf) self = weakSelf;
-        [self toggleDidStopWithPlugins:plugins request:aRequest];
-    }];
+    [self addRequestToRecord:request];
     [request start];
     [self toggleDidStartWithPlugins:plugins request:request];
 }
 
 - (void)removeRequest:(id<JSNetworkRequestProtocol>)request {
+    NSParameterAssert(request);
     if (request.isExecuting) {
         [request cancel];
     }
     [self removeRequestFromRecord:request];
 }
 
-- (void)cancelAllRequests {
-    [_requestsRecord removeAllObjects];
+- (void)handleTaskWithRequest:(id<JSNetworkRequestProtocol>)request responseObject:(nullable id)responseObject error:(nullable NSError *)error {
+    NSParameterAssert(request);
+    NSArray *plugins = [self getAllPluginsWithRequest:request];
+    [self toggleWillStopWithPlugins:plugins request:request];
+    for (JSNetworkRequestCompletePreprocessor block in request.completePreprocessors) {
+        block(request, responseObject, error);
+    }
+    [request.response handleRequestResult:request.requestTask responseObject:responseObject error:error];
+    for (JSNetworkRequestCompletedFilter block in request.completedFilters) {
+        block(request);
+    }
+    [self toggleDidStopWithPlugins:plugins request:request];
+    [request clearCompletionBlock];
 }
 
 - (void)addRequestToRecord:(id<JSNetworkRequestProtocol>)request {
@@ -89,7 +88,21 @@
     dispatch_semaphore_signal(_lock);
 }
 
+@end
+
+
+@implementation JSNetworkAgent (Plugin)
+
+- (NSArray *)getAllPluginsWithRequest:(id<JSNetworkRequestProtocol>)request {
+    NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedInstance.plugins];
+    if ([request.requestInterface.originalConfig respondsToSelector:@selector(requestPlugins)]) {
+        [plugins addObjectsFromArray:request.requestInterface.originalConfig.requestPlugins];
+    }
+    return plugins;
+}
+
 - (void)toggleWillStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    NSParameterAssert(request);
     for (id<JSNetworkPluginProtocol> plugin in plugins) {
         if ([plugin respondsToSelector:@selector(requestWillStart:)]) {
             [plugin requestWillStart:request];
@@ -98,6 +111,7 @@
 }
 
 - (void)toggleDidStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    NSParameterAssert(request);
     for (id<JSNetworkPluginProtocol> plugin in plugins) {
         if ([plugin respondsToSelector:@selector(requestDidStart:)]) {
             [plugin requestDidStart:request];
@@ -106,6 +120,7 @@
 }
 
 - (void)toggleWillStopWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    NSParameterAssert(request);
     for (id<JSNetworkPluginProtocol> plugin in plugins) {
         if ([plugin respondsToSelector:@selector(requestWillStop:)]) {
             [plugin requestWillStop:request];
@@ -114,6 +129,7 @@
 }
 
 - (void)toggleDidStopWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
+    NSParameterAssert(request);
     for (id<JSNetworkPluginProtocol> plugin in plugins) {
         if ([plugin respondsToSelector:@selector(requestDidStop:)]) {
             [plugin requestDidStop:request];

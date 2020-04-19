@@ -6,7 +6,10 @@ target 'JSNetwork' do
 
   # 网络请求
   pod 'AFNetworking', '~> 4.0'
- 
+  pod 'QMUIKit'
+  pod 'PromisesObjC'
+  pod 'MLeaksFinder'
+  
 end
 
 

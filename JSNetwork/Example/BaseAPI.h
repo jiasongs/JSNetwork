@@ -1,5 +1,5 @@
 //
-//  JSNetworkLoggerPlugin.h
+//  BaseAPI.h
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/19.
@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-@protocol JSNetworkPluginProtocol;
+#import "JSNetwork.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JSNetworkLoggerPlugin : NSObject <JSNetworkPluginProtocol>
+@interface BaseAPI : NSObject <JSNetworkRequestConfigProtocol>
+
+
 
 @end
 

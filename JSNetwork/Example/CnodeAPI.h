@@ -1,5 +1,5 @@
 //
-//  CnodeApi.h
+//  CnodeAPI.h
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/18.
@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JSNetwork.h"
+#import "BaseAPI.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CnodeApi : NSObject <JSNetworkRequestConfigProtocol>
+@interface CnodeAPI : BaseAPI 
 
 
 

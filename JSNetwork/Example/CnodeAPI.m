@@ -1,14 +1,14 @@
 //
-//  CnodeApi.m
+//  CnodeAPI.m
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/18.
 //  Copyright © 2020 jiasong. All rights reserved.
 //
 
-#import "CnodeApi.h"
+#import "CnodeAPI.h"
 
-@implementation CnodeApi
+@implementation CnodeAPI
 
 - (NSString *)baseUrl {
     return @"https://cnodejs.org/api/v1";

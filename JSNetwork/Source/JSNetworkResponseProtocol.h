@@ -12,11 +12,41 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol JSNetworkResponseProtocol <NSObject>
 
+@required
+
+/**
+ *  @brief 处理task
+ *
+ *  @param task 任务
+ *  @param responseObject 解析出的响应数据
+ *  @param error 错误
+ *
+*/
 - (void)handleRequestResult:(NSURLSessionTask *)task responseObject:(nullable id)responseObject error:(nullable NSError *)error;
+
+/**
+ *  @brief 原始的响应
+*/
 - (NSHTTPURLResponse *)originalResponse;
+
+/**
+ *  @brief 状态码
+*/
 - (NSInteger)responseStatusCode;
+
+/**
+ *  @brief 响应头
+*/
 - (NSDictionary *)responseHeaders;
+
+/**
+ *  @brief 响应数据
+*/
 - (id)responseObject;
+
+/**
+ *  @brief 错误
+*/
 - (NSError *)error;
 
 @end
