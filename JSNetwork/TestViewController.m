@@ -16,6 +16,8 @@
 
 @interface TestViewController ()
 
+//@property (nonatomic, strong) id<JSNetworkRequestProtocol> request;
+
 @end
 
 @implementation TestViewController
@@ -24,6 +26,7 @@
     [super viewDidLoad];
     static BOOL marker = false;
     if (!marker) {
+        [FBLPromise setDefaultDispatchQueue:dispatch_queue_create("com.promise", DISPATCH_QUEUE_CONCURRENT)];
         /// 全局配置
         JSNetworkConfig.sharedInstance.debugLogEnabled = true;
         [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"123456"}];
@@ -35,22 +38,22 @@
     [self onPress:nil];
 }
 
-- (void)dealloc {
-    NSLog(@"TestViewController - 已经释放");
-}
-
 - (IBAction)onPress:(nullable id)sender {
     /// 发起请求
     CnodeAPI *api = [CnodeAPI new];
-    [[JSNetworkProvider requestWithConfig:api uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
-        NSLog(@"uploadProgress - %@", uploadProgress);
-    } downloadProgress:^(NSProgress * downloadProgress) {
-        NSLog(@"requestDownloadProgress - %@", downloadProgress);
-    }] then:^id (id<JSNetworkRequestProtocol> value) {
-        NetworkResponse *response = value.response;
+    [JSNetworkProvider requestwithConfig:api completed:^(id<JSNetworkRequestProtocol> aRequest) {
+        NetworkResponse *response = aRequest.response;
         NSLog(@"requestCompletedFilter - %@", response);
-        return nil;
     }];
+//    [[JSNetworkProvider promiseRequestWithConfig:api] then:^id(id<JSNetworkRequestProtocol> aRequest) {
+//        NetworkResponse *response = aRequest.response;
+//        NSLog(@"requestCompletedFilter - %@", response);
+//        return nil;
+//    }];
+}
+
+- (void)dealloc {
+    NSLog(@"TestViewController - 已经释放");
 }
 
 @end

@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config;
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequestWithConfig:(id<JSNetworkRequestConfigProtocol>)config;
 
 /**
  *  @brief FBLPromise、requestConfig、uploadProgress
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                                  uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress;
 
 /**
@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                                downloadProgress:(nullable void (^)(NSProgress *uploadProgress))downloadProgress;
 
 /**
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                                  uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                                downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress;
 
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)request:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config;
 
 /**
@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)request:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config
                                      downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress;
 
@@ -90,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)request:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config
                                        uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress;
 
@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)request:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config
                                        uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                      downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress;

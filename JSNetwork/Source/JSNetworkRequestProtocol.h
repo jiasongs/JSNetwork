@@ -14,7 +14,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^JSNetworkRequestCompletePreprocessor)(id<JSNetworkRequestProtocol> aRequest, id _Nullable responseObject, NSError *_Nullable error);
 typedef void(^JSNetworkRequestCompletedFilter)(id<JSNetworkRequestProtocol> aRequest);
 typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 
@@ -30,7 +29,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *
  *  @see JSNetworkRequest.m JSNetworkProvider.m
  */
-- (void)buildTaskWithInterface:(JSNetworkInterface *)interface taskCompleted:(void(^)(id<JSNetworkRequestProtocol> aRequest, id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
+- (void)buildTaskWithInterface:(JSNetworkInterface *)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
 
 /**
  *  @brief 开始一个请求
@@ -60,17 +59,6 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  */
 - (void)requestDownloadProgress:(nullable JSNetworkProgressBlock)downloadProgress;
 
-/// TODO: 以下两个方法还需要考虑下JSNetworkAgent与外部设置的block，可能顺序会有差别，导致调用前后不一样，需要想办法隔离
-/**
- *  @brief 设置请求将要完成前的回调，此时响应还未被处理
- *
- *  @param completionBlock 完成前的回调
- *
- *  @use 实现此方法时需要用一个数组持有completionBlock，因为外部会设置多个回调
- *  @see JSNetworkRequest.m
- */
-- (void)requestCompletePreprocessor:(nullable JSNetworkRequestCompletePreprocessor)completionBlock;
-
 /**
  *  @brief 设置请求完成的回调，此时响应已经被处理
  *
@@ -80,14 +68,6 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *  @see JSNetworkRequest.m
  */
 - (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock;
-
-/**
- *  @brief 返回将要完成前的回调
- *
- *  @return 完成前的回调
- *
- */
-- (NSArray<JSNetworkRequestCompletePreprocessor> *)completePreprocessors;
 
 /**
  *  @brief 返回已经完成的回调
@@ -100,7 +80,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 /**
  *  @brief 清空所有Block
  */
-- (void)clearCompletionBlock;
+- (void)clearAllCallBack;
 
 /**
  *  @brief 返回设置的interface

@@ -18,7 +18,6 @@
     JSNetworkInterface *_requestInterface;
 }
 
-@property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletePreprocessor> *completePreprocessorBlocks;
 @property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedFilter> *completedBlcoks;
 @property (nonatomic, copy) JSNetworkProgressBlock downloadProgress;
 @property (nonatomic, copy) JSNetworkProgressBlock uploadProgress;
@@ -29,13 +28,12 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _completePreprocessorBlocks = [NSMutableArray array];
         _completedBlcoks = [NSMutableArray array];
     }
     return self;
 }
 
-- (void)buildTaskWithInterface:(JSNetworkInterface *)interface taskCompleted:(void(^)(id<JSNetworkRequestProtocol> aRequest, id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
+- (void)buildTaskWithInterface:(JSNetworkInterface *)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
     NSParameterAssert(interface);
     NSParameterAssert(taskCompleted);
     _requestInterface = interface;
@@ -68,6 +66,7 @@
     requestSerializer.timeoutInterval = interface.timeoutInterval;
     manger.requestSerializer = requestSerializer;
     manger.responseSerializer = responseSerializer;
+    manger.completionQueue = interface.processingQueue;
     if (useFormData) {
         _requestTask = [manger POST:interface.finalURL
                          parameters:interface.finalHTTPBody
@@ -79,9 +78,9 @@
                 self.uploadProgress(uploadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
-            taskCompleted(self, responseObject, nil);
+            taskCompleted(task, responseObject, nil);
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-           taskCompleted(self, nil, error);
+            taskCompleted(task, nil, error);
         }];
     } else {
         _requestTask = [manger
@@ -98,9 +97,11 @@
                 self.downloadProgress(downloadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
-           taskCompleted(self, responseObject, nil);
+            _requestTask;
+            taskCompleted(task, responseObject, nil);
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-           taskCompleted(self, nil, error);
+            _requestTask;
+            taskCompleted(task, nil, error);
         }];
     }
 }
@@ -127,28 +128,18 @@
     }
 }
 
-- (void)requestCompletePreprocessor:(nullable JSNetworkRequestCompletePreprocessor)completionBlock {
-    if (completionBlock) {
-        [_completePreprocessorBlocks addObject:completionBlock];
-    }
-}
-
 - (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock {
     if (completionBlock) {
         [_completedBlcoks addObject:completionBlock];
     }
 }
 
-- (NSArray<JSNetworkRequestCompletePreprocessor> *)completePreprocessors {
-    return _completePreprocessorBlocks.copy;
-}
 
 - (NSArray<JSNetworkRequestCompletedFilter> *)completedFilters {
     return _completedBlcoks.copy;
 }
 
-- (void)clearCompletionBlock {
-    [_completePreprocessorBlocks removeAllObjects];
+- (void)clearAllCallBack {
     [_completedBlcoks removeAllObjects];
     self.uploadProgress = nil;
     self.downloadProgress = nil;

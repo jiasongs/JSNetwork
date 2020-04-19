@@ -70,14 +70,15 @@
     NSParameterAssert(request);
     NSParameterAssert(config);
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
-    [request buildTaskWithInterface:interface taskCompleted:^(id<JSNetworkRequestProtocol> aRequest, id responseObject, NSError *error) {
-        [JSNetworkAgent.sharedInstance handleTaskWithRequest:aRequest responseObject:responseObject error:error];
-        [JSNetworkAgent.sharedInstance removeRequest:aRequest];
+    [request buildTaskWithInterface:interface taskCompleted:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        /// 处理响应和回调之后移除
+        [JSNetworkAgent.sharedInstance handleResponseWithTask:task responseObject:responseObject error:error];
     }];
     [request requestUploadProgress:uploadProgress];
     [request requestDownloadProgress:downloadProgress];
     [request requestCompletedFilter:completed];
-    [JSNetworkAgent.sharedInstance addRequest:request];
+    /// 处理请求
+    [JSNetworkAgent.sharedInstance handleRequest:request];
     return request;
 }
 

@@ -68,6 +68,19 @@
             ResponseClass = config.responseClass;
         }
         _response = [[ResponseClass alloc] init];
+        _processingQueue = JSNetworkConfig.sharedInstance.processingQueue;
+        if ([config respondsToSelector:@selector(requestProcessingQueue)]) {
+            _processingQueue = config.requestProcessingQueue;
+        }
+        _completionQueue = JSNetworkConfig.sharedInstance.completionQueue;
+        if ([config respondsToSelector:@selector(requestCompletionQueue)]) {
+            _completionQueue = config.requestCompletionQueue;
+        }
+        NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedInstance.plugins];
+        if ([config respondsToSelector:@selector(requestPlugins)]) {
+            [plugins addObjectsFromArray:config.requestPlugins];
+        }
+        _allPlugins = plugins.copy;
     }
     return self;
 }

@@ -12,7 +12,6 @@
 #import "JSNetworkPluginProtocol.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkInterface.h"
-#import "JSNetworkConfig.h"
 
 @interface JSNetworkAgent ()
 
@@ -44,36 +43,64 @@
     return self;;
 }
 
+- (nullable id<JSNetworkRequestProtocol>)getRequestWithTask:(NSURLSessionTask *)task {
+    NSParameterAssert(task);
+    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    id<JSNetworkRequestProtocol> request = [_requestsRecord objectForKey:@(task.taskIdentifier).stringValue];
+    dispatch_semaphore_signal(_lock);
+    return request;
+}
+
 - (void)addRequest:(id<JSNetworkRequestProtocol>)request {
     NSParameterAssert(request);
-    NSArray *plugins = [self getAllPluginsWithRequest:request];
-    [self toggleWillStartWithPlugins:plugins request:request];
     [self addRequestToRecord:request];
     [request start];
-    [self toggleDidStartWithPlugins:plugins request:request];
 }
 
 - (void)removeRequest:(id<JSNetworkRequestProtocol>)request {
     NSParameterAssert(request);
-    if (request.isExecuting) {
+    if ([request isExecuting]) {
         [request cancel];
     }
+    [request clearAllCallBack];
     [self removeRequestFromRecord:request];
 }
 
-- (void)handleTaskWithRequest:(id<JSNetworkRequestProtocol>)request responseObject:(nullable id)responseObject error:(nullable NSError *)error {
+- (void)handleRequest:(id<JSNetworkRequestProtocol>)request {
     NSParameterAssert(request);
-    NSArray *plugins = [self getAllPluginsWithRequest:request];
-    [self toggleWillStopWithPlugins:plugins request:request];
-    for (JSNetworkRequestCompletePreprocessor block in request.completePreprocessors) {
-        block(request, responseObject, error);
-    }
+//    dispatch_async(request.requestInterface.processingQueue, ^{
+//        
+//    });
+    NSArray *plugins = request.requestInterface.allPlugins;
+    [self toggleWillStartWithPlugins:plugins request:request];
+    [self addRequest:request];
+    [self toggleDidStartWithPlugins:plugins request:request];
+}
+
+- (void)handleResponseWithTask:(NSURLSessionTask *)task
+                responseObject:(nullable id)responseObject
+                         error:(nullable NSError *)error {
+    NSParameterAssert(task);
+    id<JSNetworkRequestProtocol> request = [self getRequestWithTask:task];
+    NSParameterAssert(request);
+    if (!request) return;
+//    dispatch_async(request.requestInterface.processingQueue, ^{
+//
+//    });
+    /// 处理响应
     [request.response handleRequestResult:request.requestTask responseObject:responseObject error:error];
-    for (JSNetworkRequestCompletedFilter block in request.completedFilters) {
-        block(request);
+    NSArray *plugins = request.requestInterface.allPlugins;
+    [self toggleWillStopWithPlugins:plugins request:request];
+    @autoreleasepool {
+        for (JSNetworkRequestCompletedFilter block in request.completedFilters) {
+            block(request);
+        }
     }
     [self toggleDidStopWithPlugins:plugins request:request];
-    [request clearCompletionBlock];
+    [self removeRequest:request];
+//    dispatch_async(request.requestInterface.completionQueue, ^{
+//
+//    });
 }
 
 - (void)addRequestToRecord:(id<JSNetworkRequestProtocol>)request {
@@ -90,16 +117,7 @@
 
 @end
 
-
 @implementation JSNetworkAgent (Plugin)
-
-- (NSArray *)getAllPluginsWithRequest:(id<JSNetworkRequestProtocol>)request {
-    NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedInstance.plugins];
-    if ([request.requestInterface.originalConfig respondsToSelector:@selector(requestPlugins)]) {
-        [plugins addObjectsFromArray:request.requestInterface.originalConfig.requestPlugins];
-    }
-    return plugins;
-}
 
 - (void)toggleWillStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
     NSParameterAssert(request);

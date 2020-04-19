@@ -17,6 +17,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedInstance;
 
 /**
+ *  @brief 根据task得到一个请求
+ *
+ *  @param task NSURLSessionTask
+ * @retutn JSNetworkRequestProtocol
+ */
+- (nullable id<JSNetworkRequestProtocol>)getRequestWithTask:(NSURLSessionTask *)task;
+
+/**
  *  @brief 添加一个请求，该请求被添加后执行 '- (void)start'
  *
  *  @param request 遵循<JSNetworkRequestProtocol>的请求类
@@ -31,21 +39,29 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeRequest:(id<JSNetworkRequestProtocol>)request;
 
 /**
- *  @brief 处理task完成后的响应，再removeRequest之前调用
+*  @brief 处理一个请求，该请求被处理后自动执行'addRequest:'
+*
+*  @param request 遵循<JSNetworkRequestProtocol>的请求类
+*/
+- (void)handleRequest:(id<JSNetworkRequestProtocol>)request;
+
+/**
+ *  @brief 处理task完成后的响应并且执行回调。完成后自动执行'removeRequest:'
  *
- *  @param request 遵循<JSNetworkRequestProtocol>的请求类
+ *  @param task NSURLSessionTask
  *  @param responseObject 响应数据
  *  @param error 错误
  *
  *  @see JSNetworkProvider.m
  */
-- (void)handleTaskWithRequest:(id<JSNetworkRequestProtocol>)request responseObject:(nullable id)responseObject error:(nullable NSError *)error;
+- (void)handleResponseWithTask:(NSURLSessionTask *)task
+                              responseObject:(nullable id)responseObject
+                                       error:(nullable NSError *)error;
 
 @end
 
 @interface JSNetworkAgent (Plugin)
 
-- (NSArray *)getAllPluginsWithRequest:(id<JSNetworkRequestProtocol>)request;
 - (void)toggleWillStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request;
 - (void)toggleDidStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request;
 - (void)toggleWillStopWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request;

@@ -38,6 +38,8 @@
         _plugins = [NSMutableArray array];
         _timeoutInterval = 20;
         _responseClass = JSNetworkResponse.class;
+        _processingQueue = dispatch_get_main_queue();
+        _completionQueue = dispatch_get_main_queue();
     }
     return self;
 }

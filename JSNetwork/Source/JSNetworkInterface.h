@@ -39,6 +39,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) NSTimeInterval timeoutInterval;
 /**
+ *  @brief 任务处理所在的队列，默认并行队列
+ */
+@property (nonatomic, strong, readonly) dispatch_queue_t processingQueue;
+/**
+ *  @brief 回调处理所在的队列，默认主队列
+ */
+@property (nonatomic, strong, readonly) dispatch_queue_t completionQueue;
+/**
+ *  @brief 全部插件
+ */
+@property (nonatomic, strong, readonly) NSArray *allPlugins;
+/**
  *  @brief 响应类
  */
 @property (nonatomic, strong, readonly) id<JSNetworkResponseProtocol> response;
