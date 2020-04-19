@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param plugin 遵循<JSNetworkPluginProtocol>的插件
  */
-- (void)addPlugins:(id<JSNetworkPluginProtocol>)plugin;
+- (void)addPlugin:(id<JSNetworkPluginProtocol>)plugin;
 /**
  *  @brief 清除所有插件
  */

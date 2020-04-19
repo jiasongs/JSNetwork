@@ -57,7 +57,7 @@
     }
 }
 
-- (void)addPlugins:(id<JSNetworkPluginProtocol>)plugin {
+- (void)addPlugin:(id<JSNetworkPluginProtocol>)plugin {
     NSParameterAssert(plugin);
     @synchronized (self) {
         [_plugins addObject:plugin];

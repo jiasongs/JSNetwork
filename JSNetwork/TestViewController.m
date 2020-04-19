@@ -28,7 +28,7 @@
         JSNetworkConfig.sharedInstance.debugLogEnabled = true;
         [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"123456"}];
         [JSNetworkConfig.sharedInstance addHTTPHeaderFields:@{@"userName": @"123"}];
-        [JSNetworkConfig.sharedInstance addPlugins:NetworkLoggerPlugin.new];
+        [JSNetworkConfig.sharedInstance addPlugin:NetworkLoggerPlugin.new];
         JSNetworkConfig.sharedInstance.responseClass = NetworkResponse.class;
         marker = true;
     }
