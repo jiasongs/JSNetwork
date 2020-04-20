@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param error 错误
  *
 */
-- (void)handleRequestResult:(NSURLSessionTask *)task responseObject:(nullable id)responseObject error:(nullable NSError *)error;
+- (void)processingTask:(NSURLSessionTask *)task responseObject:(nullable id)responseObject error:(nullable NSError *)error;
 
 /**
  *  @brief 原始的响应

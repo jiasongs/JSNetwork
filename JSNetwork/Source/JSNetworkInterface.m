@@ -11,8 +11,8 @@
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkResponseProtocol.h"
 #import "JSNetworkConfig.h"
+#import "JSNetworkUtil.h"
 #import "NSDictionary+JSURL.h"
-#import "NSString+JSURLCode.h"
 
 @implementation JSNetworkInterface
 
@@ -20,12 +20,14 @@
     NSParameterAssert(config);
     if (self = [super init]) {
         _originalConfig = config;
-        NSString *url = [NSString stringWithFormat:@"%@%@", config.baseUrl, config.requestUrl];
+        NSString *url = config.requestUrl;
+        if ([config respondsToSelector:@selector(baseUrl)]) {
+            url = [NSString stringWithFormat:@"%@%@", config.baseUrl, url];
+        }
         NSString *HTTPMethod = @"GET";
-        NSDictionary *parameters = nil;
+        NSDictionary *parameters = JSNetworkConfig.sharedInstance.urlFilterArguments;
         NSDictionary *headers = JSNetworkConfig.sharedInstance.HTTPHeaderFields;
         NSTimeInterval timeoutInterval = JSNetworkConfig.sharedInstance.timeoutInterval;
-        Class ResponseClass = JSNetworkConfig.sharedInstance.responseClass;
         id body = nil;
         if ([config respondsToSelector:@selector(requestMethod)]) {
             switch (config.requestMethod) {
@@ -41,9 +43,11 @@
             }
         }
         if ([config respondsToSelector:@selector(requestArgument)]) {
-            parameters = config.requestArgument;
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
+            [dictionary addEntriesFromDictionary:config.requestArgument ? : @{}];
+            parameters = dictionary.copy;
         }
-        url = [self filterURL:url withParameter:parameters];
+        url = [JSNetworkUtil filterURL:url withParameter:parameters];
         if ([config respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
             url = [config requestUrlFilterWithURL:_finalURL];
         }
@@ -64,6 +68,7 @@
         _finalArguments = [NSDictionary js_dictionaryWithURLQuery:_finalURL];
         _finalHTTPBody = body;
         _timeoutInterval = timeoutInterval;
+        Class ResponseClass = JSNetworkConfig.sharedInstance.responseClass;
         if ([config respondsToSelector:@selector(responseClass)]) {
             ResponseClass = config.responseClass;
         }
@@ -83,29 +88,6 @@
         _allPlugins = plugins.copy;
     }
     return self;
-}
-
-- (NSString *)filterURL:(NSString *)URL withParameter:(NSDictionary<NSString *, id> *)parameter {
-    NSString *finalUrl = URL.js_urlDecode;
-    NSDictionary *finalParameters = @{};
-    @autoreleasepool {
-        NSString *newUrl = URL;
-        NSString *newQuery = @"";
-        if ([URL containsString:@"?"]) {
-            NSArray *array = [URL componentsSeparatedByString:@"?"];
-            newUrl = array.firstObject;
-            newQuery = array.lastObject;
-        }
-        NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:JSNetworkConfig.sharedInstance.urlFilterArguments];
-        [newParameters addEntriesFromDictionary:parameter];
-        [newParameters addEntriesFromDictionary:[NSDictionary js_dictionaryWithURLQuery:newQuery]];
-        finalParameters = newParameters.copy;
-        finalUrl = newUrl;
-        if (finalParameters.count > 0) {
-            finalUrl = [finalUrl stringByAppendingFormat:@"?%@", finalParameters.js_URLQueryString];
-        }
-    }
-    return finalUrl;
 }
 
 @end

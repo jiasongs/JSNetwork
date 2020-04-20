@@ -72,13 +72,13 @@
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
     [request buildTaskWithInterface:interface taskCompleted:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
         /// 处理响应和回调之后移除
-        [JSNetworkAgent.sharedInstance handleResponseWithTask:task responseObject:responseObject error:error];
+        [JSNetworkAgent.sharedInstance processingResponseWithTask:task responseObject:responseObject error:error];
     }];
     [request requestUploadProgress:uploadProgress];
     [request requestDownloadProgress:downloadProgress];
     [request requestCompletedFilter:completed];
     /// 处理请求
-    [JSNetworkAgent.sharedInstance handleRequest:request];
+    [JSNetworkAgent.sharedInstance processingRequest:request];
     return request;
 }
 

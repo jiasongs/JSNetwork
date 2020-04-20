@@ -19,7 +19,7 @@
 
 @implementation JSNetworkResponse
 
-- (void)handleRequestResult:(NSURLSessionTask *)task responseObject:(id)responseObject error:(NSError *)error {
+- (void)processingTask:(NSURLSessionTask *)task responseObject:(id)responseObject error:(NSError *)error {
     _requestTask = task;
     _error = error;
     _responseObject = responseObject;

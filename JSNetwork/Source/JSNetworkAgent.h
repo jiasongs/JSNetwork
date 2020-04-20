@@ -25,6 +25,26 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable id<JSNetworkRequestProtocol>)getRequestWithTask:(NSURLSessionTask *)task;
 
 /**
+*  @brief 处理一个请求，该请求被处理后自动执行'- (void)addRequest:'
+*
+*  @param request 遵循<JSNetworkRequestProtocol>的请求类
+*/
+- (void)processingRequest:(id<JSNetworkRequestProtocol>)request;
+
+/**
+ *  @brief 处理task完成后的响应并且执行回调。完成后自动执行'- (void)removeRequest:'
+ *
+ *  @param task NSURLSessionTask
+ *  @param responseObject 响应数据
+ *  @param error 错误
+ *
+ *  @see JSNetworkProvider.m
+ */
+- (void)processingResponseWithTask:(NSURLSessionTask *)task
+                              responseObject:(nullable id)responseObject
+                                       error:(nullable NSError *)error;
+
+/**
  *  @brief 添加一个请求，该请求被添加后执行 '- (void)start'
  *
  *  @param request 遵循<JSNetworkRequestProtocol>的请求类
@@ -37,26 +57,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param request 遵循<JSNetworkRequestProtocol>的请求类
  */
 - (void)removeRequest:(id<JSNetworkRequestProtocol>)request;
-
-/**
-*  @brief 处理一个请求，该请求被处理后自动执行'addRequest:'
-*
-*  @param request 遵循<JSNetworkRequestProtocol>的请求类
-*/
-- (void)handleRequest:(id<JSNetworkRequestProtocol>)request;
-
-/**
- *  @brief 处理task完成后的响应并且执行回调。完成后自动执行'removeRequest:'
- *
- *  @param task NSURLSessionTask
- *  @param responseObject 响应数据
- *  @param error 错误
- *
- *  @see JSNetworkProvider.m
- */
-- (void)handleResponseWithTask:(NSURLSessionTask *)task
-                              responseObject:(nullable id)responseObject
-                                       error:(nullable NSError *)error;
 
 @end
 

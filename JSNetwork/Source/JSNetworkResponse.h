@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@protocol JSNetworkResponseProtocol;
+#import "JSNetworkResponseProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

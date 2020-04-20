@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 请求将要开始
  *
  *  @param request 请求类
+ *
+ *  @use 可能不在主线程被调用
 */
 - (void)requestWillStart:(id<JSNetworkRequestProtocol>)request;
 
@@ -26,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 请求已经开始
  *
  *  @param request 请求类
+ *
+ *  @use 可能不在主线程被调用
 */
 - (void)requestDidStart:(id<JSNetworkRequestProtocol>)request;
 
@@ -33,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 请求将要结束
  *
  *  @param request 请求类
+ *
+ *  @use 可能不在主线程被调用
 */
 - (void)requestWillStop:(id<JSNetworkRequestProtocol>)request;
 
@@ -40,6 +46,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 请求已经结束
  *
  *  @param request 请求类
+ *
+ *  @use 可能不在主线程被调用
 */
 - (void)requestDidStop:(id<JSNetworkRequestProtocol>)request;
 

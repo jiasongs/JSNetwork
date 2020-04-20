@@ -34,7 +34,7 @@
             }
         }];
     }
-    return dict;
+    return dict.copy;
 }
 
 /**

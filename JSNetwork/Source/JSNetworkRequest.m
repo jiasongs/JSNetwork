@@ -7,7 +7,6 @@
 //
 
 #import "JSNetworkRequest.h"
-#import "JSNetworkResponse.h"
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
@@ -37,6 +36,7 @@
     NSParameterAssert(interface);
     NSParameterAssert(taskCompleted);
     _requestInterface = interface;
+    /// 采用一个Manger的方式，否则可能会出现内存泄漏
     static AFHTTPSessionManager *manger = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -67,6 +67,9 @@
                 break;
         }
     }
+    for (NSString *headerField in interface.HTTPHeaderFields.keyEnumerator) {
+        [requestSerializer setValue:interface.HTTPHeaderFields[headerField] forHTTPHeaderField:headerField];
+    }
     requestSerializer.timeoutInterval = interface.timeoutInterval;
     manger.requestSerializer = requestSerializer;
     manger.responseSerializer = responseSerializer;
@@ -74,7 +77,7 @@
     if (useFormData) {
         _requestTask = [manger POST:interface.finalURL
                          parameters:interface.finalHTTPBody
-                            headers:interface.HTTPHeaderFields
+                            headers:nil
           constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
         } progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -91,7 +94,7 @@
                         dataTaskWithHTTPMethod:interface.HTTPMethod
                         URLString:interface.finalURL
                         parameters:interface.finalHTTPBody
-                        headers:interface.HTTPHeaderFields
+                        headers:nil
                         uploadProgress:^(NSProgress *uploadProgress) {
             if (self.uploadProgress) {
                 self.uploadProgress(uploadProgress);
@@ -145,10 +148,6 @@
     [_completedBlcoks removeAllObjects];
     self.uploadProgress = nil;
     self.downloadProgress = nil;
-}
-
-- (NSString *)taskIdentifier {
-    return @(self.requestTask.taskIdentifier).stringValue;
 }
 
 - (JSNetworkInterface *)requestInterface {

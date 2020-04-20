@@ -72,7 +72,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 /**
  *  @brief 返回已经完成的回调
  *
- *  @return 完成前的回调
+ *  @return 数组
  *
  */
 - (NSArray<JSNetworkRequestCompletedFilter> *)completedFilters;
@@ -93,11 +93,6 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *  @brief 返回响应体
  */
 - (id<JSNetworkResponseProtocol>)response;
-
-/**
- *  @brief 请求任务的唯一ID
- */
-- (NSString *)taskIdentifier;
 
 /**
  *  @brief 请求任务
