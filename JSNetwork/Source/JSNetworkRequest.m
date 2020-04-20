@@ -111,16 +111,6 @@
     }
 }
 
-- (void)start {
-    NSParameterAssert(self.requestTask);
-    [self.requestTask resume];
-}
-
-- (void)cancel {
-    NSParameterAssert(self.requestTask);
-    [self.requestTask cancel];
-}
-
 - (void)requestUploadProgress:(nullable JSNetworkProgressBlock)uploadProgress {
     if (uploadProgress) {
         self.uploadProgress = uploadProgress;
@@ -138,7 +128,6 @@
         [_completedBlcoks addObject:completionBlock];
     }
 }
-
 
 - (NSArray<JSNetworkRequestCompletedFilter> *)completedFilters {
     return _completedBlcoks.copy;
@@ -158,36 +147,45 @@
     return self.requestInterface.response;
 }
 
-#pragma mark -
-
 - (NSURLSessionTask *)requestTask {
     return _requestTask;
 }
 
-- (NSURLRequest *)currentURLRequest {
-    return self.requestTask.currentRequest;
+#pragma mark - NSOperation, 以下必须实现
+
+- (void)start {
+    NSParameterAssert(self.requestTask);
+    [self.requestTask resume];
 }
 
-- (NSURLRequest *)originalURLRequest {
-    return self.requestTask.originalRequest;
+- (void)cancel {
+    NSParameterAssert(self.requestTask);
+    [self.requestTask cancel];
 }
 
 - (BOOL)isCancelled {
-    if (!self.requestTask) {
-        return NO;
-    }
+    if (!self.requestTask) return false;
     return self.requestTask.state == NSURLSessionTaskStateCanceling;
 }
 
 - (BOOL)isExecuting {
-    if (!self.requestTask) {
-        return NO;
-    }
+    if (!self.requestTask) return false;
     return self.requestTask.state == NSURLSessionTaskStateRunning;
 }
 
+- (BOOL)isFinished {
+    if (!self.requestTask) return true;
+    return self.requestTask.state == NSURLSessionTaskStateCompleted || self.requestTask.state == NSURLSessionTaskStateCanceling;
+}
+
+- (BOOL)isAsynchronous {
+    return true;
+}
+
+#pragma mark - description
+
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@: %p> { URL: %@ } { method: %@ } { arguments: %@ } { body: %@ } { response: %@ }", NSStringFromClass([self class]), self, self.currentURLRequest.URL, self.currentURLRequest.HTTPMethod, self.requestInterface.finalArguments, self.requestInterface.finalHTTPBody, self.response];
+    return [NSString stringWithFormat:@"<%@: %p> { URL: %@ } { method: %@ } { arguments: %@ } { body: %@ } { response: %@ }", NSStringFromClass([self class]), self, self.requestTask.currentRequest.URL, self.requestTask.currentRequest.HTTPMethod, self.requestInterface.finalArguments, self.requestInterface.finalHTTPBody, self.response];
 }
 
 - (void)dealloc {

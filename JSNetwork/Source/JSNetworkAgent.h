@@ -14,22 +14,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JSNetworkAgent : NSObject
 
-+ (instancetype)sharedInstance;
+@property (nonatomic, strong, readonly) NSOperationQueue *requestQueue;
 
-/**
- *  @brief 根据task得到一个请求
- *
- *  @param task NSURLSessionTask
- * @retutn JSNetworkRequestProtocol
- */
-- (nullable id<JSNetworkRequestProtocol>)getRequestWithTask:(NSURLSessionTask *)task;
++ (instancetype)sharedInstance;
 
 /**
 *  @brief 处理一个请求，该请求被处理后自动执行'- (void)addRequest:'
 *
 *  @param request 遵循<JSNetworkRequestProtocol>的请求类
 */
-- (void)processingRequest:(id<JSNetworkRequestProtocol>)request;
+- (void)processingRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request;
 
 /**
  *  @brief 处理task完成后的响应并且执行回调。完成后自动执行'- (void)removeRequest:'
@@ -43,20 +37,27 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)processingResponseWithTask:(NSURLSessionTask *)task
                               responseObject:(nullable id)responseObject
                                        error:(nullable NSError *)error;
+/**
+ *  @brief 根据task得到一个请求
+ *
+ *  @param task NSURLSessionTask
+ * @retutn JSNetworkRequestProtocol
+ */
+- (nullable __kindof NSOperation<JSNetworkRequestProtocol> *)getRequestWithTask:(NSURLSessionTask *)task;
 
 /**
- *  @brief 添加一个请求，该请求被添加后执行 '- (void)start'
+ *  @brief 添加一个请求
  *
  *  @param request 遵循<JSNetworkRequestProtocol>的请求类
  */
-- (void)addRequest:(id<JSNetworkRequestProtocol>)request;
+- (void)addRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request;
 
 /**
  *  @brief 移除一个请求，该请求如果没有结束，则先执行 '- (void)cancel'
  *
  *  @param request 遵循<JSNetworkRequestProtocol>的请求类
  */
-- (void)removeRequest:(id<JSNetworkRequestProtocol>)request;
+- (void)removeRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request;
 
 @end
 

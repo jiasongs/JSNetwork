@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 遵循<JSNetworkRequestProtocol>的请求类
  */
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                               completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
 
@@ -98,7 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 遵循<JSNetworkRequestProtocol>的请求类
  */
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                          uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                               completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
@@ -113,7 +113,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 遵循<JSNetworkRequestProtocol>的请求类
  */
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                        downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
                               completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
@@ -129,7 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 遵循<JSNetworkRequestProtocol>的请求类
  */
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                          uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                        downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress

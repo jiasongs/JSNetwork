@@ -27,23 +27,23 @@
     return [self promiseRequest:JSNetworkRequest.new withConfig:config uploadProgress:uploadProgress downloadProgress:downloadProgress];
 }
 
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config {
     return [JSNetworkProvider promiseRequest:request withConfig:config uploadProgress:nil downloadProgress:nil];
 }
 
 
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress {
     return [JSNetworkProvider promiseRequest:request withConfig:config uploadProgress:nil downloadProgress:downloadProgress];
 }
 
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress {
     return [JSNetworkProvider promiseRequest:request withConfig:config uploadProgress:uploadProgress downloadProgress:nil];
 }
 
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress {
     FBLPromise *promise = [FBLPromise pendingPromise];
     [JSNetworkProvider request:request withConfig:config uploadProgress:uploadProgress downloadProgress:downloadProgress completed:^(id<JSNetworkRequestProtocol> aRequest) {

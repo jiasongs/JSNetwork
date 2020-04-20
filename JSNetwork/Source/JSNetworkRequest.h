@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JSNetworkRequest : NSObject <JSNetworkRequestProtocol>
+@interface JSNetworkRequest : NSOperation <JSNetworkRequestProtocol>
 
 
 @end

@@ -32,16 +32,6 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 - (void)buildTaskWithInterface:(JSNetworkInterface *)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
 
 /**
- *  @brief 开始一个请求
- */
-- (void)start;
-
-/**
- *  @brief 取消一个请求
- */
-- (void)cancel;
-
-/**
  *  @brief 设置上传进度的回调
  *
  *  @param uploadProgress 上传进度
@@ -78,7 +68,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 - (NSArray<JSNetworkRequestCompletedFilter> *)completedFilters;
 
 /**
- *  @brief 清空所有Block
+ *  @brief 清空所有回调
  */
 - (void)clearAllCallBack;
 
@@ -98,26 +88,6 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *  @brief 请求任务
  */
 - (NSURLSessionTask *)requestTask;
-
-/**
- *  @brief 当前NSURLRequest
- */
-- (NSURLRequest *)currentURLRequest;
-
-/**
- *  @brief 原始NSURLRequest
- */
-- (NSURLRequest *)originalURLRequest;
-
-/**
- *  @brief 任务是否正在执行
- */
-- (BOOL)isExecuting;
-
-/**
- *  @brief 任务是否已经取消
- */
-- (BOOL)isCancelled;
 
 @end
 

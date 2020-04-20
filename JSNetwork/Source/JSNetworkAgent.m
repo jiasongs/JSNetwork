@@ -16,7 +16,8 @@
 
 @interface JSNetworkAgent ()
 
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, id<JSNetworkRequestProtocol>> *requestsRecord;
+@property (nonatomic, strong, readwrite) NSOperationQueue *requestQueue;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, __kindof NSOperation<JSNetworkRequestProtocol> *> *requestsRecord;
 @property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
@@ -40,25 +41,25 @@
     if (self = [super init]) {
         _requestsRecord = [NSMutableDictionary dictionary];
         _lock = dispatch_semaphore_create(1);
+        _requestQueue = [[NSOperationQueue alloc] init];
+        _requestQueue.name = @"com.jsnetwork.agent";
     }
     return self;;
 }
 
-- (void)processingRequest:(id<JSNetworkRequestProtocol>)request {
+- (void)processingRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     NSParameterAssert(request);
-    dispatch_async(request.requestInterface.processingQueue, ^{
-        NSArray *plugins = request.requestInterface.allPlugins;
-        [self toggleWillStartWithPlugins:plugins request:request];
-        [self addRequest:request];
-        [self toggleDidStartWithPlugins:plugins request:request];
-    });
+    NSArray *plugins = request.requestInterface.allPlugins;
+    [self toggleWillStartWithPlugins:plugins request:request];
+    [self addRequest:request];
+    [self toggleDidStartWithPlugins:plugins request:request];
 }
 
 - (void)processingResponseWithTask:(NSURLSessionTask *)task
                     responseObject:(nullable id)responseObject
                              error:(nullable NSError *)error {
     NSParameterAssert(task);
-    id<JSNetworkRequestProtocol> request = [self getRequestWithTask:task];
+    __kindof NSOperation<JSNetworkRequestProtocol> *request = [self getRequestWithTask:task];
     if (!request) JSNetworkLog(@"request为nil, 请检查调用顺序是否正确, 请求是否被覆盖, 正常情况下不可能为nil");
     NSParameterAssert(request);
     dispatch_async(request.requestInterface.processingQueue, ^{
@@ -78,7 +79,7 @@
     });
 }
 
-- (nullable id<JSNetworkRequestProtocol>)getRequestWithTask:(NSURLSessionTask *)task {
+- (nullable __kindof NSOperation<JSNetworkRequestProtocol> *)getRequestWithTask:(NSURLSessionTask *)task {
     NSParameterAssert(task);
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     id<JSNetworkRequestProtocol> request = [_requestsRecord objectForKey:@(task.taskIdentifier)];
@@ -86,23 +87,25 @@
     return request;
 }
 
-- (void)addRequest:(id<JSNetworkRequestProtocol>)request {
+- (void)addRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     NSParameterAssert(request);
     [self addRequestToRecord:request];
-    [request start];
+    [self.requestQueue addOperation:request];
+    [self postExecuteAndFinishNotificationWithRequest:request];
 }
 
-- (void)removeRequest:(id<JSNetworkRequestProtocol>)request {
+- (void)removeRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     NSParameterAssert(request);
     if (request.isExecuting) {
         [request cancel];
     } else {
         [request clearAllCallBack];
+        [self postExecuteAndFinishNotificationWithRequest:request];
         [self removeRequestFromRecord:request];
     }
 }
 
-- (void)addRequestToRecord:(id<JSNetworkRequestProtocol>)request {
+- (void)addRequestToRecord:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     if ([_requestsRecord objectForKey:@(request.requestTask.taskIdentifier)]) {
         JSNetworkLog(@"request即将被覆盖, 请检查是否相同的taskIdentifier被添加, 多发生在多个AFNManager的情况");
@@ -111,7 +114,7 @@
     dispatch_semaphore_signal(_lock);
 }
 
-- (void)removeRequestFromRecord:(id<JSNetworkRequestProtocol>)request {
+- (void)removeRequestFromRecord:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     if (![_requestsRecord objectForKey:@(request.requestTask.taskIdentifier)]) {
         JSNetworkLog(@"request不存在, 请检查request是否被覆盖, 多发生在多个AFNManager的情况");
@@ -120,8 +123,14 @@
     dispatch_semaphore_signal(_lock);
 }
 
-@end
+- (void)postExecuteAndFinishNotificationWithRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
+    [request willChangeValueForKey:@"isExecuting"];
+    [request didChangeValueForKey:@"isExecuting"];
+    [request willChangeValueForKey:@"isFinished"];
+    [request didChangeValueForKey:@"isFinished"];
+}
 
+@end
 
 @implementation JSNetworkAgent (Plugin)
 

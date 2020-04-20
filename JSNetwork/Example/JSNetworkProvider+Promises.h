@@ -7,7 +7,7 @@
 //
 
 #import "JSNetworkProvider.h"
-#import <FBLPromises.h>
+@class FBLPromise;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config;
 
 /**
@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config
                                      downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress;
 
@@ -90,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config
                                        uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress;
 
@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return FBLPromise<JSNetworkRequestProtocol>
  */
-+ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(id<JSNetworkRequestProtocol>)request
++ (FBLPromise<id<JSNetworkRequestProtocol>> *)promiseRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                                            withConfig:(id<JSNetworkRequestConfigProtocol>)config
                                        uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                      downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress;

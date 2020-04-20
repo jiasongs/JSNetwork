@@ -11,8 +11,8 @@
 
 @implementation NetworkResponse
 
-- (void)handleRequestResult:(NSURLSessionTask *)task responseObject:(id)responseObject error:(NSError *)error {
-    [super handleRequestResult:task responseObject:responseObject error:error];
+- (void)processingTask:(NSURLSessionTask *)task responseObject:(id)responseObject error:(NSError *)error {
+    [super processingTask:task responseObject:responseObject error:error];
     if (error) {
         self.message = error.localizedDescription;
     } else {

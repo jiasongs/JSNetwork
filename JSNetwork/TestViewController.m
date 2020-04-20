@@ -13,6 +13,7 @@
 #import "NetworkLoggerPlugin.h"
 #import "NetworkResponse.h"
 #import "JSNetworkProvider+Promises.h"
+#import <FBLPromises.h>
 
 @interface TestViewController ()
 
@@ -41,7 +42,7 @@
 - (IBAction)onPress:(nullable id)sender {
     /// 发起请求
     CnodeAPI *api = [CnodeAPI new];
-    [JSNetworkProvider requestwithConfig:api completed:^(id<JSNetworkRequestProtocol> aRequest) {
+    id request = [JSNetworkProvider requestwithConfig:api completed:^(id<JSNetworkRequestProtocol> aRequest) {
         NetworkResponse *response = aRequest.response;
         NSLog(@"requestCompletedFilter - %@", response);
     }];

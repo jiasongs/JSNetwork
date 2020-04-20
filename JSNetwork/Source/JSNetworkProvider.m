@@ -42,27 +42,27 @@
     return [self request:JSNetworkRequest.new withConfig:config uploadProgress:uploadProgress downloadProgress:downloadProgress completed:completed];
 }
 
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                               completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self request:request withConfig:config uploadProgress:nil downloadProgress:nil completed:completed];
 }
 
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                          uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                               completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self request:request withConfig:config uploadProgress:uploadProgress downloadProgress:nil completed:completed];
 }
 
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                        downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
                               completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self request:request withConfig:config uploadProgress:nil downloadProgress:downloadProgress completed:completed];
 }
 
-+ (id<JSNetworkRequestProtocol>)request:(id<JSNetworkRequestProtocol>)request
++ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
                              withConfig:(id<JSNetworkRequestConfigProtocol>)config
                          uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                        downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
