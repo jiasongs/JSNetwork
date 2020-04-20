@@ -82,7 +82,7 @@
 - (nullable __kindof NSOperation<JSNetworkRequestProtocol> *)getRequestWithTask:(NSURLSessionTask *)task {
     NSParameterAssert(task);
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
-    id<JSNetworkRequestProtocol> request = [_requestsRecord objectForKey:@(task.taskIdentifier)];
+    __kindof NSOperation<JSNetworkRequestProtocol> *request = [_requestsRecord objectForKey:@(task.taskIdentifier)];
     dispatch_semaphore_signal(_lock);
     return request;
 }
@@ -91,7 +91,7 @@
     NSParameterAssert(request);
     [self addRequestToRecord:request];
     [self.requestQueue addOperation:request];
-    [self postExecuteAndFinishNotificationWithRequest:request];
+    [self postExecutingAndFinishedKVOWithRequest:request];
 }
 
 - (void)removeRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
@@ -100,7 +100,7 @@
         [request cancel];
     } else {
         [request clearAllCallBack];
-        [self postExecuteAndFinishNotificationWithRequest:request];
+        [self postExecutingAndFinishedKVOWithRequest:request];
         [self removeRequestFromRecord:request];
     }
 }
@@ -108,9 +108,9 @@
 - (void)addRequestToRecord:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
     if ([_requestsRecord objectForKey:@(request.requestTask.taskIdentifier)]) {
-        JSNetworkLog(@"request即将被覆盖, 请检查是否相同的taskIdentifier被添加, 多发生在多个AFNManager的情况");
+        JSNetworkLog(@"request即将被覆盖, 请检查是否添加了相同的taskIdentifier, 多发生在多个AFNManager的情况");
     }
-    [_requestsRecord setValue:request forKey:@(request.requestTask.taskIdentifier)];
+    [_requestsRecord setObject:request forKey:@(request.requestTask.taskIdentifier)];
     dispatch_semaphore_signal(_lock);
 }
 
@@ -123,7 +123,7 @@
     dispatch_semaphore_signal(_lock);
 }
 
-- (void)postExecuteAndFinishNotificationWithRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
+- (void)postExecutingAndFinishedKVOWithRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     [request willChangeValueForKey:@"isExecuting"];
     [request didChangeValueForKey:@"isExecuting"];
     [request willChangeValueForKey:@"isFinished"];
