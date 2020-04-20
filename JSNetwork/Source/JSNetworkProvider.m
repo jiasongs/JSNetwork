@@ -18,7 +18,7 @@
     return [self request:JSNetworkRequest.new withConfig:config uploadProgress:nil downloadProgress:nil completed:nil];
 }
 
-+ (id<JSNetworkRequestProtocol>)requestwithConfig:(id<JSNetworkRequestConfigProtocol>)config
++ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                         completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self request:JSNetworkRequest.new withConfig:config uploadProgress:nil downloadProgress:nil completed:completed];
 }

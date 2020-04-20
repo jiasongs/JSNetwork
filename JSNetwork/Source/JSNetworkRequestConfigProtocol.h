@@ -98,10 +98,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 插件
 */
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
+
 /**
  *  @brief 任务处理所在的队列
  */
 - (dispatch_queue_t)requestProcessingQueue;
+
 /**
  *  @brief 回调处理所在的队列，默认默认并行队列
  */

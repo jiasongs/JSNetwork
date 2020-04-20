@@ -10,7 +10,7 @@
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkResponseProtocol;
 @protocol JSNetworkRequestProtocol;
-@class JSNetworkInterface;
+@protocol JSNetworkInterfaceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,7 +29,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *
  *  @see JSNetworkRequest.m JSNetworkProvider.m
  */
-- (void)buildTaskWithInterface:(JSNetworkInterface *)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
+- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
 
 /**
  *  @brief 设置上传进度的回调
@@ -77,7 +77,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *
  *  @use 需要持有一个requestInterface
  */
-- (JSNetworkInterface *)requestInterface;
+- (id<JSNetworkInterfaceProtocol>)requestInterface;
 
 /**
  *  @brief 返回响应体

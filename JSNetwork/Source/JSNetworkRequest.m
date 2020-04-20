@@ -32,7 +32,7 @@
     return self;
 }
 
-- (void)buildTaskWithInterface:(JSNetworkInterface *)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
+- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
     NSParameterAssert(interface);
     NSParameterAssert(taskCompleted);
     _requestInterface = interface;
@@ -139,7 +139,7 @@
     self.downloadProgress = nil;
 }
 
-- (JSNetworkInterface *)requestInterface {
+- (id<JSNetworkInterfaceProtocol>)requestInterface {
     return _requestInterface;
 }
 

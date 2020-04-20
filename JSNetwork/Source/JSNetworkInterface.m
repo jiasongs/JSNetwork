@@ -16,6 +16,18 @@
 
 @implementation JSNetworkInterface
 
+@synthesize allPlugins = _allPlugins;
+@synthesize completionQueue = _completionQueue;
+@synthesize finalHTTPBody = _finalHTTPBody;
+@synthesize finalArguments = _finalArguments;
+@synthesize finalURL = _finalURL;
+@synthesize HTTPMethod = _HTTPMethod;
+@synthesize originalConfig = _originalConfig;
+@synthesize processingQueue = _processingQueue;
+@synthesize response = _response;
+@synthesize timeoutInterval = _timeoutInterval;
+@synthesize HTTPHeaderFields = _HTTPHeaderFields;
+
 - (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
     NSParameterAssert(config);
     if (self = [super init]) {

@@ -13,6 +13,7 @@
 
 #import <JSNetwork/JSNetworkRequestProtocol.h>
 #import <JSNetwork/JSNetworkRequestConfigProtocol.h>
+#import <JSNetwork/JSNetworkInterfaceProtocol.h>
 #import <JSNetwork/JSNetworkResponseProtocol.h>
 #import <JSNetwork/JSNetworkPluginProtocol.h>
 #import <JSNetwork/JSNetworkProvider.h>
@@ -29,6 +30,7 @@
 
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
+#import "JSNetworkInterfaceProtocol.h"
 #import "JSNetworkResponseProtocol.h"
 #import "JSNetworkPluginProtocol.h"
 #import "JSNetworkProvider.h"

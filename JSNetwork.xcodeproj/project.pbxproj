@@ -14,7 +14,6 @@
 		7A43711F244B5E5600C9EA95 /* NSDictionary+JSURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A43711E244B5E5600C9EA95 /* NSDictionary+JSURL.m */; };
 		7A437122244B5E7C00C9EA95 /* NSString+JSURLCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437121244B5E7C00C9EA95 /* NSString+JSURLCode.m */; };
 		7A43712A244BE60A00C9EA95 /* NetworkLoggerPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437129244BE60A00C9EA95 /* NetworkLoggerPlugin.m */; };
-		7A43712F244BFAA900C9EA95 /* JSNetworkProvider+Promises.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A43712E244BFAA900C9EA95 /* JSNetworkProvider+Promises.m */; };
 		7A437132244BFB1400C9EA95 /* NetworkToastPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437131244BFB1400C9EA95 /* NetworkToastPlugin.m */; };
 		7A437135244BFE0800C9EA95 /* BaseAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437134244BFE0800C9EA95 /* BaseAPI.m */; };
 		7A437139244BFF7900C9EA95 /* NetworkResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A437138244BFF7900C9EA95 /* NetworkResponse.m */; };
@@ -46,8 +45,6 @@
 		7A437121244B5E7C00C9EA95 /* NSString+JSURLCode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSURLCode.m"; sourceTree = "<group>"; };
 		7A437128244BE60A00C9EA95 /* NetworkLoggerPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkLoggerPlugin.h; sourceTree = "<group>"; };
 		7A437129244BE60A00C9EA95 /* NetworkLoggerPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkLoggerPlugin.m; sourceTree = "<group>"; };
-		7A43712D244BFAA900C9EA95 /* JSNetworkProvider+Promises.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JSNetworkProvider+Promises.h"; sourceTree = "<group>"; };
-		7A43712E244BFAA900C9EA95 /* JSNetworkProvider+Promises.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JSNetworkProvider+Promises.m"; sourceTree = "<group>"; };
 		7A437130244BFB1400C9EA95 /* NetworkToastPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkToastPlugin.h; sourceTree = "<group>"; };
 		7A437131244BFB1400C9EA95 /* NetworkToastPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkToastPlugin.m; sourceTree = "<group>"; };
 		7A437133244BFE0800C9EA95 /* BaseAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseAPI.h; sourceTree = "<group>"; };
@@ -173,8 +170,6 @@
 				7A437131244BFB1400C9EA95 /* NetworkToastPlugin.m */,
 				7A437137244BFF7900C9EA95 /* NetworkResponse.h */,
 				7A437138244BFF7900C9EA95 /* NetworkResponse.m */,
-				7A43712D244BFAA900C9EA95 /* JSNetworkProvider+Promises.h */,
-				7A43712E244BFAA900C9EA95 /* JSNetworkProvider+Promises.m */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -363,7 +358,6 @@
 				7A05DC18244AAE5800D71C5C /* CnodeAPI.m in Sources */,
 				7A437139244BFF7900C9EA95 /* NetworkResponse.m in Sources */,
 				7AE05C462449E17400B71A11 /* JSNetworkRequest.m in Sources */,
-				7A43712F244BFAA900C9EA95 /* JSNetworkProvider+Promises.m in Sources */,
 				7A437119244B56A800C9EA95 /* JSNetworkInterface.m in Sources */,
 				7AEE41152449AFDB0039ACE7 /* main.m in Sources */,
 				7A437132244BFB1400C9EA95 /* NetworkToastPlugin.m in Sources */,

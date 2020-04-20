@@ -12,8 +12,6 @@
 #import "NetworkToastPlugin.h"
 #import "NetworkLoggerPlugin.h"
 #import "NetworkResponse.h"
-#import "JSNetworkProvider+Promises.h"
-#import <FBLPromises.h>
 
 @interface TestViewController ()
 
@@ -27,7 +25,6 @@
     [super viewDidLoad];
     static BOOL marker = false;
     if (!marker) {
-        [FBLPromise setDefaultDispatchQueue:dispatch_queue_create("com.promise", DISPATCH_QUEUE_CONCURRENT)];
         /// 全局配置
         JSNetworkConfig.sharedInstance.debugLogEnabled = true;
         [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"123456"}];
@@ -42,15 +39,10 @@
 - (IBAction)onPress:(nullable id)sender {
     /// 发起请求
     CnodeAPI *api = [CnodeAPI new];
-    id request = [JSNetworkProvider requestwithConfig:api completed:^(id<JSNetworkRequestProtocol> aRequest) {
+    id request = [JSNetworkProvider requestWithConfig:api completed:^(id<JSNetworkRequestProtocol> aRequest) {
         NetworkResponse *response = aRequest.response;
         NSLog(@"requestCompletedFilter - %@", response);
     }];
-//    [[JSNetworkProvider promiseRequestWithConfig:api] then:^id(id<JSNetworkRequestProtocol> aRequest) {
-//        NetworkResponse *response = aRequest.response;
-//        NSLog(@"requestCompletedFilter - %@", response);
-//        return nil;
-//    }];
 }
 
 - (void)dealloc {

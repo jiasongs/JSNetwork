@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 遵循<JSNetworkRequestProtocol>的请求类
  */
-+ (id<JSNetworkRequestProtocol>)requestwithConfig:(id<JSNetworkRequestConfigProtocol>)config
++ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                         completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
 
 /**
