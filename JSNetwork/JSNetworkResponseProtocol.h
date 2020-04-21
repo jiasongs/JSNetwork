@@ -21,32 +21,32 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param responseObject 解析出的响应数据
  *  @param error 错误
  *
-*/
+ */
 - (void)processingTask:(NSURLSessionTask *)task responseObject:(nullable id)responseObject error:(nullable NSError *)error;
 
 /**
  *  @brief 原始的响应
-*/
+ */
 - (NSHTTPURLResponse *)originalResponse;
 
 /**
  *  @brief 状态码
-*/
+ */
 - (NSInteger)responseStatusCode;
 
 /**
  *  @brief 响应头
-*/
+ */
 - (NSDictionary *)responseHeaders;
 
 /**
  *  @brief 响应数据
-*/
+ */
 - (id)responseObject;
 
 /**
  *  @brief 错误
-*/
+ */
 - (NSError *)error;
 
 @end

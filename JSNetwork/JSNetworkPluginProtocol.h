@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@protocol JSNetworkRequestProtocol;
+@protocol JSNetworkInterfaceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,38 +18,38 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 请求将要开始
  *
- *  @param request 请求类
+ *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  *  @use 可能不在主线程被调用
-*/
-- (void)requestWillStart:(id<JSNetworkRequestProtocol>)request;
+ */
+- (void)requestWillStart:(id<JSNetworkInterfaceProtocol>)interface;
 
 /**
  *  @brief 请求已经开始
  *
- *  @param request 请求类
+ *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  *  @use 可能不在主线程被调用
-*/
-- (void)requestDidStart:(id<JSNetworkRequestProtocol>)request;
+ */
+- (void)requestDidStart:(id<JSNetworkInterfaceProtocol>)interface;
 
 /**
  *  @brief 请求将要结束
  *
- *  @param request 请求类
+ *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  *  @use 可能不在主线程被调用
-*/
-- (void)requestWillStop:(id<JSNetworkRequestProtocol>)request;
+ */
+- (void)requestWillStop:(id<JSNetworkInterfaceProtocol>)interface;
 
 /**
  *  @brief 请求已经结束
  *
- *  @param request 请求类
+ *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  *  @use 可能不在主线程被调用
-*/
-- (void)requestDidStop:(id<JSNetworkRequestProtocol>)request;
+ */
+- (void)requestDidStop:(id<JSNetworkInterfaceProtocol>)interface;
 
 @end
 

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkRequestProtocol;
+@protocol JSNetworkInterfaceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,9 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置项
  *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
+ *  @return 遵循<JSNetworkInterfaceProtocol>的接口
  */
-+ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config;
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config;
 
 /**
  *  @brief requestConfig、completed
@@ -29,10 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置项
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
+ *  @return 遵循<JSNetworkInterfaceProtocol>的接口
  */
-+ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
 
 /**
  *  @brief requestConfig、uploadProgress、completed
@@ -41,11 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param uploadProgress 上传进度
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
+ *  @return 遵循<JSNetworkInterfaceProtocol>的接口
  */
-+ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                   uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
 
 /**
  *  @brief requestConfig、downloadProgress、completed
@@ -54,11 +55,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param downloadProgress 下载进度
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
+ *  @return 遵循<JSNetworkInterfaceProtocol>的接口
  */
-+ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                 downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
 
 /**
  *  @brief requestConfig、uploadProgress、downloadProgress、completed
@@ -68,72 +69,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param downloadProgress 下载进度
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
+ *  @return 遵循<JSNetworkInterfaceProtocol>的接口
  */
-+ (id<JSNetworkRequestProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                   uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                 downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                        completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
-
-/**
- *  @brief request、requestConfig、completed
- *
- *  @param request 遵循<JSNetworkRequestProtocol>的请求类
- *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置项
- *  @param completed 请求完成的回调
- *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
- */
-+ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
-                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
-                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
-
-/**
- *  @brief request、requestConfig、uploadProgress、completed
- *
- *  @param request 遵循<JSNetworkRequestProtocol>的请求类
- *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置项
- *  @param uploadProgress 上传进度
- *  @param completed 请求完成的回调
- *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
- */
-+ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
-                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
-                         uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
-
-/**
- *  @brief request、requestConfig、downloadProgress、completed
- *
- *  @param request 遵循<JSNetworkRequestProtocol>的请求类
- *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置项
- *  @param downloadProgress 下载进度
- *  @param completed 请求完成的回调
- *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
- */
-+ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
-                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
-                       downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
-
-/**
- *  @brief request、requestConfig、uploadProgress、downloadProgress、completed
- *
- *  @param request 遵循<JSNetworkRequestProtocol>的请求类
- *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置项
- *  @param uploadProgress 上传进度
- *  @param downloadProgress 下载进度
- *  @param completed 请求完成的回调
- *
- *  @return 遵循<JSNetworkRequestProtocol>的请求类
- */
-+ (id<JSNetworkRequestProtocol>)request:(__kindof NSOperation<JSNetworkRequestProtocol> *)request
-                             withConfig:(id<JSNetworkRequestConfigProtocol>)config
-                         uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                       downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                              completed:(nullable void (^)(id<JSNetworkRequestProtocol> aRequest))completed;
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
 
 
 @end

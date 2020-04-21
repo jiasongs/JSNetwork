@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^JSNetworkRequestCompletedFilter)(id<JSNetworkRequestProtocol> aRequest);
+typedef void(^JSNetworkRequestCompletedFilter)(id<JSNetworkInterfaceProtocol> aInterface);
 typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 
 @protocol JSNetworkRequestProtocol <NSObject>
@@ -60,6 +60,22 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 - (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock;
 
 /**
+ *  @brief 上传进度的回调
+ *
+ *  @return uploadProgress
+ *
+ */
+- (nullable JSNetworkProgressBlock)uploadProgress;
+
+/**
+ *  @brief 下载进度的回调
+ *
+ *  @return downloadProgress
+ *
+ */
+- (nullable JSNetworkProgressBlock)downloadProgress;
+
+/**
  *  @brief 返回已经完成的回调
  *
  *  @return 数组
@@ -71,18 +87,6 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *  @brief 清空所有回调
  */
 - (void)clearAllCallBack;
-
-/**
- *  @brief 返回设置的interface
- *
- *  @use 需要持有一个requestInterface
- */
-- (id<JSNetworkInterfaceProtocol>)requestInterface;
-
-/**
- *  @brief 返回响应体
- */
-- (id<JSNetworkResponseProtocol>)response;
 
 /**
  *  @brief 请求任务

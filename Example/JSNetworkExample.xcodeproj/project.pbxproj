@@ -19,6 +19,7 @@
 		7A2684FD244E8263004A7C82 /* NetworkResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684F7244E8262004A7C82 /* NetworkResponse.m */; };
 		7A2684FE244E8263004A7C82 /* NetworkLoggerPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684FA244E8263004A7C82 /* NetworkLoggerPlugin.m */; };
 		7A2684FF244E8263004A7C82 /* NetworkToastPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684FC244E8263004A7C82 /* NetworkToastPlugin.m */; };
+		7A268509244EB459004A7C82 /* NetworkRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A268508244EB459004A7C82 /* NetworkRequest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,8 @@
 		7A2684FA244E8263004A7C82 /* NetworkLoggerPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkLoggerPlugin.m; sourceTree = "<group>"; };
 		7A2684FB244E8263004A7C82 /* NetworkToastPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkToastPlugin.h; sourceTree = "<group>"; };
 		7A2684FC244E8263004A7C82 /* NetworkToastPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkToastPlugin.m; sourceTree = "<group>"; };
+		7A268507244EB459004A7C82 /* NetworkRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkRequest.h; sourceTree = "<group>"; };
+		7A268508244EB459004A7C82 /* NetworkRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkRequest.m; sourceTree = "<group>"; };
 		BD48473650C390EFD4AEA50C /* Pods-JSNetworkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExample.release.xcconfig"; path = "Target Support Files/Pods-JSNetworkExample/Pods-JSNetworkExample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -142,6 +145,8 @@
 		7A2684F0244E823B004A7C82 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				7A268507244EB459004A7C82 /* NetworkRequest.h */,
+				7A268508244EB459004A7C82 /* NetworkRequest.m */,
 				7A2684F8244E8262004A7C82 /* NetworkResponse.h */,
 				7A2684F7244E8262004A7C82 /* NetworkResponse.m */,
 				7A2684F9244E8262004A7C82 /* NetworkLoggerPlugin.h */,
@@ -269,6 +274,7 @@
 				7A2684FE244E8263004A7C82 /* NetworkLoggerPlugin.m in Sources */,
 				7A2684DA244E7700004A7C82 /* ViewController.m in Sources */,
 				7A2684F3244E824B004A7C82 /* BaseAPI.m in Sources */,
+				7A268509244EB459004A7C82 /* NetworkRequest.m in Sources */,
 				7A2684FF244E8263004A7C82 /* NetworkToastPlugin.m in Sources */,
 				7A2684D4244E7700004A7C82 /* AppDelegate.m in Sources */,
 				7A2684E5244E7701004A7C82 /* main.m in Sources */,

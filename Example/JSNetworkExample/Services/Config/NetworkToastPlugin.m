@@ -9,25 +9,26 @@
 #import "NetworkToastPlugin.h"
 #import <JSNetworkResponseProtocol.h>
 #import <JSNetworkRequestProtocol.h>
+#import <JSNetworkInterfaceProtocol.h>
 #import <QMUITips.h>
 
 @implementation NetworkToastPlugin
 
-- (void)requestWillStart:(id<JSNetworkRequestProtocol>)request {
+- (void)requestWillStart:(id<JSNetworkInterfaceProtocol>)interface {
     dispatch_async(dispatch_get_main_queue(), ^{
         [QMUITips showLoading:@"正在请求" inView:UIApplication.sharedApplication.delegate.window];
     });
 }
 
-- (void)requestDidStop:(id<JSNetworkRequestProtocol>)request  {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [QMUITips hideAllTips];
-        if (!request.response.error) {
-            [QMUITips showSucceed:@"请求成功！"];
-        } else {
-            [QMUITips showError:request.response.error.localizedDescription];
-        }
-    });
+- (void)requestDidStop:(id<JSNetworkInterfaceProtocol>)interface {
+     dispatch_async(dispatch_get_main_queue(), ^{
+           [QMUITips hideAllTips];
+           if (!interface.response.error) {
+               [QMUITips showSucceed:@"请求成功！"];
+           } else {
+               [QMUITips showError:interface.response.error.localizedDescription];
+           }
+       });
 }
 
 @end

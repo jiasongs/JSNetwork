@@ -7,22 +7,23 @@
 //
 
 #import "NetworkLoggerPlugin.h"
+#import <JSNetworkInterfaceProtocol.h>
 
 @implementation NetworkLoggerPlugin
 
-- (void)requestWillStart:(id<JSNetworkRequestProtocol>)request {
+- (void)requestWillStart:(id<JSNetworkInterfaceProtocol>)interface {
     NSLog(@"requestWillStart - ");
 }
 
-- (void)requestDidStart:(id<JSNetworkRequestProtocol>)request {
+- (void)requestDidStart:(id<JSNetworkInterfaceProtocol>)interface {
      NSLog(@"requestDidStart - ");
 }
 
-- (void)requestWillStop:(id<JSNetworkRequestProtocol>)request {
+- (void)requestWillStop:(id<JSNetworkInterfaceProtocol>)interface {
      NSLog(@"requestWillStop - ");
 }
 
-- (void)requestDidStop:(id<JSNetworkRequestProtocol>)request {
+- (void)requestDidStop:(id<JSNetworkInterfaceProtocol>)interface {
     NSLog(@"requestDidStop - ");
 }
 

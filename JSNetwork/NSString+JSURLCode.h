@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return urlEncode 后的字符串
  */
 - (NSString *)js_urlEncode;
+
 /**
  *  @brief  urlEncode
  *
@@ -26,12 +27,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return urlEncode 后的字符串
  */
 - (NSString *)js_urlEncodeUsingEncoding:(NSStringEncoding)encoding;
+
 /**
  *  @brief  urlDecode
  *
  *  @return urlDecode 后的字符串
  */
 - (NSString *)js_urlDecode;
+
 /**
  *  @brief  urlDecode
  *

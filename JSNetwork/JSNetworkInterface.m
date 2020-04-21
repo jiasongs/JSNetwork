@@ -27,6 +27,7 @@
 @synthesize response = _response;
 @synthesize timeoutInterval = _timeoutInterval;
 @synthesize HTTPHeaderFields = _HTTPHeaderFields;
+@synthesize request = _request;
 
 - (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
     NSParameterAssert(config);
@@ -80,6 +81,11 @@
         _finalArguments = [NSDictionary js_dictionaryWithURLQuery:_finalURL];
         _finalHTTPBody = body;
         _timeoutInterval = timeoutInterval;
+        Class RequestClass = JSNetworkConfig.sharedInstance.requestClass;
+        if ([config respondsToSelector:@selector(requestClass)]) {
+            RequestClass = config.requestClass;
+        }
+        _request = [[RequestClass alloc] init];
         Class ResponseClass = JSNetworkConfig.sharedInstance.responseClass;
         if ([config respondsToSelector:@selector(responseClass)]) {
             ResponseClass = config.responseClass;
@@ -100,6 +106,12 @@
         _allPlugins = plugins.copy;
     }
     return self;
+}
+
+- (void)dealloc {
+#ifdef DEBUG
+    NSLog(@"JSNetworkInterface - 已经释放");
+#endif
 }
 
 @end

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @protocol JSNetworkPluginProtocol;
 @protocol JSNetworkResponseProtocol;
+@protocol JSNetworkRequestProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,7 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 /**
- *  @brief 全局的响应Class
+ *  @brief 全局的请求Class, 默认JSNetworkRequest, 继承于NSOperation
+ */
+@property (nonatomic, assign) Class<JSNetworkRequestProtocol> requestClass;
+/**
+ *  @brief 全局的响应Class, 默认JSNetworkResponse
  */
 @property (nonatomic, assign) Class<JSNetworkResponseProtocol> responseClass;
 /**

@@ -8,6 +8,7 @@
 
 #import "JSNetworkConfig.h"
 #import "JSNetworkResponse.h"
+#import "JSNetworkRequest.h"
 
 @interface JSNetworkConfig () {
     NSMutableArray *_plugins;
@@ -37,6 +38,7 @@
         _urlFilterArguments = [NSDictionary dictionary];
         _plugins = [NSMutableArray array];
         _timeoutInterval = 20;
+        _requestClass = JSNetworkRequest.class;
         _responseClass = JSNetworkResponse.class;
         _processingQueue = dispatch_queue_create("com.jsnetwork.networkagent.processing", DISPATCH_QUEUE_CONCURRENT);
         _completionQueue = dispatch_get_main_queue();

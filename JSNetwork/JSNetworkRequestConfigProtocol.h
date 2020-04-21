@@ -35,49 +35,49 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  @brief URL
-*/
+ */
 - (NSString *)requestUrl;
 
 @optional
 
 /**
  *  @brief BaseURL
-*/
+ */
 - (NSString *)baseUrl;
 
 /**
  *  @brief URL中需要拼接的参数
-*/
+ */
 - (nullable NSDictionary *)requestArgument;
 
 /**
  *  @brief request中的HTTPBody
-*/
+ */
 - (nullable id)requestBody;
 
 /**
  *  @brief 请求方式GET/POST
-*/
+ */
 - (JSRequestMethod)requestMethod;
 
 /**
  *  @brief POST时Body的转换方式，默认JSRequestSerializerTypeJSON
-*/
+ */
 - (JSRequestSerializerType)requestSerializerType;
 
 /**
  *  @brief 响应的数据解析方式，默认为JSResponseSerializerTypeJSON
-*/
+ */
 - (JSResponseSerializerType)responseSerializerType;
 
 /**
  *  @brief 请求超时时间
-*/
+ */
 - (NSTimeInterval)requestTimeoutInterval;
 
 /**
  *  @brief 请求头
-*/
+ */
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
 /**
@@ -86,17 +86,22 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param URL 需要筛选的URL
  *
  *  @return 返回新的URL
-*/
+ */
 - (NSString *)requestUrlFilterWithURL:(NSString *)URL;
 
 /**
+ *  @brief 请求类的Class，继承于NSOperation
+ */
+- (Class<JSNetworkRequestProtocol>)requestClass;
+
+/**
  *  @brief 响应类的Class
-*/
+ */
 - (Class<JSNetworkResponseProtocol>)responseClass;
 
 /**
  *  @brief 插件
-*/
+ */
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
 
 /**

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkResponseProtocol;
+@protocol JSNetworkRequestProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,6 +51,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 全部插件
  */
 @property (nonatomic, strong, readonly) NSArray *allPlugins;
+/**
+ *  @brief 请求类
+ */
+@property (nonatomic, strong, readonly) __kindof NSOperation<JSNetworkRequestProtocol> *request;
 /**
  *  @brief 响应类
  */

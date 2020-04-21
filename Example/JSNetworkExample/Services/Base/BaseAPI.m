@@ -23,7 +23,7 @@
 
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins {
     if (!_plugins) {
-        _plugins = @[NetworkToastPlugin.new];
+//        _plugins = @[NetworkToastPlugin.new];
     }
     return _plugins;
 }

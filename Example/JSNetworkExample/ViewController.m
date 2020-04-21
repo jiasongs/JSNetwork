@@ -10,6 +10,7 @@
 #import <JSNetwork.h>
 #import "NetworkLoggerPlugin.h"
 #import "NetworkResponse.h"
+#import "NetworkRequest.h"
 #import "CNodeAPI.h"
 
 @interface ViewController ()
@@ -21,6 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     /// 全局配置
+    JSNetworkConfig.sharedInstance.requestClass = NetworkRequest.class;
     JSNetworkConfig.sharedInstance.responseClass = NetworkResponse.class;
     JSNetworkConfig.sharedInstance.debugLogEnabled = true;
     [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"token"}];
@@ -31,8 +33,8 @@
 
 - (IBAction)onPressRequest:(id)sender {
     CNodeAPI *api = [CNodeAPI new];
-    [JSNetworkProvider requestWithConfig:api completed:^(id<JSNetworkRequestProtocol> aRequest) {
-        NetworkResponse *response = aRequest.response;
+    [JSNetworkProvider requestWithConfig:api completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+        NetworkResponse *response = aInterface.response;
         NSLog(@"completed - %@", response);
     }];
 }

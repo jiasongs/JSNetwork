@@ -17,7 +17,7 @@
 @interface JSNetworkAgent ()
 
 @property (nonatomic, strong, readwrite) NSOperationQueue *requestQueue;
-@property (nonatomic, strong) NSMutableDictionary<NSNumber *, __kindof NSOperation<JSNetworkRequestProtocol> *> *requestsRecord;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, id<JSNetworkInterfaceProtocol>> *requestsRecord;
 @property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
@@ -47,79 +47,86 @@
     return self;;
 }
 
-- (void)processingRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
-    NSParameterAssert(request);
-    NSArray *plugins = request.requestInterface.allPlugins;
-    [self toggleWillStartWithPlugins:plugins request:request];
-    [self addRequest:request];
-    [self toggleDidStartWithPlugins:plugins request:request];
+- (void)processingInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    NSParameterAssert(interface);
+    NSParameterAssert(interface.request);
+    [self toggleWillStartWithInterface:interface];
+    __weak __typeof(self) weakSelf = self;
+    [interface.request buildTaskWithInterface:interface taskCompleted:^(NSURLSessionDataTask *task, id responseObject, NSError *error) {
+        /// 处理响应和回调之后移除
+        [weakSelf processingResponseWithTask:task responseObject:responseObject error:error];
+    }];
+    [self addInterface:interface];
+    [self toggleDidStartWithInterface:interface];
 }
 
 - (void)processingResponseWithTask:(NSURLSessionTask *)task
                     responseObject:(nullable id)responseObject
                              error:(nullable NSError *)error {
     NSParameterAssert(task);
-    __kindof NSOperation<JSNetworkRequestProtocol> *request = [self getRequestWithTask:task];
-    if (!request) JSNetworkLog(@"request为nil, 请检查调用顺序是否正确, 请求是否被覆盖, 正常情况下不可能为nil");
-    NSParameterAssert(request);
-    dispatch_async(request.requestInterface.processingQueue, ^{
+    id<JSNetworkInterfaceProtocol> interface = [self getInterfaceWithTask:task];
+    if (!interface) JSNetworkLog(@"interface为nil, 请检查调用顺序是否正确, 请求是否被覆盖, 正常情况下不可能为nil");
+    NSParameterAssert(interface);
+    dispatch_async(interface.processingQueue, ^{
         /// 处理响应
-        [request.response processingTask:task responseObject:responseObject error:error];
-        dispatch_async(request.requestInterface.completionQueue, ^{
-            NSArray *plugins = request.requestInterface.allPlugins;
-            [self toggleWillStopWithPlugins:plugins request:request];
+        [interface.response processingTask:task responseObject:responseObject error:error];
+        dispatch_async(interface.completionQueue, ^{
+            [self toggleWillStopWithInterface:interface];
             @autoreleasepool {
-                for (JSNetworkRequestCompletedFilter block in request.completedFilters) {
-                    block(request);
+                for (JSNetworkRequestCompletedFilter block in interface.request.completedFilters) {
+                    block(interface);
                 }
             }
-            [self toggleDidStopWithPlugins:plugins request:request];
-            [self removeRequest:request];
+            [self toggleDidStopWithInterface:interface];
+            [self removeInterface:interface];
         });
     });
 }
 
-- (nullable __kindof NSOperation<JSNetworkRequestProtocol> *)getRequestWithTask:(NSURLSessionTask *)task {
+- (void)addInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    NSParameterAssert(interface);
+    NSParameterAssert(interface.request);
+    NSParameterAssert([interface.request isKindOfClass:NSOperation.class]);
+    [self addInterfaceToRecord:interface];
+    [self.requestQueue addOperation:interface.request];
+    [self postExecutingAndFinishedKVOWithRequest:interface.request];
+}
+
+- (void)removeInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    NSParameterAssert(interface);
+    NSParameterAssert(interface.request);
+    if (interface.request.isExecuting) {
+        [interface.request cancel];
+    } else {
+        [interface.request clearAllCallBack];
+        [self postExecutingAndFinishedKVOWithRequest:interface.request];
+        [self removeInterfaceFromRecord:interface];
+    }
+}
+
+- (id<JSNetworkInterfaceProtocol>)getInterfaceWithTask:(NSURLSessionTask *)task {
     NSParameterAssert(task);
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
-    __kindof NSOperation<JSNetworkRequestProtocol> *request = [_requestsRecord objectForKey:@(task.taskIdentifier)];
+    id<JSNetworkInterfaceProtocol> interface = [_requestsRecord objectForKey:@(task.taskIdentifier)];
     dispatch_semaphore_signal(_lock);
-    return request;
+    return interface;
 }
 
-- (void)addRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
-    NSParameterAssert(request);
-    [self addRequestToRecord:request];
-    [self.requestQueue addOperation:request];
-    [self postExecutingAndFinishedKVOWithRequest:request];
-}
-
-- (void)removeRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
-    NSParameterAssert(request);
-    if (request.isExecuting) {
-        [request cancel];
-    } else {
-        [request clearAllCallBack];
-        [self postExecutingAndFinishedKVOWithRequest:request];
-        [self removeRequestFromRecord:request];
-    }
-}
-
-- (void)addRequestToRecord:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
+- (void)addInterfaceToRecord:(id<JSNetworkInterfaceProtocol>)interface {
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
-    if ([_requestsRecord objectForKey:@(request.requestTask.taskIdentifier)]) {
-        JSNetworkLog(@"request即将被覆盖, 请检查是否添加了相同的taskIdentifier, 多发生在多个AFNManager的情况");
+    if ([_requestsRecord objectForKey:@(interface.request.requestTask.taskIdentifier)]) {
+        JSNetworkLog(@"interface即将被覆盖, 请检查是否添加了相同的taskIdentifier, 多发生在多个AFNManager的情况");
     }
-    [_requestsRecord setObject:request forKey:@(request.requestTask.taskIdentifier)];
+    [_requestsRecord setObject:interface forKey:@(interface.request.requestTask.taskIdentifier)];
     dispatch_semaphore_signal(_lock);
 }
 
-- (void)removeRequestFromRecord:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
+- (void)removeInterfaceFromRecord:(id<JSNetworkInterfaceProtocol>)interface {
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
-    if (![_requestsRecord objectForKey:@(request.requestTask.taskIdentifier)]) {
-        JSNetworkLog(@"request不存在, 请检查request是否被覆盖, 多发生在多个AFNManager的情况");
+    if (![_requestsRecord objectForKey:@(interface.request.requestTask.taskIdentifier)]) {
+        JSNetworkLog(@"interface不存在, 请检查interface是否被覆盖, 多发生在多个AFNManager的情况");
     }
-    [_requestsRecord removeObjectForKey:@(request.requestTask.taskIdentifier)];
+    [_requestsRecord removeObjectForKey:@(interface.request.requestTask.taskIdentifier)];
     dispatch_semaphore_signal(_lock);
 }
 
@@ -134,38 +141,38 @@
 
 @implementation JSNetworkAgent (Plugin)
 
-- (void)toggleWillStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
-    NSParameterAssert(request);
-    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+- (void)toggleWillStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    NSParameterAssert(interface);
+    for (id<JSNetworkPluginProtocol> plugin in interface.allPlugins) {
         if ([plugin respondsToSelector:@selector(requestWillStart:)]) {
-            [plugin requestWillStart:request];
+            [plugin requestWillStart:interface];
         }
     }
 }
 
-- (void)toggleDidStartWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
-    NSParameterAssert(request);
-    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+- (void)toggleDidStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    NSParameterAssert(interface);
+    for (id<JSNetworkPluginProtocol> plugin in interface.allPlugins) {
         if ([plugin respondsToSelector:@selector(requestDidStart:)]) {
-            [plugin requestDidStart:request];
+            [plugin requestDidStart:interface];
         }
     }
 }
 
-- (void)toggleWillStopWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
-    NSParameterAssert(request);
-    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+- (void)toggleWillStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    NSParameterAssert(interface);
+    for (id<JSNetworkPluginProtocol> plugin in interface.allPlugins) {
         if ([plugin respondsToSelector:@selector(requestWillStop:)]) {
-            [plugin requestWillStop:request];
+            [plugin requestWillStop:interface];
         }
     }
 }
 
-- (void)toggleDidStopWithPlugins:(NSArray *)plugins request:(id<JSNetworkRequestProtocol>)request {
-    NSParameterAssert(request);
-    for (id<JSNetworkPluginProtocol> plugin in plugins) {
+- (void)toggleDidStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    NSParameterAssert(interface);
+    for (id<JSNetworkPluginProtocol> plugin in interface.allPlugins) {
         if ([plugin respondsToSelector:@selector(requestDidStop:)]) {
-            [plugin requestDidStop:request];
+            [plugin requestDidStop:interface];
         }
     }
 }
