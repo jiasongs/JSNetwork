@@ -12,4 +12,6 @@ Pod::Spec.new do |s|
   s.source_files = "JSNetwork", "JSNetwork/*.{h,m}"
   s.license      = "MIT"
   s.requires_arc = true
+
+  s.dependency 'AFNetworking'
 end

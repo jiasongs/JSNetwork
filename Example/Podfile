@@ -2,10 +2,10 @@ platform :ios, '9.0'
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'JSNetwork' do
+target 'JSNetworkExample' do
 
   # 网络请求
-  pod 'JSNetwork', :path => '../../../JSNetwork'
+  pod 'JSNetwork', :path => '../../JSNetwork'
   pod 'AFNetworking', '~> 4.0'
   pod 'QMUIKit'
   pod 'PromisesObjC'

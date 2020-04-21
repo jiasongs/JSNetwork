@@ -10,7 +10,7 @@
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
-#import <AFNetworking.h>
+#import <AFNetworking/AFNetworking.h>
 
 @interface JSNetworkRequest () {
     NSURLSessionTask *_requestTask;
@@ -189,7 +189,9 @@
 }
 
 - (void)dealloc {
+#ifdef DEBUG
     NSLog(@"JSNetworkRequest - 已经释放");
+#endif
 }
 
 @end

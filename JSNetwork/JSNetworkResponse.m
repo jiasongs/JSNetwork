@@ -50,7 +50,9 @@
 }
 
 - (void)dealloc {
+#ifdef DEBUG
     NSLog(@"JSNetworkResponse - 已经释放");
+#endif
 }
 
 @end

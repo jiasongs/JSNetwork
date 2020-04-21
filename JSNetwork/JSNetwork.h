@@ -24,7 +24,7 @@
 #import <JSNetwork/JSNetworkResponse.h>
 #import <JSNetwork/JSNetworkUtil.h>
 #import <JSNetwork/NSDictionary+JSURL.h>
-#import <JSNetwork/NSString+JSURLCodeL.h>
+#import <JSNetwork/NSString+JSURLCode.h>
 
 #else
 

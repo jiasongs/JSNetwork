@@ -7,6 +7,10 @@
 //
 
 #import "ViewController.h"
+#import <JSNetwork.h>
+#import "NetworkLoggerPlugin.h"
+#import "NetworkResponse.h"
+#import "CNodeAPI.h"
 
 @interface ViewController ()
 
@@ -16,8 +20,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    /// 全局配置
+    JSNetworkConfig.sharedInstance.responseClass = NetworkResponse.class;
+    JSNetworkConfig.sharedInstance.debugLogEnabled = true;
+    [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"token"}];
+    [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"other": @"other"}];
+    [JSNetworkConfig.sharedInstance addHTTPHeaderFields:@{@"userName": @"123"}];
+    [JSNetworkConfig.sharedInstance addPlugin:NetworkLoggerPlugin.new];
 }
 
+- (IBAction)onPressRequest:(id)sender {
+    CNodeAPI *api = [CNodeAPI new];
+    [JSNetworkProvider requestWithConfig:api completed:^(id<JSNetworkRequestProtocol> aRequest) {
+        NetworkResponse *response = aRequest.response;
+        NSLog(@"completed - %@", response);
+    }];
+}
 
 @end
