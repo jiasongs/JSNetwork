@@ -20,7 +20,7 @@
 
 @implementation JSNetworkConfig
 
-+ (instancetype)sharedInstance {
++ (instancetype)sharedConfig {
     static dispatch_once_t onceToken;
     static JSNetworkConfig *instance = nil;
     dispatch_once(&onceToken,^{
@@ -30,7 +30,7 @@
 }
 
 + (id)allocWithZone:(struct _NSZone *)zone {
-    return [self sharedInstance];
+    return [self sharedConfig];
 }
 
 - (instancetype)init {

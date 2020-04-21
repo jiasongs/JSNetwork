@@ -45,7 +45,7 @@
 
 void JSNetworkLog(NSString *format, ...) {
 #ifdef DEBUG
-    if (!JSNetworkConfig.sharedInstance.debugLogEnabled) {
+    if (!JSNetworkConfig.sharedConfig.debugLogEnabled) {
         return;
     }
     NSString *newFormat = [NSString stringWithFormat:@"JSNetworLog - %@", format];

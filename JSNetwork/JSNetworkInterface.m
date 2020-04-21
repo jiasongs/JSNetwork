@@ -38,9 +38,9 @@
             url = [NSString stringWithFormat:@"%@%@", config.baseUrl, url];
         }
         NSString *HTTPMethod = @"GET";
-        NSDictionary *parameters = JSNetworkConfig.sharedInstance.urlFilterArguments;
-        NSDictionary *headers = JSNetworkConfig.sharedInstance.HTTPHeaderFields;
-        NSTimeInterval timeoutInterval = JSNetworkConfig.sharedInstance.timeoutInterval;
+        NSDictionary *parameters = JSNetworkConfig.sharedConfig.urlFilterArguments;
+        NSDictionary *headers = JSNetworkConfig.sharedConfig.HTTPHeaderFields;
+        NSTimeInterval timeoutInterval = JSNetworkConfig.sharedConfig.timeoutInterval;
         id body = nil;
         if ([config respondsToSelector:@selector(requestMethod)]) {
             switch (config.requestMethod) {
@@ -81,25 +81,25 @@
         _finalArguments = [NSDictionary js_dictionaryWithURLQuery:_finalURL];
         _finalHTTPBody = body;
         _timeoutInterval = timeoutInterval;
-        Class RequestClass = JSNetworkConfig.sharedInstance.requestClass;
+        Class RequestClass = JSNetworkConfig.sharedConfig.requestClass;
         if ([config respondsToSelector:@selector(requestClass)]) {
             RequestClass = config.requestClass;
         }
         _request = [[RequestClass alloc] init];
-        Class ResponseClass = JSNetworkConfig.sharedInstance.responseClass;
+        Class ResponseClass = JSNetworkConfig.sharedConfig.responseClass;
         if ([config respondsToSelector:@selector(responseClass)]) {
             ResponseClass = config.responseClass;
         }
         _response = [[ResponseClass alloc] init];
-        _processingQueue = JSNetworkConfig.sharedInstance.processingQueue;
+        _processingQueue = JSNetworkConfig.sharedConfig.processingQueue;
         if ([config respondsToSelector:@selector(requestProcessingQueue)]) {
             _processingQueue = config.requestProcessingQueue;
         }
-        _completionQueue = JSNetworkConfig.sharedInstance.completionQueue;
+        _completionQueue = JSNetworkConfig.sharedConfig.completionQueue;
         if ([config respondsToSelector:@selector(requestCompletionQueue)]) {
             _completionQueue = config.requestCompletionQueue;
         }
-        NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedInstance.plugins];
+        NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedConfig.plugins];
         if ([config respondsToSelector:@selector(requestPlugins)]) {
             [plugins addObjectsFromArray:config.requestPlugins];
         }

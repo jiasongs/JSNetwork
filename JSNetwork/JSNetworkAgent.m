@@ -24,7 +24,7 @@
 
 @implementation JSNetworkAgent
 
-+ (instancetype)sharedInstance {
++ (instancetype)sharedAgent {
     static dispatch_once_t onceToken;
     static JSNetworkAgent *instance = nil;
     dispatch_once(&onceToken,^{
@@ -34,7 +34,7 @@
 }
 
 + (id)allocWithZone:(struct _NSZone *)zone {
-    return [self sharedInstance];
+    return [self sharedAgent];
 }
 
 - (instancetype)init {

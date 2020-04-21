@@ -22,13 +22,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     /// 全局配置
-    JSNetworkConfig.sharedInstance.requestClass = NetworkRequest.class;
-    JSNetworkConfig.sharedInstance.responseClass = NetworkResponse.class;
-    JSNetworkConfig.sharedInstance.debugLogEnabled = true;
-    [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"token"}];
-    [JSNetworkConfig.sharedInstance addUrlFilterArguments:@{@"other": @"other"}];
-    [JSNetworkConfig.sharedInstance addHTTPHeaderFields:@{@"userName": @"123"}];
-    [JSNetworkConfig.sharedInstance addPlugin:NetworkLoggerPlugin.new];
+    JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
+    JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
+    JSNetworkConfig.sharedConfig.debugLogEnabled = true;
+    [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"token"}];
+    [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"other": @"other"}];
+    [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
+    [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
 }
 
 - (IBAction)onPressRequest:(id)sender {

@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) NSArray *plugins;
 
-+ (instancetype)sharedInstance;
++ (instancetype)sharedConfig;
 
 /**
  *  @brief 添加一个用于URL筛选的字典

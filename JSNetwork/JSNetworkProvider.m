@@ -47,7 +47,7 @@
     [interface.request requestDownloadProgress:downloadProgress];
     [interface.request requestCompletedFilter:completed];
     /// 处理接口
-    [JSNetworkAgent.sharedInstance processingInterface:interface];
+    [JSNetworkAgent.sharedAgent processingInterface:interface];
     return interface;
 }
 

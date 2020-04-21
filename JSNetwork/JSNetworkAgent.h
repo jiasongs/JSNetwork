@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) NSOperationQueue *requestQueue;
 
-+ (instancetype)sharedInstance;
++ (instancetype)sharedAgent;
 
 /**
  *  @brief 处理一个请求，该请求被处理后自动执行'- (void)addRequest:'
