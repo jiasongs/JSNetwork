@@ -51,12 +51,8 @@
 }
 
 - (void)processingInterface:(id<JSNetworkInterfaceProtocol>)interface {
-    dispatch_queue_t processingQueue = JSNetworkConfig.sharedConfig.processingQueue;
-    dispatch_queue_t completionQueue = JSNetworkConfig.sharedConfig.completionQueue;
     NSParameterAssert(interface);
     NSParameterAssert(interface.request);
-    NSParameterAssert(processingQueue);
-    NSParameterAssert(completionQueue);
     [self toggleWillStartWithInterface:interface];
     if (!interface.ignoreCache) {
         NSParameterAssert(interface.cacheTimeInSeconds > 0 || interface.cacheVersion > 0);
