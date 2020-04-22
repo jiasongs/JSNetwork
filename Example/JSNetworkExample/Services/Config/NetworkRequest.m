@@ -10,6 +10,7 @@
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
+#import <JSNetworkConfig.h>
 #import <AFNetworking.h>
 
 @interface NetworkRequest () {
@@ -20,7 +21,7 @@
 
 @implementation NetworkRequest
 
-- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void (^)(NSURLSessionDataTask * _Nonnull, id _Nullable, NSError * _Nullable))taskCompleted {
+- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
     [super buildTaskWithInterface:interface taskCompleted:taskCompleted];
     /// 采用一个Manger的方式，否则可能会出现内存泄漏
     static AFHTTPSessionManager *manger = nil;
@@ -59,7 +60,7 @@
     requestSerializer.timeoutInterval = interface.timeoutInterval;
     manger.requestSerializer = requestSerializer;
     manger.responseSerializer = responseSerializer;
-    manger.completionQueue = interface.processingQueue;
+    manger.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     if (useFormData) {
         _requestTask = [manger POST:interface.finalURL
                          parameters:interface.finalHTTPBody
@@ -71,9 +72,9 @@
                 self.uploadProgress(uploadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
-            taskCompleted(task, responseObject, nil);
+            taskCompleted(responseObject, nil);
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            taskCompleted(task, nil, error);
+            taskCompleted(nil, error);
         }];
     } else {
         _requestTask = [manger
@@ -90,9 +91,9 @@
                 self.downloadProgress(downloadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
-            taskCompleted(task, responseObject, nil);
+            taskCompleted(responseObject, nil);
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            taskCompleted(task, nil, error);
+            taskCompleted(nil, error);
         }];
     }
 }

@@ -20,6 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface JSNetworkUtil (Cache)
+
++ (nullable NSData *)dataFromObject:(id)object;
++ (NSString *)md5StringFromString:(NSString *)string;
++ (NSString *)appVersionString;
++ (NSStringEncoding)stringEncodingWithTextEncodingName:(NSString *)textEncodingName;
+
+@end
+
 @interface JSNetworkUtil (Logger)
 
 FOUNDATION_EXPORT void JSNetworkLog(NSString *format, ...);

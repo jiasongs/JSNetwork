@@ -30,7 +30,7 @@
     return self;
 }
 
-- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void(^)(NSURLSessionDataTask *task, id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
+- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
     NSParameterAssert(interface);
     NSParameterAssert(taskCompleted);
 }

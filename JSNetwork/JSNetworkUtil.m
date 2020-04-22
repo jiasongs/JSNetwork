@@ -6,6 +6,7 @@
 //  Copyright © 2020 ruanmei. All rights reserved.
 //
 
+#import <CommonCrypto/CommonDigest.h>
 #import "JSNetworkUtil.h"
 #import "NSDictionary+JSURL.h"
 #import "NSString+JSURLCode.h"
@@ -37,6 +38,50 @@
         }
     }
     return finalUrl;
+}
+
+@end
+
+@implementation JSNetworkUtil (Cache)
+
++ (NSData *)dataFromObject:(id)object {
+    NSData *data = nil;
+    if ([object isKindOfClass:NSString.class]) {
+        data = [object dataUsingEncoding:NSUTF8StringEncoding];
+    } else if ([object isKindOfClass:NSDictionary.class] || [object isKindOfClass:NSArray.class]) {
+        data = [NSJSONSerialization dataWithJSONObject:object options:NSJSONWritingPrettyPrinted error:nil];
+    } else if ([object isKindOfClass:NSData.class]) {
+        data = object;
+    }
+    return data;
+}
+
++ (NSString *)md5StringFromString:(NSString *)string {
+    NSParameterAssert(string != nil && [string length] > 0);
+    const char *value = [string UTF8String];
+    unsigned char outputBuffer[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(value, (CC_LONG)strlen(value), outputBuffer);
+    NSMutableString *outputString = [[NSMutableString alloc] initWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(NSInteger count = 0; count < CC_MD5_DIGEST_LENGTH; count++){
+        [outputString appendFormat:@"%02x", outputBuffer[count]];
+    }
+    return outputString;
+}
+
++ (NSString *)appVersionString {
+     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+}
+
++ (NSStringEncoding)stringEncodingWithTextEncodingName:(NSString *)textEncodingName {
+    NSStringEncoding stringEncoding = NSUTF8StringEncoding;
+    NSString *encodingName = textEncodingName.copy;
+    if (encodingName) {
+        CFStringEncoding encoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName);
+        if (encoding != kCFStringEncodingInvalidId) {
+            stringEncoding = CFStringConvertEncodingToNSStringEncoding(encoding);
+        }
+    }
+    return stringEncoding;
 }
 
 @end

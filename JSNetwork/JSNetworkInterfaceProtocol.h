@@ -10,11 +10,13 @@
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkResponseProtocol;
 @protocol JSNetworkRequestProtocol;
+@protocol JSNetworkDiskCacheProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol JSNetworkInterfaceProtocol <NSObject>
 
+@required
 /**
  *  @brief 过滤后最终需要请求的URL
  */
@@ -40,17 +42,29 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) NSTimeInterval timeoutInterval;
 /**
- *  @brief 任务处理所在的队列，默认并行队列
- */
-@property (nonatomic, strong, readonly) dispatch_queue_t processingQueue;
-/**
- *  @brief 回调处理所在的队列，默认主队列
- */
-@property (nonatomic, strong, readonly) dispatch_queue_t completionQueue;
-/**
  *  @brief 全部插件
  */
 @property (nonatomic, strong, readonly) NSArray *allPlugins;
+/**
+ *  @brief 缓存类的实例
+ */
+@property (nonatomic, strong, readonly) id<JSNetworkDiskCacheProtocol> diskCache;
+/**
+ *  @brief 是否缓存
+ */
+@property (nonatomic, assign, readonly) BOOL ignoreCache;
+/**
+ *  @brief 缓存版本
+ */
+@property (nonatomic, assign, readonly) long long cacheVersion;
+/**
+ *  @brief 缓存时间
+ */
+@property (nonatomic, assign, readonly) NSInteger cacheTimeInSeconds;
+/**
+ *  @brief 缓存的文件夹路径
+ */
+@property (nonatomic, strong, readonly) NSString *cacheDirectoryPath;
 /**
  *  @brief 请求类
  */

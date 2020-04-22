@@ -103,16 +103,24 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 插件
  */
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
-
 /**
- *  @brief 任务处理所在的队列
+ *  @brief 是否忽略缓存, 默认为true
+ *
+ *  @use 当设置不忽略缓存时, 则必须设置cacheVersion或者cacheTimeInSeconds
  */
-- (dispatch_queue_t)requestProcessingQueue;
-
+- (BOOL)ignoreCache;
 /**
- *  @brief 回调处理所在的队列，默认默认并行队列
+ *  @brief 缓存版本, 默认是-1
  */
-- (dispatch_queue_t)requestCompletionQueue;
+- (long long)cacheVersion;
+/**
+ *  @brief 缓存时间, 默认为-1
+ */
+- (NSInteger)cacheTimeInSeconds;
+/**
+ *  @brief 缓存的文件夹路径
+ */
+- (NSString *)cacheDirectoryPath;
 
 @end
 

@@ -10,6 +10,7 @@
 @protocol JSNetworkPluginProtocol;
 @protocol JSNetworkResponseProtocol;
 @protocol JSNetworkRequestProtocol;
+@protocol JSNetworkDiskCacheProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 输出DEBUG信息
  */
 @property (nonatomic, assign) BOOL debugLogEnabled;
+/**
+ *  @brief 全局的任务处理所在的队列
+ */
+@property (nonatomic, strong) dispatch_queue_t processingQueue;
+/**
+ *  @brief 全局的回调处理所在的队列，默认主队列
+ */
+@property (nonatomic, strong) dispatch_queue_t completionQueue;
 /**
  *  @brief 全局BaseURL
  */
@@ -43,14 +52,15 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 全局的响应Class, 默认JSNetworkResponse
  */
 @property (nonatomic, assign) Class<JSNetworkResponseProtocol> responseClass;
+
 /**
- *  @brief 全局的任务处理所在的队列
+ *  @brief 磁盘缓存的Class
  */
-@property (nonatomic, strong) dispatch_queue_t processingQueue;
+@property (nonatomic, assign) Class<JSNetworkDiskCacheProtocol> diskCache;
 /**
- *  @brief 全局的回调处理所在的队列，默认主队列
+ *  @brief 磁盘缓存的文件夹路径
  */
-@property (nonatomic, strong) dispatch_queue_t completionQueue;
+@property (nonatomic, strong) NSString *cacheDirectoryPath;
 /**
  *  @brief 全局的插件
  */

@@ -8,6 +8,8 @@
 
 #import "JSNetworkResponse.h"
 #import "JSNetworkResponseProtocol.h"
+#import "JSNetworkInterfaceProtocol.h"
+#import "JSNetworkRequestProtocol.h"
 
 @interface JSNetworkResponse () {
     NSURLSessionTask *_requestTask;
@@ -19,8 +21,8 @@
 
 @implementation JSNetworkResponse
 
-- (void)processingTask:(NSURLSessionTask *)task responseObject:(id)responseObject error:(NSError *)error {
-    _requestTask = task;
+- (void)processingTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface responseObject:(nullable id)responseObject error:(nullable NSError *)error {
+    _requestTask = interface.request.requestTask;
     _error = error;
     _responseObject = responseObject;
 }

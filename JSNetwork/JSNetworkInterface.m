@@ -17,17 +17,20 @@
 @implementation JSNetworkInterface
 
 @synthesize allPlugins = _allPlugins;
-@synthesize completionQueue = _completionQueue;
 @synthesize finalHTTPBody = _finalHTTPBody;
 @synthesize finalArguments = _finalArguments;
 @synthesize finalURL = _finalURL;
 @synthesize HTTPMethod = _HTTPMethod;
 @synthesize originalConfig = _originalConfig;
-@synthesize processingQueue = _processingQueue;
 @synthesize response = _response;
 @synthesize timeoutInterval = _timeoutInterval;
 @synthesize HTTPHeaderFields = _HTTPHeaderFields;
 @synthesize request = _request;
+@synthesize cacheDirectoryPath = _cacheDirectoryPath;
+@synthesize cacheVersion = _cacheVersion;
+@synthesize ignoreCache = _ignoreCache;
+@synthesize cacheTimeInSeconds = _cacheTimeInSeconds;
+@synthesize diskCache = _diskCache;
 
 - (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
     NSParameterAssert(config);
@@ -91,19 +94,31 @@
             ResponseClass = config.responseClass;
         }
         _response = [[ResponseClass alloc] init];
-        _processingQueue = JSNetworkConfig.sharedConfig.processingQueue;
-        if ([config respondsToSelector:@selector(requestProcessingQueue)]) {
-            _processingQueue = config.requestProcessingQueue;
-        }
-        _completionQueue = JSNetworkConfig.sharedConfig.completionQueue;
-        if ([config respondsToSelector:@selector(requestCompletionQueue)]) {
-            _completionQueue = config.requestCompletionQueue;
-        }
         NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedConfig.plugins];
         if ([config respondsToSelector:@selector(requestPlugins)]) {
             [plugins addObjectsFromArray:config.requestPlugins];
         }
         _allPlugins = plugins.copy;
+        _ignoreCache = true;
+        if ([config respondsToSelector:@selector(ignoreCache)]) {
+            _ignoreCache = config.ignoreCache;
+        }
+        _cacheVersion = -1;
+        if ([config respondsToSelector:@selector(cacheVersion)]) {
+            _cacheVersion = config.cacheVersion;
+        }
+        _cacheTimeInSeconds = -1;
+        if ([config respondsToSelector:@selector(cacheTimeInSeconds)]) {
+            _cacheTimeInSeconds = config.cacheTimeInSeconds;
+        }
+        _cacheDirectoryPath = JSNetworkConfig.sharedConfig.cacheDirectoryPath;
+        if ([config respondsToSelector:@selector(cacheDirectoryPath)]) {
+            _cacheDirectoryPath = config.cacheDirectoryPath;
+        }
+        if (!_ignoreCache) {
+            Class DiskCacheClass = JSNetworkConfig.sharedConfig.diskCache;
+            _diskCache = [[DiskCacheClass alloc] init];
+        }
     }
     return self;
 }

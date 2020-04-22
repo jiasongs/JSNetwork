@@ -18,5 +18,12 @@
   return @"/topics?test=1111&zzz={zzz}";
 }
 
+- (BOOL)ignoreCache {
+    return false;
+}
+
+- (long long)cacheVersion {
+    return 1;
+}
 
 @end
