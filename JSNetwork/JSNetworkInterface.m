@@ -28,7 +28,7 @@
 @synthesize request = _request;
 @synthesize cacheDirectoryPath = _cacheDirectoryPath;
 @synthesize cacheVersion = _cacheVersion;
-@synthesize ignoreCache = _ignoreCache;
+@synthesize cacheIgnore = _cacheIgnore;
 @synthesize cacheTimeInSeconds = _cacheTimeInSeconds;
 @synthesize diskCache = _diskCache;
 
@@ -99,9 +99,9 @@
             [plugins addObjectsFromArray:config.requestPlugins];
         }
         _allPlugins = plugins.copy;
-        _ignoreCache = true;
-        if ([config respondsToSelector:@selector(ignoreCache)]) {
-            _ignoreCache = config.ignoreCache;
+        _cacheIgnore = true;
+        if ([config respondsToSelector:@selector(cacheIgnore)]) {
+            _cacheIgnore = config.cacheIgnore;
         }
         _cacheVersion = -1;
         if ([config respondsToSelector:@selector(cacheVersion)]) {
@@ -115,7 +115,7 @@
         if ([config respondsToSelector:@selector(cacheDirectoryPath)]) {
             _cacheDirectoryPath = config.cacheDirectoryPath;
         }
-        if (!_ignoreCache) {
+        if (!_cacheIgnore) {
             Class DiskCacheClass = JSNetworkConfig.sharedConfig.diskCache;
             _diskCache = [[DiskCacheClass alloc] init];
         }

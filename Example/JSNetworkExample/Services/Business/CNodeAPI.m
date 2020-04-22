@@ -18,7 +18,7 @@
   return @"/topics?test=1111&zzz={zzz}";
 }
 
-- (BOOL)ignoreCache {
+- (BOOL)cacheIgnore {
     return false;
 }
 

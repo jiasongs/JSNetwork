@@ -54,7 +54,7 @@
     NSParameterAssert(interface);
     NSParameterAssert(interface.request);
     [self toggleWillStartWithInterface:interface];
-    if (!interface.ignoreCache) {
+    if (!interface.cacheIgnore) {
         NSParameterAssert(interface.cacheTimeInSeconds > 0 || interface.cacheVersion > 0);
         __weak typeof(self) weakSelf = self;
         /// 缓存处理
@@ -79,7 +79,7 @@
     __weak typeof(self) weakSelf = self;
     __weak typeof(interface) weakInterface = interface;
     [interface.request buildTaskWithInterface:weakInterface taskCompleted:^(id responseObject, NSError *error) {
-        if (!weakInterface.ignoreCache) {
+        if (!weakInterface.cacheIgnore) {
             /// 设置缓存
             [weakInterface.diskCache setCacheData:responseObject
                                      forInterface:weakInterface
@@ -112,15 +112,17 @@
             }
             [interface.request clearAllCallBack];
             [self toggleDidStopWithInterface:interface];
-            if (interface.request.requestTask) {
-                [self removeOperationWithInterface:interface];
-            }
+            [self removeOperationWithInterface:interface];
         });
     });
 }
 
 - (void)addOperationWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
-    NSParameterAssert(interface.request && [interface.request isKindOfClass:NSOperation.class]);
+    NSParameterAssert(interface);
+    if (!interface.request.requestTask) {
+        return;
+    }
+    NSParameterAssert([interface.request isKindOfClass:NSOperation.class]);
     [self addInterfaceToRecord:interface];
     [self.requestQueue addOperation:interface.request];
     [self postExecutingAndFinishedKVOWithRequest:interface.request];
@@ -128,6 +130,9 @@
 
 - (void)removeOperationWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
+    if (!interface.request.requestTask) {
+        return;
+    }
     if (interface.request.isExecuting) {
         [interface.request cancel];
     } else {

@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 是否缓存
  */
-@property (nonatomic, assign, readonly) BOOL ignoreCache;
+@property (nonatomic, assign, readonly) BOOL cacheIgnore;
 /**
  *  @brief 缓存版本
  */

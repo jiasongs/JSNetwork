@@ -108,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @use 当设置不忽略缓存时, 则必须设置cacheVersion或者cacheTimeInSeconds
  */
-- (BOOL)ignoreCache;
+- (BOOL)cacheIgnore;
 /**
  *  @brief 缓存版本, 默认是-1
  */

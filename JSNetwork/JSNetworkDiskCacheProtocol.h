@@ -27,7 +27,7 @@ typedef void (^JSNetworkDiskCacheCompleted)(id<JSNetworkDiskCacheMetadataProtoco
                      completed:(nullable JSNetworkDiskCacheCompleted)completed;
 
 /**
- *  @brief 得到一个缓存
+ *  @brief 得到缓存
  *
  *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *  @param completed 参数为空时表示没有有效的缓存
@@ -37,7 +37,7 @@ typedef void (^JSNetworkDiskCacheCompleted)(id<JSNetworkDiskCacheMetadataProtoco
                 completed:(nullable JSNetworkDiskCacheCompleted)completed;
 
 /**
- *  @brief 得到一个缓存
+ *  @brief 设置缓存
  *
  *  @param cacheData 要缓存的数据
  *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
