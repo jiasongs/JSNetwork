@@ -22,9 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     /// 全局配置
+    JSNetworkConfig.sharedConfig.debugLogEnabled = true;
     JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
     JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
-    JSNetworkConfig.sharedConfig.debugLogEnabled = true;
     [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"token"}];
     [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"other": @"other"}];
     [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
