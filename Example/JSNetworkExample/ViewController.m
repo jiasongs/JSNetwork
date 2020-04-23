@@ -33,10 +33,14 @@
 
 - (IBAction)onPressRequest:(id)sender {
     CNodeAPI *api = [CNodeAPI new];
+    /// 生成接口
     [JSNetworkProvider requestWithConfig:api completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
         NetworkResponse *response = aInterface.response;
         NSLog(@"completed - %@", response);
     }];
+//    for (int i = 0; i < 20; i++) {
+//
+//    }
 }
 
 @end

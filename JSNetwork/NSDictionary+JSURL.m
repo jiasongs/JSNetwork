@@ -30,11 +30,11 @@
             if (queryItem.value) {
                 /// 解除url query编码
                 NSString *value = [queryItem.value stringByRemovingPercentEncoding];
-                [dict setValue:value forKey:queryItem.name];
+                [dict setObject:value forKey:queryItem.name];
             }
         }];
     }
-    return dict.copy;
+    return [NSDictionary dictionaryWithDictionary:dict];
 }
 
 /**
@@ -58,7 +58,7 @@
         [string appendFormat:@"%@=%@", key, escaped];
         CFRelease(escaped);
     }
-    return string;
+    return [NSString stringWithString:string];
 }
 
 @end

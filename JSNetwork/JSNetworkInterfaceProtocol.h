@@ -18,13 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @required
 /**
- *  @brief 过滤后最终需要请求的URL
+ *  @brief 过滤后最终需要请求的URL, 已经拼接好参数所有参数
  */
 @property (nonatomic, strong, readonly) NSString *finalURL;
 /**
- *  @brief 过滤后URL的参数信息
+ *  @brief 过滤后URL的参数信息, URL已经拼接, 这里只是返回一下最终的参数
  */
-@property (nonatomic, strong, readonly) id finalArguments;
+@property (nonatomic, strong, readonly) NSDictionary *finalArguments;
 /**
  *  @brief POST请求中携带的HTTPBody
  */

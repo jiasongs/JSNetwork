@@ -62,7 +62,6 @@
             if (metadata) {
                 /// 存在缓存时
                 @autoreleasepool {
-                    [weakSelf toggleDidStartWithInterface:interface];
                     [weakSelf processingResponseWithInterface:interface responseObject:metadata.cacheData error:nil];
                 }
             } else {
@@ -70,8 +69,10 @@
                 [weakSelf processingRequestWithInterface:interface];
             }
         }];
+        [self toggleDidStartWithInterface:interface];
     } else {
         [self processingRequestWithInterface:interface];
+        [self toggleDidStartWithInterface:interface];
     }
 }
 
@@ -91,7 +92,6 @@
         }
     }];
     [self addOperationWithInterface:weakInterface];
-    [self toggleDidStartWithInterface:weakInterface];
 }
 
 - (void)processingResponseWithInterface:(id<JSNetworkInterfaceProtocol>)interface
@@ -142,25 +142,34 @@
 }
 
 - (void)addInterfaceToRecord:(id<JSNetworkInterfaceProtocol>)interface {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    [self addLock];
     if ([_requestsRecord objectForKey:@(interface.request.requestTask.taskIdentifier)]) {
         JSNetworkLog(@"interface即将被覆盖, 请检查是否添加了相同的taskIdentifier, 多发生在多个AFNManager的情况");
     }
     [_requestsRecord setObject:interface forKey:@(interface.request.requestTask.taskIdentifier)];
-    dispatch_semaphore_signal(_lock);
+    [self unLock];
 }
 
 - (void)removeInterfaceFromRecord:(id<JSNetworkInterfaceProtocol>)interface {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    [self addLock];
     [_requestsRecord removeObjectForKey:@(interface.request.requestTask.taskIdentifier)];
-    dispatch_semaphore_signal(_lock);
+    [self unLock];
 }
 
 - (void)postExecutingAndFinishedKVOWithRequest:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
+    NSParameterAssert(request);
     [request willChangeValueForKey:@"isExecuting"];
     [request didChangeValueForKey:@"isExecuting"];
     [request willChangeValueForKey:@"isFinished"];
     [request didChangeValueForKey:@"isFinished"];
+}
+
+- (void)addLock {
+    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+}
+
+- (void)unLock {
+    dispatch_semaphore_signal(_lock);
 }
 
 @end
