@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSData *)dataFromObject:(id)object;
 + (NSString *)md5StringFromString:(NSString *)string;
 + (NSString *)appVersionString;
-+ (NSStringEncoding)stringEncodingWithTextEncodingName:(NSString *)textEncodingName;
 
 @end
 

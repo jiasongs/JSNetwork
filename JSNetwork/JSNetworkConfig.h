@@ -52,7 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 全局的响应Class, 默认JSNetworkResponse
  */
 @property (nonatomic, assign) Class<JSNetworkResponseProtocol> responseClass;
-
 /**
  *  @brief 磁盘缓存的Class
  */
@@ -66,6 +65,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly) NSArray *plugins;
 
+/**
+ *  @brief 单例
+ */
 + (instancetype)sharedConfig;
 
 /**

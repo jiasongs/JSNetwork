@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JSNetworkAgent : NSObject
 
+/**
+ *  @brief 单例
+ */
 + (instancetype)sharedAgent;
 
 /**

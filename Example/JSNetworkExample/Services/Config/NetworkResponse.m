@@ -10,8 +10,8 @@
 
 @implementation NetworkResponse
 
-- (void)processingTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface responseObject:(id)responseObject error:(NSError *)error {
-    [super processingTaskWithInterface:interface responseObject:responseObject error:error];
+- (void)processingTask:(NSURLSessionTask *)task responseObject:(id)responseObject error:(NSError *)error {
+    [super processingTask:task responseObject:responseObject error:error];
     if (error) {
         self.message = error.localizedDescription;
     } else {

@@ -72,18 +72,6 @@
      return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 }
 
-+ (NSStringEncoding)stringEncodingWithTextEncodingName:(NSString *)textEncodingName {
-    NSStringEncoding stringEncoding = NSUTF8StringEncoding;
-    NSString *encodingName = textEncodingName.copy;
-    if (encodingName) {
-        CFStringEncoding encoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName);
-        if (encoding != kCFStringEncodingInvalidId) {
-            stringEncoding = CFStringConvertEncodingToNSStringEncoding(encoding);
-        }
-    }
-    return stringEncoding;
-}
-
 @end
 
 @implementation JSNetworkUtil (Logger)

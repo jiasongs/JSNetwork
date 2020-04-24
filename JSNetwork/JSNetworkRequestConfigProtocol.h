@@ -103,24 +103,36 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 插件
  */
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
+
 /**
  *  @brief 是否忽略缓存, 默认为true
  *
  *  @use 当设置不忽略缓存时, 则必须设置cacheVersion或者cacheTimeInSeconds
  */
 - (BOOL)cacheIgnore;
+
 /**
  *  @brief 缓存版本, 默认是-1
  */
 - (long long)cacheVersion;
+
 /**
- *  @brief 缓存时间, 默认为-1
+ *  @brief 缓存时间, 默认是-1
  */
 - (NSInteger)cacheTimeInSeconds;
+
+/**
+ *  @brief 根据响应最后一次询问是否保存缓存, 默认true
+ *
+ *  @param response 响应
+ */
+- (BOOL)cacheIsSavedWithResponse:(id<JSNetworkResponseProtocol>)response;
+
 /**
  *  @brief 缓存的文件夹路径
  */
 - (NSString *)cacheDirectoryPath;
+
 
 @end
 

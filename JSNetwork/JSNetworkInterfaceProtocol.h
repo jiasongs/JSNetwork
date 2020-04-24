@@ -18,53 +18,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @required
 /**
- *  @brief 过滤后最终需要请求的URL, 已经拼接好参数所有参数
+ *  @brief 已经处理好的请求配置类
  */
-@property (nonatomic, strong, readonly) NSString *finalURL;
+@property (nonatomic, strong, readonly) id<JSNetworkRequestConfigProtocol> processedConfig;
 /**
- *  @brief 过滤后URL的参数信息, URL已经拼接, 这里只是返回一下最终的参数
+ *  @brief 原始的请求配置类
  */
-@property (nonatomic, strong, readonly) NSDictionary *finalArguments;
-/**
- *  @brief POST请求中携带的HTTPBody
- */
-@property (nonatomic, strong, readonly) id finalHTTPBody;
-/**
- *  @brief 请求方式GET/POST
- */
-@property (nonatomic, strong, readonly) NSString *HTTPMethod;
-/**
- *  @brief 请求头
- */
-@property (nonatomic, strong, readonly) NSDictionary *HTTPHeaderFields;
-/**
- *  @brief 设置超时时间
- */
-@property (nonatomic, assign, readonly) NSTimeInterval timeoutInterval;
-/**
- *  @brief 全部插件
- */
-@property (nonatomic, strong, readonly) NSArray *allPlugins;
+@property (nonatomic, strong, readonly) id<JSNetworkRequestConfigProtocol> originalConfig;
 /**
  *  @brief 缓存类的实例
  */
 @property (nonatomic, strong, readonly) id<JSNetworkDiskCacheProtocol> diskCache;
-/**
- *  @brief 是否缓存
- */
-@property (nonatomic, assign, readonly) BOOL cacheIgnore;
-/**
- *  @brief 缓存版本
- */
-@property (nonatomic, assign, readonly) long long cacheVersion;
-/**
- *  @brief 缓存时间
- */
-@property (nonatomic, assign, readonly) NSInteger cacheTimeInSeconds;
-/**
- *  @brief 缓存的文件夹路径
- */
-@property (nonatomic, strong, readonly) NSString *cacheDirectoryPath;
 /**
  *  @brief 请求类
  */
@@ -73,10 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 响应类
  */
 @property (nonatomic, strong, readonly) id<JSNetworkResponseProtocol> response;
-/**
- *  @brief 原始的请求配置类
- */
-@property (nonatomic, strong, readonly) id<JSNetworkRequestConfigProtocol> originalConfig;
 
 /**
  *  @brief 根据config初始化一个Interface

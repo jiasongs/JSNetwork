@@ -11,9 +11,7 @@
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
 
-@interface JSNetworkRequest () {
-    NSURLSessionTask *_requestTask;
-}
+@interface JSNetworkRequest ()
 
 @property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedFilter> *completedBlcoks;
 @property (nonatomic, copy) JSNetworkProgressBlock uploadProgressBlock;
@@ -30,8 +28,8 @@
     return self;
 }
 
-- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
-    NSParameterAssert(interface);
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
+    NSParameterAssert(config);
     NSParameterAssert(taskCompleted);
 }
 
@@ -72,7 +70,7 @@
 }
 
 - (NSURLSessionTask *)requestTask {
-    return _requestTask;
+    return nil;
 }
 
 #pragma mark - NSOperation, 以下必须实现

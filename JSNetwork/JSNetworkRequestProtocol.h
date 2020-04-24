@@ -24,12 +24,12 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 /**
  *  @brief 构建一个NSURLSessionTask
  *
- *  @param interface 根据config生成的接口类
+ *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置类
  *  @param taskCompleted 任务 <完全结束> 后的回调
  *
  *  @see JSNetworkRequest.m JSNetworkProvider.m
  */
-- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
 
 /**
  *  @brief 设置上传进度的回调

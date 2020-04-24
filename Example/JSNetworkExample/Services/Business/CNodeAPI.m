@@ -7,6 +7,7 @@
 //
 
 #import "CNodeAPI.h"
+#import "NetworkResponse.h"
 
 @implementation CNodeAPI
 
@@ -24,6 +25,10 @@
 
 - (long long)cacheVersion {
     return 1;
+}
+
+- (BOOL)cacheIsSavedWithResponse:(id<JSNetworkResponseProtocol>)response {
+    return [(NetworkResponse *)response successful];
 }
 
 @end

@@ -21,8 +21,8 @@
 
 @implementation NetworkRequest
 
-- (void)buildTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
-    [super buildTaskWithInterface:interface taskCompleted:taskCompleted];
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
+    [super buildTaskWithRequestConfig:config taskCompleted:taskCompleted];
     /// 采用一个Manger的方式，否则可能会出现内存泄漏
     static AFHTTPSessionManager *manger = nil;
     static dispatch_once_t onceToken;
@@ -31,8 +31,8 @@
     });
     BOOL useFormData = false;
     AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
-    if ([interface.originalConfig respondsToSelector:@selector(requestSerializerType)]) {
-        switch (interface.originalConfig.requestSerializerType) {
+    if ([config respondsToSelector:@selector(requestSerializerType)]) {
+        switch (config.requestSerializerType) {
             case JSRequestSerializerTypeFormData:
                 useFormData = true;
                 requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -42,8 +42,8 @@
         }
     }
     AFHTTPResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializer];
-    if ([interface.originalConfig respondsToSelector:@selector(responseSerializerType)]) {
-        switch (interface.originalConfig.responseSerializerType) {
+    if ([config respondsToSelector:@selector(responseSerializerType)]) {
+        switch (config.responseSerializerType) {
             case JSResponseSerializerTypeHTTP:
                 responseSerializer = [AFHTTPResponseSerializer serializer];
                 break;
@@ -54,16 +54,17 @@
                 break;
         }
     }
-    for (NSString *headerField in interface.HTTPHeaderFields.keyEnumerator) {
-        [requestSerializer setValue:interface.HTTPHeaderFields[headerField] forHTTPHeaderField:headerField];
+    NSDictionary *headers = config.requestHeaderFieldValueDictionary;
+    for (NSString *headerField in headers.keyEnumerator) {
+        [requestSerializer setValue:headers[headerField] forHTTPHeaderField:headerField];
     }
-    requestSerializer.timeoutInterval = interface.timeoutInterval;
+    requestSerializer.timeoutInterval = config.requestTimeoutInterval;
     manger.requestSerializer = requestSerializer;
     manger.responseSerializer = responseSerializer;
     manger.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     if (useFormData) {
-        _requestTask = [manger POST:interface.finalURL
-                         parameters:interface.finalHTTPBody
+        _requestTask = [manger POST:config.requestUrl
+                         parameters:config.requestBody
                             headers:nil
           constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
@@ -77,10 +78,11 @@
             taskCompleted(nil, error);
         }];
     } else {
+        NSString *HTTPMethod = config.requestMethod == JSRequestMethodGET ? @"GET" : @"POST";
         _requestTask = [manger
-                        dataTaskWithHTTPMethod:interface.HTTPMethod
-                        URLString:interface.finalURL
-                        parameters:interface.finalHTTPBody
+                        dataTaskWithHTTPMethod:HTTPMethod
+                        URLString:config.requestUrl
+                        parameters:config.requestBody
                         headers:nil
                         uploadProgress:^(NSProgress *uploadProgress) {
             if (self.uploadProgress) {

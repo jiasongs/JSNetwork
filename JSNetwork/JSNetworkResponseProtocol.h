@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@protocol JSNetworkInterfaceProtocol;
+@protocol JSNetworkRequestProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,12 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 处理task
  *
- *  @param interface 接口
+ *  @param task NSURLSessionTask
  *  @param responseObject 解析出的响应数据
  *  @param error 错误
  *
  */
-- (void)processingTaskWithInterface:(id<JSNetworkInterfaceProtocol>)interface responseObject:(nullable id)responseObject error:(nullable NSError *)error;
+- (void)processingTask:(NSURLSessionTask *)task responseObject:(nullable id)responseObject error:(nullable NSError *)error;
 
 /**
  *  @brief 原始的响应

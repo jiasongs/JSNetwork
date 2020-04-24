@@ -6,9 +6,8 @@
 //
 
 #import "JSNetworkDiskCache.h"
-#import "JSNetworkInterfaceProtocol.h"
+#import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkDiskCacheMetadata.h"
-#import "JSNetworkResponseProtocol.h"
 #import "JSNetworkUtil.h"
 
 @interface JSNetworkDiskCache ()
@@ -28,18 +27,18 @@
     return self;
 }
 
-- (void)validCacheForInterface:(id<JSNetworkInterfaceProtocol>)interface completed:(nullable JSNetworkDiskCacheCompleted)completed {
-    [self cacheForInterface:interface completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
+- (void)validCacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config completed:(nullable JSNetworkDiskCacheCompleted)completed {
+    [self cacheForRequestConfig:config completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         if (metadata) {
             @autoreleasepool {
                 /// Date
                 id<JSNetworkDiskCacheMetadataProtocol> resultMetadata = nil;
                 NSTimeInterval duration = -[metadata.creationDate timeIntervalSinceNow];
-                if (interface.cacheTimeInSeconds > 0 && duration > 0 && duration < interface.cacheTimeInSeconds) {
+                if (config.cacheTimeInSeconds > 0 && duration > 0 && duration < config.cacheTimeInSeconds) {
                     resultMetadata = metadata;
                 }
                 /// Version
-                else if (interface.cacheVersion > 0 && metadata.version == interface.cacheVersion) {
+                else if (config.cacheVersion > 0 && metadata.version == config.cacheVersion) {
                     resultMetadata = metadata;
                 }
                 /// TODO: App version
@@ -55,10 +54,10 @@
     }];
 }
 
-- (void)cacheForInterface:(id<JSNetworkInterfaceProtocol>)interface completed:(nullable JSNetworkDiskCacheCompleted)completed {
+- (void)cacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config completed:(nullable JSNetworkDiskCacheCompleted)completed {
     dispatch_async(_processingQueue, ^{
         [self addLock];
-        NSString *filePath = [self cacheFilePathWithInterface:interface];
+        NSString *filePath = [self cacheFilePathWithRequestConfig:config];
         if ([NSFileManager.defaultManager fileExistsAtPath:filePath]) {
             @autoreleasepool {
                 JSNetworkDiskCacheMetadata *metadata = nil;
@@ -83,19 +82,19 @@
     });
 }
 
-- (void)setCacheData:(id)cacheData forInterface:(id<JSNetworkInterfaceProtocol>)interface completed:(nullable JSNetworkDiskCacheCompleted)completed {
+- (void)setCacheData:(id)cacheData forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config completed:(nullable JSNetworkDiskCacheCompleted)completed {
     dispatch_async(_processingQueue, ^{
         [self addLock];
-        BOOL success = [self createCacheDirectoryWithInterface:interface];
+        BOOL success = [self createCacheDirectoryWithRequestConfig:config];
         if (success) {
             @autoreleasepool {
                 JSNetworkDiskCacheMetadata *metadata = [[JSNetworkDiskCacheMetadata alloc] init];
-                metadata.version = interface.cacheVersion;
-                metadata.stringEncoding = [JSNetworkUtil stringEncodingWithTextEncodingName:interface.response.originalResponse.textEncodingName];
+                metadata.version = config.cacheVersion;
+                metadata.stringEncoding = NSUTF8StringEncoding;
                 metadata.creationDate = NSDate.date;
                 metadata.appVersionString = [JSNetworkUtil appVersionString];
                 metadata.cacheData = [JSNetworkUtil dataFromObject:cacheData];
-                NSString *filePath = [self cacheFilePathWithInterface:interface];
+                NSString *filePath = [self cacheFilePathWithRequestConfig:config];
                 if (@available(iOS 11.0, *)) {
                     NSData *newData = [NSKeyedArchiver archivedDataWithRootObject:metadata requiringSecureCoding:YES error:NULL];
                     [newData writeToFile:filePath atomically:true];
@@ -115,15 +114,15 @@
     });
 }
 
-- (NSString *)cacheFilePathWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
-    NSString *requestUrl = interface.finalURL;
+- (NSString *)cacheFilePathWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
+    NSString *requestUrl = config.requestUrl;
     NSString *cacheFileName = [JSNetworkUtil md5StringFromString:requestUrl];
-    return [[interface.cacheDirectoryPath stringByAppendingPathComponent:cacheFileName] stringByAppendingPathExtension:@"metadata"];
+    return [[config.cacheDirectoryPath stringByAppendingPathComponent:cacheFileName] stringByAppendingPathExtension:@"metadata"];
 }
 
-- (BOOL)createCacheDirectoryWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
+- (BOOL)createCacheDirectoryWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *cacheDirectoryPath = interface.cacheDirectoryPath;
+    NSString *cacheDirectoryPath = config.cacheDirectoryPath;
     NSError *error;
     if (![fileManager fileExistsAtPath:cacheDirectoryPath]) {
         [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
