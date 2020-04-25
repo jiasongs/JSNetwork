@@ -36,8 +36,9 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _urlFilterArguments = [NSDictionary dictionary];
+        _urlFilterArguments = @{};
         _plugins = [NSMutableArray array];
+        _baseURL = @"";
         _timeoutInterval = 20;
         _requestClass = JSNetworkRequest.class;
         _responseClass = JSNetworkResponse.class;
@@ -46,6 +47,7 @@
         NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         _cacheDirectoryPath = [NSString stringWithFormat:@"%@/com.jsnetwork.cache", cachePaths.firstObject];
         _diskCache = JSNetworkDiskCache.class;
+        _HTTPHeaderFields = @{};
     }
     return self;
 }

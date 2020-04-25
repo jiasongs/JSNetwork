@@ -1,6 +1,6 @@
 //
 //  JSNetworkRequestConfig.m
-//  AFNetworking
+//  JSNetwork
 //
 //  Created by jiasong on 2020/4/24.
 //
@@ -41,7 +41,7 @@
         NSDictionary *headers = JSNetworkConfig.sharedConfig.HTTPHeaderFields;
         if ([config respondsToSelector:@selector(requestHeaderFieldValueDictionary)]) {
             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:headers];
-            [dic addEntriesFromDictionary:config.requestHeaderFieldValueDictionary];
+            [dic addEntriesFromDictionary:config.requestHeaderFieldValueDictionary ? : @{}];
             headers = dic.copy;
         }
         _finalHTTPHeaderFields = headers;
@@ -59,7 +59,7 @@
             NSString *baseUrl = self.baseUrl;
             NSDictionary *argument = @{};
             if ([_originalConfig respondsToSelector:@selector(requestArgument)]) {
-                argument = _originalConfig.requestArgument;
+                argument = _originalConfig.requestArgument ? : @{};
             }
             NSString *requestInfo = [NSString stringWithFormat:@"Host:%@ Url:%@ Argument:%@ Method:%@", baseUrl, requestUrl, argument, @(self.requestMethod)];
             _finalCacheFileName = [JSNetworkUtil md5StringFromString:requestInfo];;
