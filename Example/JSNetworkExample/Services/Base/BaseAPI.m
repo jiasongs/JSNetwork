@@ -20,8 +20,8 @@
 }
 
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins {
-    return @[];
-//    return @[NetworkToastPlugin.new];
+//    return @[];
+    return @[NetworkToastPlugin.new];
 }
 
 @end

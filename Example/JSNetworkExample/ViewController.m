@@ -36,7 +36,7 @@
     /// 生成接口
     [JSNetworkProvider requestWithConfig:api completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
         NetworkResponse *response = aInterface.response;
-        NSLog(@"completed - %@", response);
+        NSLog(@"%@", aInterface);
     }];
     for (int i = 0; i < 20; i++) {
         

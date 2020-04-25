@@ -49,6 +49,10 @@
     return self;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"{\n%@: <%p>\n%@: %@ \n}", NSStringFromClass(self.class), self, NSStringFromClass(_request.class), _request];
+}
+
 - (void)dealloc {
 #ifdef DEBUG
     NSLog(@"JSNetworkInterface - 已经释放");

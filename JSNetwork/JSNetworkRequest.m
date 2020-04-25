@@ -104,6 +104,10 @@
     return true;
 }
 
+//- (NSString *)description {
+//    return [NSString stringWithFormat:@"{ }"];
+//}
+
 - (void)dealloc {
 #ifdef DEBUG
     NSLog(@"JSNetworkRequest - 已经释放");

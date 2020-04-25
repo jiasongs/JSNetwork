@@ -20,7 +20,7 @@
 }
 
 - (BOOL)cacheIgnore {
-    return false;
+    return true;
 }
 
 - (long long)cacheVersion {
