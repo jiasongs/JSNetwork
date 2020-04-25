@@ -12,8 +12,12 @@
 
 @interface JSNetworkDiskCache ()
 
+@property (nonatomic, strong) NSString *taskIdentifier;
 @property (nonatomic, strong) dispatch_queue_t processingQueue;
 @property (nonatomic, strong) dispatch_semaphore_t lock;
+@property (nonatomic, copy) id testBlockSave;
+@property (nonatomic, copy) id testBlockValid;
+@property (nonatomic, copy) id testBlockGet;
 
 @end
 
@@ -27,19 +31,35 @@
     return self;
 }
 
+static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
+    @synchronized (self) {
+        JSNetworkDiskCache_TaskIdentifier = JSNetworkDiskCache_TaskIdentifier + 1;
+        _taskIdentifier = [@"cache_task" stringByAppendingFormat:@"%@", @(JSNetworkDiskCache_TaskIdentifier)];
+    }
+}
+
+- (NSString *)taskIdentifier {
+    @synchronized (self) {
+        return _taskIdentifier;
+    }
+}
+
 - (void)validCacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
                          completed:(nullable JSNetworkDiskCacheCompleted)completed {
+    //    self.testBlockValid = completed;
     [self cacheForRequestConfig:config
                       completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         if (metadata) {
             @autoreleasepool {
-                /// Date
+                NSLog(@"%@", @(config.cacheVersion));
+                /// 时间
                 id<JSNetworkDiskCacheMetadataProtocol> resultMetadata = nil;
                 NSTimeInterval duration = -[metadata.creationDate timeIntervalSinceNow];
                 if (config.cacheTimeInSeconds > 0 && duration > 0 && duration < config.cacheTimeInSeconds) {
                     resultMetadata = metadata;
                 }
-                /// Version
+                /// 版本
                 else if (config.cacheVersion > 0 && metadata.version == config.cacheVersion) {
                     resultMetadata = metadata;
                 }
@@ -58,6 +78,7 @@
 
 - (void)cacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
                     completed:(nullable JSNetworkDiskCacheCompleted)completed {
+    //    self.testBlockGet = completed;
     dispatch_async(_processingQueue, ^{
         [self addLock];
         NSString *filePath = [self cacheFilePathWithRequestConfig:config];
@@ -81,13 +102,14 @@
                 completed(nil);
             }
         }
-        [self unlock];
+        [self unLock];
     });
 }
 
 - (void)setCacheData:(id)cacheData
     forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
            completed:(nullable JSNetworkDiskCacheCompleted)completed {
+    self.testBlockSave = completed;
     dispatch_async(_processingQueue, ^{
         [self addLock];
         BOOL success = [self createCacheDirectoryWithRequestConfig:config];
@@ -114,7 +136,7 @@
                 completed(nil);
             }
         }
-        [self unlock];
+        [self unLock];
     });
 }
 
@@ -136,7 +158,7 @@
     dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
 }
 
-- (void)unlock {
+- (void)unLock {
     dispatch_semaphore_signal(_lock);
 }
 

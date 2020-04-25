@@ -12,7 +12,7 @@
 
 @interface JSNetworkRequestConfig ()
 
-@property (nonatomic, weak) id<JSNetworkRequestConfigProtocol> originalConfig;
+@property (nonatomic, strong) id<JSNetworkRequestConfigProtocol> originalConfig;
 @property (nonatomic, strong) NSString *finalURL;
 @property (nonatomic, strong) NSDictionary *finalArguments;
 @property (nonatomic, strong) NSDictionary *finalHTTPHeaderFields;

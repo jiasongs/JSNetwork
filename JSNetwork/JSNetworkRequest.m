@@ -73,6 +73,10 @@
     return nil;
 }
 
+- (NSString *)taskIdentifier {
+    return [@"request_task" stringByAppendingFormat:@"%@", @(self.requestTask.taskIdentifier)];
+}
+
 #pragma mark - NSOperation, 以下必须实现
 
 - (void)start {

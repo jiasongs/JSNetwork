@@ -94,6 +94,13 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  */
 - (NSURLSessionTask *)requestTask;
 
+/**
+ *  @brief 任务ID
+ *
+ * @return NSString
+ */
+- (NSString *)taskIdentifier;
+
 @end
 
 NS_ASSUME_NONNULL_END
