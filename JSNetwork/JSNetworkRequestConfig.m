@@ -15,8 +15,9 @@
 @property (nonatomic, weak) id<JSNetworkRequestConfigProtocol> originalConfig;
 @property (nonatomic, strong) NSString *finalURL;
 @property (nonatomic, strong) NSDictionary *finalArguments;
-@property (nonatomic, strong) NSDictionary *HTTPHeaderFields;
+@property (nonatomic, strong) NSDictionary *finalHTTPHeaderFields;
 @property (nonatomic, strong) NSArray *allPlugins;
+@property (nonatomic, strong) NSString *finalCacheFileName;
 
 @end
 
@@ -24,7 +25,9 @@
 
 - (instancetype)initWithConfig:(id<JSNetworkRequestConfigProtocol>)config {
     if (self = [super init]) {
+        /// 原始的配置, 用weak即可, 外部已经引用
         _originalConfig = config;
+        /// URL拼接参数
         NSDictionary *parameters = JSNetworkConfig.sharedConfig.urlFilterArguments;
         if ([config respondsToSelector:@selector(requestArgument)]) {
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
@@ -34,18 +37,33 @@
         NSString *url = [NSString stringWithFormat:@"%@%@", self.baseUrl, config.requestUrl];
         _finalURL = [self requestUrlFilterWithURL:[JSNetworkUtil filterURL:url withParameter:parameters]];;
         _finalArguments = [NSDictionary js_dictionaryWithURLQuery:_finalURL];
+        /// 拼接请求头
         NSDictionary *headers = JSNetworkConfig.sharedConfig.HTTPHeaderFields;
         if ([config respondsToSelector:@selector(requestHeaderFieldValueDictionary)]) {
             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:headers];
             [dic addEntriesFromDictionary:config.requestHeaderFieldValueDictionary];
             headers = dic.copy;
         }
-        _HTTPHeaderFields = headers;
+        _finalHTTPHeaderFields = headers;
+        /// 全部的插件
         NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedConfig.plugins];
         if ([config respondsToSelector:@selector(requestPlugins)]) {
             [plugins addObjectsFromArray:config.requestPlugins];
         }
         _allPlugins = plugins.copy;
+        /// 缓存的文件名
+        if ([config respondsToSelector:@selector(cacheFileName)]) {
+            _finalCacheFileName = config.cacheFileName;
+        } else {
+            NSString *requestUrl = config.requestUrl;
+            NSString *baseUrl = self.baseUrl;
+            NSDictionary *argument = @{};
+            if ([_originalConfig respondsToSelector:@selector(requestArgument)]) {
+                argument = _originalConfig.requestArgument;
+            }
+            NSString *requestInfo = [NSString stringWithFormat:@"Host:%@ Url:%@ Argument:%@ Method:%@", baseUrl, requestUrl, argument, @(self.requestMethod)];
+            _finalCacheFileName = [JSNetworkUtil md5StringFromString:requestInfo];;
+        }
     }
     return self;
 }
@@ -101,7 +119,7 @@
 }
 
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary {
-    return _HTTPHeaderFields;
+    return _finalHTTPHeaderFields;
 }
 
 - (NSString *)requestUrlFilterWithURL:(NSString *)URL {
@@ -141,6 +159,10 @@
         return [_originalConfig cacheIsSavedWithResponse:response];
     }
     return true;
+}
+
+- (NSString *)cacheFileName {
+    return _finalCacheFileName;
 }
 
 - (NSString *)cacheDirectoryPath {

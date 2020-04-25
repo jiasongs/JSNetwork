@@ -129,6 +129,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)cacheIsSavedWithResponse:(id<JSNetworkResponseProtocol>)response;
 
 /**
+ *  @brief 缓存的文件名
+ */
+- (NSString *)cacheFileName;
+
+/**
  *  @brief 缓存的文件夹路径
  */
 - (NSString *)cacheDirectoryPath;

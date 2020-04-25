@@ -59,7 +59,8 @@
         NSParameterAssert(processedConfig.cacheTimeInSeconds > 0 || processedConfig.cacheVersion > 0);
         __weak typeof(self) weakSelf = self;
         /// 缓存处理
-        [interface.diskCache validCacheForRequestConfig:processedConfig completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
+        [interface.diskCache validCacheForRequestConfig:processedConfig
+                                              completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
             if (metadata) {
                 /// 存在缓存时
                 @autoreleasepool {
@@ -84,7 +85,8 @@
     __weak typeof(self) weakSelf = self;
     __weak typeof(interface) weakInterface = interface;
     id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    [interface.request buildTaskWithRequestConfig:processedConfig taskCompleted:^(id responseObject, NSError *error) {
+    [interface.request buildTaskWithRequestConfig:processedConfig
+                                    taskCompleted:^(id responseObject, NSError *error) {
         [weakSelf processingResponseWithInterface:weakInterface
                                    responseObject:responseObject
                                  needSetCacheData:true
@@ -102,7 +104,9 @@
     dispatch_queue_t completionQueue = JSNetworkConfig.sharedConfig.completionQueue;
     dispatch_async(processingQueue, ^{
         /// 处理响应
-        [interface.response processingTask:interface.request.requestTask responseObject:responseObject error:error];
+        [interface.response processingTask:interface.request.requestTask
+                            responseObject:responseObject
+                                     error:error];
         void(^completionBlock)(void) = ^(void) {
             dispatch_async(completionQueue, ^{
                 [self toggleWillStopWithInterface:interface];

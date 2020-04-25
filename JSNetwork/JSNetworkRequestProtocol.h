@@ -29,7 +29,8 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *
  *  @see JSNetworkRequest.m JSNetworkProvider.m
  */
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+                     taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
 
 /**
  *  @brief 设置上传进度的回调

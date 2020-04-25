@@ -45,7 +45,7 @@ typedef void (^JSNetworkDiskCacheCompleted)(id<JSNetworkDiskCacheMetadataProtoco
  *
  */
 - (void)setCacheData:(id)cacheData
-        forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+    forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
            completed:(nullable JSNetworkDiskCacheCompleted)completed;
 
 /**

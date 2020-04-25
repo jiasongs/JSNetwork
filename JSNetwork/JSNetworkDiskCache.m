@@ -27,8 +27,10 @@
     return self;
 }
 
-- (void)validCacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config completed:(nullable JSNetworkDiskCacheCompleted)completed {
-    [self cacheForRequestConfig:config completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
+- (void)validCacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+                         completed:(nullable JSNetworkDiskCacheCompleted)completed {
+    [self cacheForRequestConfig:config
+                      completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         if (metadata) {
             @autoreleasepool {
                 /// Date
@@ -54,7 +56,8 @@
     }];
 }
 
-- (void)cacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config completed:(nullable JSNetworkDiskCacheCompleted)completed {
+- (void)cacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+                    completed:(nullable JSNetworkDiskCacheCompleted)completed {
     dispatch_async(_processingQueue, ^{
         [self addLock];
         NSString *filePath = [self cacheFilePathWithRequestConfig:config];
@@ -82,7 +85,9 @@
     });
 }
 
-- (void)setCacheData:(id)cacheData forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config completed:(nullable JSNetworkDiskCacheCompleted)completed {
+- (void)setCacheData:(id)cacheData
+    forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+           completed:(nullable JSNetworkDiskCacheCompleted)completed {
     dispatch_async(_processingQueue, ^{
         [self addLock];
         BOOL success = [self createCacheDirectoryWithRequestConfig:config];
@@ -90,7 +95,6 @@
             @autoreleasepool {
                 JSNetworkDiskCacheMetadata *metadata = [[JSNetworkDiskCacheMetadata alloc] init];
                 metadata.version = config.cacheVersion;
-                metadata.stringEncoding = NSUTF8StringEncoding;
                 metadata.creationDate = NSDate.date;
                 metadata.appVersionString = [JSNetworkUtil appVersionString];
                 metadata.cacheData = [JSNetworkUtil dataFromObject:cacheData];
@@ -115,9 +119,7 @@
 }
 
 - (NSString *)cacheFilePathWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
-    NSString *requestUrl = config.requestUrl;
-    NSString *cacheFileName = [JSNetworkUtil md5StringFromString:requestUrl];
-    return [[config.cacheDirectoryPath stringByAppendingPathComponent:cacheFileName] stringByAppendingPathExtension:@"metadata"];
+    return [[config.cacheDirectoryPath stringByAppendingPathComponent:config.cacheFileName] stringByAppendingPathExtension:@"metadata"];
 }
 
 - (BOOL)createCacheDirectoryWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {

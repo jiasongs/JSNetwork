@@ -21,7 +21,9 @@
 
 @implementation JSNetworkResponse
 
-- (void)processingTask:(NSURLSessionTask *)task responseObject:(nullable id)responseObject error:(nullable NSError *)error {
+- (void)processingTask:(NSURLSessionTask *)task
+        responseObject:(nullable id)responseObject
+                 error:(nullable NSError *)error {
     _requestTask = task;
     _error = error;
     _responseObject = responseObject;

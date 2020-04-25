@@ -11,8 +11,6 @@
 
 @interface BaseAPI ()
 
-@property (nonatomic, strong) NSArray *plugins;
-
 @end
 
 @implementation BaseAPI
@@ -22,10 +20,8 @@
 }
 
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins {
-    if (!_plugins) {
-//        _plugins = @[NetworkToastPlugin.new];
-    }
-    return _plugins;
+    return @[];
+//    return @[NetworkToastPlugin.new];
 }
 
 @end
