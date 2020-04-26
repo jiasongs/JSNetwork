@@ -78,10 +78,8 @@
 
 void JSNetworkLog(NSString *format, ...) {
 #ifdef DEBUG
-    if (!JSNetworkConfig.sharedConfig.debugLogEnabled) {
-        return;
-    }
-    NSString *newFormat = [NSString stringWithFormat:@"JSNetworLog - %@", format];
+    if (!JSNetworkConfig.sharedConfig.debugLogEnabled) return;
+    NSString *newFormat = [NSString stringWithFormat:@"JSNetworLog: %@", format];
     va_list argptr;
     va_start(argptr, format);
     NSLogv(newFormat, argptr);

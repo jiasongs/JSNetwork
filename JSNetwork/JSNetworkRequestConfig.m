@@ -172,10 +172,20 @@
     return JSNetworkConfig.sharedConfig.cacheDirectoryPath;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"\n{\nPointer: <%p>\nURL: %@\nArguments: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
+            self,
+            _finalURL,
+            _finalArguments,
+            self.requestBody,
+            _finalHTTPHeaderFields,
+            @([self requestMethod]),
+            [NSString stringWithFormat:@"%@/%@.metadata", self.cacheDirectoryPath, self.cacheFileName]
+            ];
+}
+
 - (void)dealloc {
-#ifdef DEBUG
-    NSLog(@"JSNetworkRequestConfig - 已经释放");
-#endif
+    JSNetworkLog(@"JSNetworkRequestConfig - 已经释放");
 }
 
 @end

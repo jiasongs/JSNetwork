@@ -14,6 +14,10 @@
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
     JSRequestMethodGET,
     JSRequestMethodPOST,
+    JSRequestMethodHEAD,
+    JSRequestMethodPUT,
+    JSRequestMethodDELETE,
+    JSRequestMethodPATCH,
 };
 
 typedef NS_ENUM(NSInteger, JSRequestSerializerType) {

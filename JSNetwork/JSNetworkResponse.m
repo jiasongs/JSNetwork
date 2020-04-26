@@ -10,6 +10,7 @@
 #import "JSNetworkResponseProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkRequestProtocol.h"
+#import "JSNetworkUtil.h"
 
 @interface JSNetworkResponse () {
     NSURLSessionTask *_requestTask;
@@ -50,13 +51,11 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@: %p> { responseStatusCode: %@ } { error: %@ }", NSStringFromClass([self class]), self, @(self.responseStatusCode), self.error];
+    return [NSString stringWithFormat:@"<%p>", self];
 }
 
 - (void)dealloc {
-#ifdef DEBUG
-    NSLog(@"JSNetworkResponse - 已经释放");
-#endif
+    JSNetworkLog(@"JSNetworkResponse - 已经释放");
 }
 
 @end

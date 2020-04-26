@@ -38,7 +38,6 @@ static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
                       completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         if (metadata) {
             @autoreleasepool {
-                NSLog(@"%@", @(config.cacheVersion));
                 /// 时间
                 id<JSNetworkDiskCacheMetadataProtocol> resultMetadata = nil;
                 NSTimeInterval duration = -[metadata.creationDate timeIntervalSinceNow];
@@ -153,9 +152,7 @@ static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
 }
 
 - (void)dealloc {
-#ifdef DEBUG
-    NSLog(@"JSNetworkDiskCache - 已经释放");
-#endif
+    JSNetworkLog(@"JSNetworkDiskCache - 已经释放");
 }
 
 @end

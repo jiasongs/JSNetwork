@@ -16,11 +16,11 @@
 }
 
 - (void)requestDidStart:(id<JSNetworkInterfaceProtocol>)interface {
-     NSLog(@"requestDidStart - ");
+    NSLog(@"requestDidStart - ");
 }
 
 - (void)requestWillStop:(id<JSNetworkInterfaceProtocol>)interface {
-     NSLog(@"requestWillStop - ");
+    NSLog(@"requestWillStop - ");
 }
 
 - (void)requestDidStop:(id<JSNetworkInterfaceProtocol>)interface {

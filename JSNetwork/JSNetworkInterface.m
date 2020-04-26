@@ -12,6 +12,7 @@
 #import "JSNetworkResponseProtocol.h"
 #import "JSNetworkConfig.h"
 #import "JSNetworkRequestConfig.h"
+#import "JSNetworkUtil.h"
 
 @implementation JSNetworkInterface
 
@@ -50,13 +51,20 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"{\n%@: <%p>\n%@: %@ \n}", NSStringFromClass(self.class), self, NSStringFromClass(_request.class), _request];
+    return [NSString stringWithFormat:@"\n{\n%@: <%p>\n----------------\n%@: %@\n----------------\n%@: %@\n----------------\n%@: %@\n}",
+            NSStringFromClass(self.class),
+            self,
+            NSStringFromClass(_processedConfig.class),
+            _processedConfig,
+            NSStringFromClass(_request.class),
+            _request,
+            NSStringFromClass(_response.class),
+            _response
+            ];
 }
 
 - (void)dealloc {
-#ifdef DEBUG
-    NSLog(@"JSNetworkInterface - 已经释放");
-#endif
+    JSNetworkLog(@"JSNetworkInterface - 已经释放");
 }
 
 @end

@@ -6,6 +6,7 @@
 //
 
 #import "JSNetworkDiskCacheMetadata.h"
+#import "JSNetworkUtil.h"
 
 @implementation JSNetworkDiskCacheMetadata
 
@@ -36,9 +37,7 @@
 }
 
 - (void)dealloc {
-#ifdef DEBUG
-    NSLog(@"JSNetworkDiskCacheMetadata - 已经释放");
-#endif
+    JSNetworkLog(@"JSNetworkDiskCacheMetadata - 已经释放");
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
+#import "JSNetworkUtil.h"
 
 @interface JSNetworkRequest ()
 
@@ -108,14 +109,12 @@
     return true;
 }
 
-//- (NSString *)description {
-//    return [NSString stringWithFormat:@"{ }"];
-//}
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<%p>", self];
+}
 
 - (void)dealloc {
-#ifdef DEBUG
-    NSLog(@"JSNetworkRequest - 已经释放");
-#endif
+    JSNetworkLog(@"JSNetworkRequest - 已经释放");
 }
 
 @end
