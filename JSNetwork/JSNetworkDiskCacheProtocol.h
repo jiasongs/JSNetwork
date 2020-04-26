@@ -21,26 +21,10 @@ typedef void (^JSNetworkDiskCacheCompleted)(id<JSNetworkDiskCacheMetadataProtoco
  *  @brief 判断缓存是否有效
  *
  *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置类
+ *  @param taskCompleted 参数为空时表示没有有效的缓存
  *
  */
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config;
-
-/**
- *  @brief 任务ID
- *
- * @return NSString
- */
-- (NSString *)taskIdentifier;
-
-/**
- *  @brief 判断缓存是否有效
- *
- *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置类
- *  @param completed 参数为空时表示没有有效的缓存
- *
- */
-- (void)validCacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-                         completed:(nullable JSNetworkDiskCacheCompleted)completed;
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(JSNetworkDiskCacheCompleted)taskCompleted;
 
 /**
  *  @brief 得到缓存
@@ -63,6 +47,13 @@ typedef void (^JSNetworkDiskCacheCompleted)(id<JSNetworkDiskCacheMetadataProtoco
 - (void)setCacheData:(id)cacheData
     forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
            completed:(nullable JSNetworkDiskCacheCompleted)completed;
+
+/**
+ *  @brief 任务ID
+ *
+ * @return NSString
+ */
+- (NSString *)taskIdentifier;
 
 /**
  *  @brief 得到缓存文件的完整路径

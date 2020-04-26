@@ -15,9 +15,6 @@
 @property (nonatomic, strong) NSString *taskIdentifier;
 @property (nonatomic, strong) dispatch_queue_t processingQueue;
 @property (nonatomic, strong) dispatch_semaphore_t lock;
-@property (nonatomic, copy) id testBlockSave;
-@property (nonatomic, copy) id testBlockValid;
-@property (nonatomic, copy) id testBlockGet;
 
 @end
 
@@ -32,22 +29,11 @@
 }
 
 static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(JSNetworkDiskCacheCompleted)taskCompleted {
     @synchronized (self) {
         JSNetworkDiskCache_TaskIdentifier = JSNetworkDiskCache_TaskIdentifier + 1;
         _taskIdentifier = [@"cache_task" stringByAppendingFormat:@"%@", @(JSNetworkDiskCache_TaskIdentifier)];
     }
-}
-
-- (NSString *)taskIdentifier {
-    @synchronized (self) {
-        return _taskIdentifier;
-    }
-}
-
-- (void)validCacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-                         completed:(nullable JSNetworkDiskCacheCompleted)completed {
-    //    self.testBlockValid = completed;
     [self cacheForRequestConfig:config
                       completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         if (metadata) {
@@ -64,13 +50,13 @@ static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
                     resultMetadata = metadata;
                 }
                 /// TODO: App version
-                if (completed) {
-                    completed(resultMetadata);
+                if (taskCompleted) {
+                    taskCompleted(resultMetadata);
                 }
             }
         } else {
-            if (completed) {
-                completed(nil);
+            if (taskCompleted) {
+                taskCompleted(nil);
             }
         }
     }];
@@ -78,7 +64,6 @@ static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
 
 - (void)cacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
                     completed:(nullable JSNetworkDiskCacheCompleted)completed {
-    //    self.testBlockGet = completed;
     dispatch_async(_processingQueue, ^{
         [self addLock];
         NSString *filePath = [self cacheFilePathWithRequestConfig:config];
@@ -109,7 +94,6 @@ static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
 - (void)setCacheData:(id)cacheData
     forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
            completed:(nullable JSNetworkDiskCacheCompleted)completed {
-    self.testBlockSave = completed;
     dispatch_async(_processingQueue, ^{
         [self addLock];
         BOOL success = [self createCacheDirectoryWithRequestConfig:config];
@@ -152,6 +136,12 @@ static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
         [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
     }
     return !error;
+}
+
+- (NSString *)taskIdentifier {
+    @synchronized (self) {
+        return _taskIdentifier;
+    }
 }
 
 - (void)addLock {

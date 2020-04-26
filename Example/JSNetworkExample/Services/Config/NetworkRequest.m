@@ -17,15 +17,12 @@
     NSURLSessionTask *_requestTask;
 }
 
-@property (nonatomic, copy) id testBlock;
-
 @end
 
 @implementation NetworkRequest
 
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
     [super buildTaskWithRequestConfig:config taskCompleted:taskCompleted];
-    self.testBlock = taskCompleted;
     /// 采用一个Manger的方式，否则可能会出现内存泄漏
     static AFHTTPSessionManager *manger = nil;
     static dispatch_once_t onceToken;
@@ -99,7 +96,6 @@
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             taskCompleted(nil, error);
         }];
-        NSLog(@"");
     }
 }
 
