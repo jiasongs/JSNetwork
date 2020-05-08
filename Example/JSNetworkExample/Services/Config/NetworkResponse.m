@@ -24,7 +24,7 @@
         if (dic) {
             if ([[dic objectForKey:@"success"] boolValue]) {
                 self.successful = true;
-                self.contentData = [dic objectForKey:@"content"];
+                self.contentData = [dic objectForKey:@"data"];
             }
             self.message = [dic objectForKey:@"message"];
         }

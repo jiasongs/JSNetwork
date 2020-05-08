@@ -124,7 +124,7 @@
 
 - (NSString *)requestUrlFilterWithURL:(NSString *)URL {
     if ([_originalConfig respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
-        return [_originalConfig requestUrlFilterWithURL:_finalURL];
+        return [_originalConfig requestUrlFilterWithURL:URL];
     }
     return URL;
 }

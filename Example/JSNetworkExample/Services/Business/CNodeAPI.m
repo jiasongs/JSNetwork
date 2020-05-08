@@ -16,11 +16,11 @@
 }
 
 - (NSString *)requestUrl {
-  return @"/topics?test=1111&zzz={zzz}";
+  return @"/topics?test=1111&zzz={中文}";
 }
 
 - (BOOL)cacheIgnore {
-    return false;
+    return true;
 }
 
 - (long long)cacheVersion {

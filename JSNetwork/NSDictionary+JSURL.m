@@ -21,7 +21,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if (query && query.length > 0) {
         /// 先使用url query编码
-        NSString *totalUrl = [query stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *totalUrl = [query stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
         if (![totalUrl hasPrefix:@"http"]) {
             totalUrl = [@"https://host" stringByAppendingFormat:@"?%@", totalUrl];
         }
@@ -45,18 +45,12 @@
 - (NSString *)js_URLQueryString {
     NSMutableString *string = [NSMutableString string];
     for (NSString *key in [self allKeys]) {
-        if ([string length]) {
+        if (string.length > 0) {
             [string appendString:@"&"];
         }
         NSString *value = [[[self objectForKey:key] description] stringByRemovingPercentEncoding];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored"-Wdeprecated-declarations"
-        CFStringRef escaped = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)value,
-                                                                      NULL,(CFStringRef)@"!*'();:@&=+$,/?%#[]",
-                                                                      kCFStringEncodingUTF8);
-#pragma clang diagnostic pop
-        [string appendFormat:@"%@=%@", key, escaped];
-        CFRelease(escaped);
+        NSString *encode = [value stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        [string appendFormat:@"%@=%@", key, encode];
     }
     return [NSString stringWithString:string];
 }

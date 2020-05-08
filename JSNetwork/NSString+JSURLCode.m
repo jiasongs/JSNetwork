@@ -29,9 +29,12 @@
 - (NSString *)js_urlEncodeUsingEncoding:(NSStringEncoding)encoding {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    return (__bridge_transfer NSString *)CFURLCreateStringByAddingPercentEscapes(NULL,
-                                                                                 (__bridge CFStringRef)self,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",
-                                                                                 CFStringConvertNSStringEncodingToEncoding(encoding));
+    NSString *resultString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,
+                                                                                                   (__bridge CFStringRef)self,
+                                                                                                   NULL,
+                                                                                                   (CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",
+                                                                                                   CFStringConvertNSStringEncodingToEncoding(encoding)));
+    return resultString ? : self;
 #pragma clang diagnostic pop
 }
 
@@ -54,8 +57,11 @@
 - (NSString *)js_urlDecodeUsingEncoding:(NSStringEncoding)encoding {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored"-Wdeprecated-declarations"
-    return (__bridge_transfer NSString *)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,
-                                                                                                 (__bridge CFStringRef)self,CFSTR(""),CFStringConvertNSStringEncodingToEncoding(encoding));
+    NSString *resultString = (NSString *)CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,
+                                                                                                                   (__bridge CFStringRef)self,
+                                                                                                                   CFSTR(""),
+                                                                                                                   CFStringConvertNSStringEncodingToEncoding(encoding)));
+    return resultString ? : self;
 #pragma clang diagnostic pop
 }
 
