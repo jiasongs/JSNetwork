@@ -14,6 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^JSNetworkConstructingFormDataBlock)(id formData);
 typedef void(^JSNetworkRequestCompletedFilter)(id<JSNetworkInterfaceProtocol> aInterface);
 typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 
@@ -31,6 +32,15 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  */
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
                      taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
+
+/**
+ *  @brief 设置构造FormData的回调
+ *
+ *  @param constructingFormData Body
+ *
+ *  @use 实现此方法时需要持有uploadProgress
+ */
+- (void)requestConstructingFormData:(nullable JSNetworkConstructingFormDataBlock)constructingFormData;
 
 /**
  *  @brief 设置上传进度的回调
@@ -59,6 +69,14 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *  @see JSNetworkRequest.m
  */
 - (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock;
+
+/**
+ *  @brief 构造FormData的回调
+ *
+ *  @return constructingFormData
+ *
+ */
+- (nullable JSNetworkConstructingFormDataBlock)constructingFormData;
 
 /**
  *  @brief 上传进度的回调

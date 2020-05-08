@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedFilter> *completedBlcoks;
 @property (nonatomic, copy) JSNetworkProgressBlock uploadProgressBlock;
 @property (nonatomic, copy) JSNetworkProgressBlock downloadProgressBlock;
+@property (nonatomic, copy) JSNetworkConstructingFormDataBlock formDataBlock;
 
 @end
 
@@ -34,22 +35,26 @@
     NSParameterAssert(taskCompleted);
 }
 
+- (void)requestConstructingFormData:(nullable JSNetworkConstructingFormDataBlock)constructingFormData {
+    self.formDataBlock = constructingFormData;
+}
+
 - (void)requestUploadProgress:(nullable JSNetworkProgressBlock)uploadProgress {
-    if (uploadProgress) {
-        self.uploadProgressBlock = uploadProgress;
-    }
+    self.uploadProgressBlock = uploadProgress;
 }
 
 - (void)requestDownloadProgress:(nullable JSNetworkProgressBlock)downloadProgress {
-    if (downloadProgress) {
-        self.downloadProgressBlock = downloadProgress;
-    }
+    self.downloadProgressBlock = downloadProgress;
 }
 
 - (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock {
     if (completionBlock) {
         [_completedBlcoks addObject:completionBlock];
     }
+}
+
+- (nullable JSNetworkConstructingFormDataBlock)constructingFormData {
+    return self.formDataBlock;
 }
 
 - (nullable JSNetworkProgressBlock)uploadProgress {
@@ -66,6 +71,7 @@
 
 - (void)clearAllCallBack {
     [_completedBlcoks removeAllObjects];
+    self.formDataBlock = nil;
     self.uploadProgressBlock = nil;
     self.downloadProgressBlock = nil;
 }

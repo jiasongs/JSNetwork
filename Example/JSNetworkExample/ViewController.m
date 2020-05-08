@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import <JSNetwork.h>
+#import <AFNetworking.h>
 #import "NetworkLoggerPlugin.h"
 #import "NetworkResponse.h"
 #import "NetworkRequest.h"
@@ -34,9 +35,13 @@
 - (IBAction)onPressRequest:(id)sender {
     CNodeAPI *api = [CNodeAPI new];
     /// 生成接口
-    [JSNetworkProvider requestWithConfig:api completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-        NetworkResponse *response = aInterface.response;
-        NetworkRequest *request = aInterface.request;
+    [JSNetworkProvider requestWithConfig:api constructingFormData:^(id<AFMultipartFormData> formData) {
+        
+    } uploadProgress:^(NSProgress *uploadProgress) {
+        
+    } downloadProgress:^(NSProgress *downloadProgress) {
+    
+    } completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
         NSLog(@"%@", aInterface);
     }];
 }

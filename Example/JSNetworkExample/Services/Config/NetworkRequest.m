@@ -67,7 +67,9 @@
                          parameters:config.requestBody
                             headers:nil
           constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            
+            if (self.constructingFormData) {
+                self.constructingFormData(formData);
+            }
         } progress:^(NSProgress * _Nonnull uploadProgress) {
             if (self.uploadProgress) {
                 self.uploadProgress(uploadProgress);
