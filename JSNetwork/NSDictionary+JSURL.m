@@ -10,13 +10,6 @@
 
 @implementation NSDictionary (JSURL)
 
-/**
- *  @brief  将url参数转换成NSDictionary
- *
- *  @param query url参数
- *
- *  @return NSDictionary
- */
 + (NSDictionary *)js_dictionaryWithURLQuery:(NSString *)query {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if (query && query.length > 0) {
@@ -37,11 +30,6 @@
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 
-/**
- *  @brief  将NSDictionary转换成url 参数字符串
- *
- *  @return url 参数字符串
- */
 - (NSString *)js_URLQueryString {
     NSMutableString *string = [NSMutableString string];
     for (NSString *key in [self allKeys]) {
