@@ -17,7 +17,6 @@
 @property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedFilter> *completedBlcoks;
 @property (nonatomic, copy) JSNetworkProgressBlock uploadProgressBlock;
 @property (nonatomic, copy) JSNetworkProgressBlock downloadProgressBlock;
-@property (nonatomic, copy) JSNetworkConstructingFormDataBlock formDataBlock;
 
 @end
 
@@ -30,13 +29,10 @@
     return self;
 }
 
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+                     taskCompleted:(void(^)(id responseObject, NSError *error))taskCompleted {
     NSParameterAssert(config);
     NSParameterAssert(taskCompleted);
-}
-
-- (void)requestConstructingFormData:(nullable JSNetworkConstructingFormDataBlock)constructingFormData {
-    self.formDataBlock = constructingFormData;
 }
 
 - (void)requestUploadProgress:(nullable JSNetworkProgressBlock)uploadProgress {
@@ -53,10 +49,6 @@
     }
 }
 
-- (nullable JSNetworkConstructingFormDataBlock)constructingFormData {
-    return self.formDataBlock;
-}
-
 - (nullable JSNetworkProgressBlock)uploadProgress {
     return self.uploadProgressBlock;
 }
@@ -71,7 +63,6 @@
 
 - (void)clearAllCallBack {
     [_completedBlcoks removeAllObjects];
-    self.formDataBlock = nil;
     self.uploadProgressBlock = nil;
     self.downloadProgressBlock = nil;
 }
@@ -116,7 +107,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%p>", self];
+    return [NSString stringWithFormat:@"%@: <%p>", NSStringFromClass(self.class), self];
 }
 
 - (void)dealloc {

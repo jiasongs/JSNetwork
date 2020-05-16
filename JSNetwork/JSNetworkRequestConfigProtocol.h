@@ -85,6 +85,23 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
 /**
+ *  @brief 拼接FormData
+ *
+ *  @param multipartFormData 可拼接的FormData, 如果外部使用AFN, 则是AFMultipartFormData
+ */
+- (void)constructingMultipartFormData:(id)multipartFormData;
+
+/**
+ *  @brief 内容类型
+ */
+- (nullable NSSet<NSString *> *)acceptableContentTypes;
+
+/**
+ *  @brief 状态码，默认是100 - 500
+ */
+- (NSIndexSet *)acceptableStatusCodes;
+
+/**
  *  @brief 筛选URL
  *
  *  @param URL 需要筛选的URL

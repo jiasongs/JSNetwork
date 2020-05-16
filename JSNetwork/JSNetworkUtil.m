@@ -69,7 +69,12 @@
 }
 
 + (NSString *)appVersionString {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    static NSString *_appVersionString;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _appVersionString = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    });
+    return _appVersionString;
 }
 
 @end

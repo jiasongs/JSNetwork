@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSDictionary *finalHTTPHeaderFields;
 @property (nonatomic, strong) NSArray *allPlugins;
 @property (nonatomic, strong) NSString *finalCacheFileName;
+@property (nonatomic, strong) NSIndexSet *finalAcceptableStatusCodes;
 
 @end
 
@@ -45,6 +46,8 @@
             headers = dic.copy;
         }
         _finalHTTPHeaderFields = headers;
+        /// 内容类型
+        ///
         /// 全部的插件
         NSMutableArray *plugins = [NSMutableArray arrayWithArray:JSNetworkConfig.sharedConfig.plugins];
         if ([config respondsToSelector:@selector(requestPlugins)]) {
@@ -64,6 +67,7 @@
             NSString *requestInfo = [NSString stringWithFormat:@"Host:%@ Url:%@ Argument:%@ Method:%@", baseUrl, requestUrl, argument, @(self.requestMethod)];
             _finalCacheFileName = [JSNetworkUtil md5StringFromString:requestInfo];;
         }
+        _finalAcceptableStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 500)];
     }
     return self;
 }
@@ -122,6 +126,26 @@
     return _finalHTTPHeaderFields;
 }
 
+- (void)constructingMultipartFormData:(id)multipartFormData {
+    if ([_originalConfig respondsToSelector:@selector(constructingMultipartFormData:)]) {
+        [_originalConfig constructingMultipartFormData:multipartFormData];
+    }
+}
+
+- (nullable NSSet<NSString *> *)acceptableContentTypes {
+    if ([_originalConfig respondsToSelector:@selector(acceptableContentTypes)]) {
+        return [_originalConfig acceptableContentTypes];
+    }
+    return nil;
+}
+
+- (NSIndexSet *)acceptableStatusCodes {
+    if ([_originalConfig respondsToSelector:@selector(acceptableStatusCodes)]) {
+        return [_originalConfig acceptableStatusCodes];
+    }
+    return _finalAcceptableStatusCodes;
+}
+
 - (NSString *)requestUrlFilterWithURL:(NSString *)URL {
     if ([_originalConfig respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
         return [_originalConfig requestUrlFilterWithURL:URL];
@@ -173,14 +197,15 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"\n{\nPointer: <%p>\nURL: %@\nArguments: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
+    return [NSString stringWithFormat:@"%@: <%p>\n{\nURL: %@\nArguments: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
+            NSStringFromClass(self.class),
             self,
             _finalURL,
             _finalArguments,
             self.requestBody,
             _finalHTTPHeaderFields,
             @([self requestMethod]),
-            [NSString stringWithFormat:@"%@/%@.metadata", self.cacheDirectoryPath, self.cacheFileName]
+            !self.cacheIgnore ? [NSString stringWithFormat:@"%@/%@.metadata", self.cacheDirectoryPath, self.cacheFileName] : @""
             ];
 }
 

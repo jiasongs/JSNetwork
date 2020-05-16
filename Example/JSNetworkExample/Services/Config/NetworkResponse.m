@@ -27,6 +27,11 @@
                 self.contentData = [dic objectForKey:@"data"];
             }
             self.message = [dic objectForKey:@"message"];
+        } else {
+            if (responseObject) {
+                self.successful = true;
+                self.contentData = responseObject;
+            }
         }
     }
 }

@@ -59,17 +59,21 @@
         [requestSerializer setValue:headers[headerField] forHTTPHeaderField:headerField];
     }
     requestSerializer.timeoutInterval = config.requestTimeoutInterval;
+    manger.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     manger.requestSerializer = requestSerializer;
     manger.responseSerializer = responseSerializer;
-    manger.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
+    manger.responseSerializer.acceptableStatusCodes = config.acceptableStatusCodes;
+    if (config.acceptableContentTypes) {
+        NSMutableSet *contentTypes = [NSMutableSet setWithSet:manger.responseSerializer.acceptableContentTypes];
+        [contentTypes unionSet:config.acceptableContentTypes];
+        manger.responseSerializer.acceptableContentTypes = contentTypes.copy;
+    }
     if (useFormData) {
         _requestTask = [manger POST:config.requestUrl
                          parameters:config.requestBody
                             headers:nil
           constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            if (self.constructingFormData) {
-                self.constructingFormData(formData);
-            }
+            [config constructingMultipartFormData:formData];
         } progress:^(NSProgress * _Nonnull uploadProgress) {
             if (self.uploadProgress) {
                 self.uploadProgress(uploadProgress);

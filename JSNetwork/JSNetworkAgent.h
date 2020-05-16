@@ -16,6 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface JSNetworkAgent : NSObject
 
 /**
+ *  @brief NSOperationQueue
+ */
+@property (nonatomic, strong, readonly) NSOperationQueue *requestQueue;
+
+/**
  *  @brief 单例
  */
 + (instancetype)sharedAgent;

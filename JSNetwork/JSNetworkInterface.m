@@ -51,14 +51,11 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"\n{\n%@: <%p>\n----------------\n%@: %@\n----------------\n%@: %@\n----------------\n%@: %@\n}",
+    return [NSString stringWithFormat:@"\n{\n%@: <%p>\n----------------\n%@\n----------------\n%@\n----------------\n%@\n}",
             NSStringFromClass(self.class),
             self,
-            NSStringFromClass(_processedConfig.class),
             _processedConfig,
-            NSStringFromClass(_request.class),
             _request,
-            NSStringFromClass(_response.class),
             _response
             ];
 }

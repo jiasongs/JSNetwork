@@ -19,7 +19,7 @@
 
 @interface JSNetworkAgent ()
 
-@property (nonatomic, strong) NSOperationQueue *requestQueue;
+@property (nonatomic, strong, readwrite) NSOperationQueue *requestQueue;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, id<JSNetworkInterfaceProtocol>> *interfaceRecord;
 @property (nonatomic, strong) dispatch_semaphore_t lock;
 
@@ -45,7 +45,7 @@
         _interfaceRecord = [NSMutableDictionary dictionary];
         _lock = dispatch_semaphore_create(1);
         _requestQueue = [[NSOperationQueue alloc] init];
-        _requestQueue.name = @"com.jsnetwork.agent";
+        _requestQueue.name = @"com.jsnetwork.agent.queue";
     }
     return self;;
 }

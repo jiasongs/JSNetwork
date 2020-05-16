@@ -13,6 +13,8 @@
 #import "NetworkResponse.h"
 #import "NetworkRequest.h"
 #import "CNodeAPI.h"
+#import "DownloadAPI.h"
+#import "UploadImageAPI.h"
 
 @interface ViewController ()
 
@@ -35,12 +37,28 @@
 - (IBAction)onPressRequest:(id)sender {
     CNodeAPI *api = [CNodeAPI new];
     /// 生成接口
-    [JSNetworkProvider requestWithConfig:api constructingFormData:^(id<AFMultipartFormData> formData) {
-        
-    } uploadProgress:^(NSProgress *uploadProgress) {
-        
-    } downloadProgress:^(NSProgress *downloadProgress) {
-    
+    [JSNetworkProvider requestWithConfig:api
+                               completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+        NSLog(@"%@", aInterface);
+    }];
+}
+
+- (IBAction)onPressUpload:(id)sender {
+    UploadImageAPI *api = [[UploadImageAPI alloc] init];
+    [JSNetworkProvider requestWithConfig:api
+                          uploadProgress:^(NSProgress *uploadProgress) {
+        NSLog(@"uploadProgress - %@", uploadProgress);
+    } completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+        NSLog(@"%@", aInterface);
+    }];
+}
+
+- (IBAction)onPressDownload:(id)sender {
+    DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
+    /// 生成接口
+    [JSNetworkProvider requestWithConfig:api
+                        downloadProgress:^(NSProgress *downloadProgress) {
+        NSLog(@"downloadProgress - %@", downloadProgress);
     } completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
         NSLog(@"%@", aInterface);
     }];

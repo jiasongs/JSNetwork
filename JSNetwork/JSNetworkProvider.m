@@ -17,17 +17,6 @@
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
-              constructingFormData:nil
-                    uploadProgress:nil
-                  downloadProgress:nil
-                         completed:completed];
-}
-
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                               constructingFormData:(nullable JSNetworkConstructingFormDataBlock)constructingFormData
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
-    return [self requestWithConfig:config
-              constructingFormData:constructingFormData
                     uploadProgress:nil
                   downloadProgress:nil
                          completed:completed];
@@ -37,18 +26,6 @@
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
-              constructingFormData:nil
-                    uploadProgress:uploadProgress
-                  downloadProgress:nil
-                         completed:completed];
-}
-
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                               constructingFormData:(nullable JSNetworkConstructingFormDataBlock)constructingFormData
-                                     uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
-    return [self requestWithConfig:config
-              constructingFormData:constructingFormData
                     uploadProgress:uploadProgress
                   downloadProgress:nil
                          completed:completed];
@@ -58,38 +35,12 @@
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
-              constructingFormData:nil
                     uploadProgress:nil
                   downloadProgress:downloadProgress
                          completed:completed];
 }
 
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                               constructingFormData:(nullable JSNetworkConstructingFormDataBlock)constructingFormData
-                                   downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
-    return [self requestWithConfig:config
-              constructingFormData:constructingFormData
-                    uploadProgress:nil
-                  downloadProgress:downloadProgress
-                         completed:completed];
-}
-
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                     uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                                   downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
-    NSParameterAssert(config);
-    return [self requestWithConfig:config
-              constructingFormData:nil
-                    uploadProgress:uploadProgress
-                  downloadProgress:downloadProgress
-                         completed:completed];
-}
-
-
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                               constructingFormData:(nullable JSNetworkConstructingFormDataBlock)constructingFormData
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
@@ -97,7 +48,6 @@
     /// 生成接口
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
     /// 设置请求回调
-    [interface.request requestConstructingFormData:constructingFormData];
     [interface.request requestUploadProgress:uploadProgress];
     [interface.request requestDownloadProgress:downloadProgress];
     [interface.request requestCompletedFilter:completed];
