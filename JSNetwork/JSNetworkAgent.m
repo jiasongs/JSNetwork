@@ -155,7 +155,7 @@
                 @autoreleasepool {
                     /// 更新进度
                     if (weakSelf.progress.totalUnitCount != 0 && weakSelf.interfaceRecord.count <= weakSelf.progress.totalUnitCount) {
-                        NSInteger completedUnitCount = weakSelf.progress.totalUnitCount - weakSelf.interfaceRecord.count + 1;
+                        int64_t completedUnitCount = weakSelf.progress.totalUnitCount - weakSelf.interfaceRecord.count + 1;
                         weakSelf.progress.completedUnitCount = completedUnitCount;
                     }
                     [weakSelf toggleWillStopWithInterface:weakInterface];
