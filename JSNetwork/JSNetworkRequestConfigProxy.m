@@ -6,7 +6,6 @@
 //
 
 #import "JSNetworkRequestConfigProxy.h"
-#import <objc/runtime.h>
 #import "NSDictionary+JSURL.h"
 #import "JSNetworkConfig.h"
 #import "JSNetworkUtil.h"
