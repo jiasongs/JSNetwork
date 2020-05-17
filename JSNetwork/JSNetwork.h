@@ -26,6 +26,8 @@
 #import <JSNetwork/JSNetworkResponse.h>
 #import <JSNetwork/JSNetworkDiskCache.h>
 #import <JSNetwork/JSNetworkDiskCacheMetadata.h>
+#import <JSNetwork/JSNetworkProxy.h>
+#import <JSNetwork/JSNetworkRequestConfigProxy.h>
 #import <JSNetwork/JSNetworkUtil.h>
 #import <JSNetwork/NSDictionary+JSURL.h>
 #import <JSNetwork/NSString+JSURLCode.h>
@@ -47,6 +49,8 @@
 #import "JSNetworkResponse.h"
 #import "JSNetworkDiskCache.h"
 #import "JSNetworkDiskCacheMetadata.h"
+#import "JSNetworkProxy.h"
+#import "JSNetworkRequestConfigProxy.h"
 #import "JSNetworkUtil.h"
 #import "NSDictionary+JSURL.h"
 #import "NSString+JSURLCode.h"
