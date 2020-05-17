@@ -16,9 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface JSNetworkAgent : NSObject
 
 /**
- *  @brief NSOperationQueue
+ *  @brief 最大并发数, 默认是-1
  */
-@property (nonatomic, strong, readonly) NSOperationQueue *requestQueue;
+@property (nonatomic, assign) NSInteger maxConcurrentCount;
+
+/**
+ *  @brief 当前执行的进度, 需设置totalUnitCount, 默认0
+ */
+@property (readonly, strong) NSProgress *progress;
 
 /**
  *  @brief 单例
@@ -26,12 +31,36 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedAgent;
 
 /**
- *  @brief 处理一个接口
+ *  @brief 添加一个请求
  *
  *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  */
-- (void)processingInterface:(id<JSNetworkInterfaceProtocol>)interface;
+- (void)addRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface;
+
+/**
+ *  @brief 取消一个请求
+ *
+ *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
+ *
+ */
+- (void)cancelRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface;
+
+/**
+ *  @brief 取消一个请求, 根据任务ID
+ *
+ *  @param taskIdentifier 任务ID
+ *
+ */
+- (void)cancelRequestForTaskIdentifier:(NSString *)taskIdentifier;
+
+/**
+ *  @brief 获得一个接口
+ *
+ *  @param taskIdentifier 任务ID
+ *
+ */
+- (nullable id<JSNetworkInterfaceProtocol>)interfaceForTaskIdentifier:(NSString *)taskIdentifier;
 
 @end
 

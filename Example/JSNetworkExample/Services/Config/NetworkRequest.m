@@ -73,8 +73,8 @@
                 [config constructingMultipartFormData:formData];
             }
         } progress:^(NSProgress * _Nonnull uploadProgress) {
-            if (self.uploadProgress) {
-                self.uploadProgress(uploadProgress);
+            if (self.interfaceProxy.uploadProgress) {
+                self.interfaceProxy.uploadProgress(uploadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
             taskCompleted(responseObject, nil);
@@ -88,12 +88,12 @@
                                            parameters:config.requestBody
                                               headers:nil
                                        uploadProgress:^(NSProgress *uploadProgress) {
-            if (self.uploadProgress) {
-                self.uploadProgress(uploadProgress);
+            if (self.interfaceProxy.uploadProgress) {
+                self.interfaceProxy.uploadProgress(uploadProgress);
             }
         } downloadProgress:^(NSProgress *downloadProgress) {
-            if (self.downloadProgress) {
-                self.downloadProgress(downloadProgress);
+            if (self.interfaceProxy.downloadProgress) {
+                self.interfaceProxy.downloadProgress(downloadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
             taskCompleted(responseObject, nil);

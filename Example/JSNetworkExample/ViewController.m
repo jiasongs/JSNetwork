@@ -39,8 +39,48 @@
     /// 生成接口
     [JSNetworkProvider requestWithConfig:api
                                completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+        NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
         NSLog(@"%@", aInterface);
+        NSLog(@"%@", progress);
     }];
+}
+
+- (IBAction)onPressBatch:(id)sender {
+    /// 暂未封装
+    dispatch_group_t group = dispatch_group_create();
+    for (int i = 0; i < 10; i++) {
+        CNodeAPI *api = [CNodeAPI new];
+        dispatch_group_enter(group);
+        [JSNetworkProvider requestWithConfig:api
+                                   completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+            NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
+            NSLog(@"%@", aInterface);
+            NSLog(@"%@", progress);
+            dispatch_group_leave(group);
+        }];
+    }
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        NSLog(@"全部请求完毕");
+    });
+}
+
+- (IBAction)onPressChain:(id)sender {
+    /// 暂未封装
+    JSNetworkAgent.sharedAgent.maxConcurrentCount = 1;
+    JSNetworkAgent.sharedAgent.progress.totalUnitCount = 10;
+    for (int i = 0; i < 10; i++) {
+        CNodeAPI *api = [CNodeAPI new];
+        [JSNetworkProvider requestWithConfig:api
+                                   completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+            NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
+            NSLog(@"%@", aInterface);
+            NSLog(@"%@", progress);
+            if (progress.completedUnitCount == 10) {
+                JSNetworkAgent.sharedAgent.maxConcurrentCount = -1;
+                progress.totalUnitCount = 0;
+            }
+        }];
+    }
 }
 
 - (IBAction)onPressUpload:(id)sender {

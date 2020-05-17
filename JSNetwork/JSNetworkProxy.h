@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JSNetworkProxy : NSProxy
 
-@property (nonatomic, strong) id target;
+@property (nonatomic, weak, readonly) id target;
 
 + (instancetype)proxyWithTarget:(id)target;
 - (instancetype)initWithTarget:(id)target;

@@ -48,11 +48,11 @@
     /// 生成接口
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
     /// 设置请求回调
-    [interface.request requestUploadProgress:uploadProgress];
-    [interface.request requestDownloadProgress:downloadProgress];
-    [interface.request requestCompletedFilter:completed];
+    [interface requestUploadProgress:uploadProgress];
+    [interface requestDownloadProgress:downloadProgress];
+    [interface requestCompletedFilter:completed];
     /// 处理接口
-    [JSNetworkAgent.sharedAgent processingInterface:interface];
+    [JSNetworkAgent.sharedAgent addRequestForInterface:interface];
     return interface;
 }
 

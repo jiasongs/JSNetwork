@@ -21,10 +21,7 @@
 #pragma mark - NSProxy
 
 - (id)forwardingTargetForSelector:(SEL)aSelector {
-    if ([_target respondsToSelector:aSelector]) {
-        return _target;
-    }
-    return nil;
+    return _target;
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {

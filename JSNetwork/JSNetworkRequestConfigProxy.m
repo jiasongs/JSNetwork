@@ -209,7 +209,7 @@
 }
 
 - (void)dealloc {
-    JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([self.target class]));
+    //    JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([_privateConfig class]));
 }
 
 @end

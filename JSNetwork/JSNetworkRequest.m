@@ -7,27 +7,20 @@
 //
 
 #import "JSNetworkRequest.h"
-#import "JSNetworkInterface.h"
+#import "JSNetworkInterfaceProtocol.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkUtil.h"
 
 @interface JSNetworkRequest ()
 
-@property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedFilter> *completedBlcoks;
-@property (nonatomic, copy) JSNetworkProgressBlock uploadProgressBlock;
-@property (nonatomic, copy) JSNetworkProgressBlock downloadProgressBlock;
+@property (nonatomic, weak) id<JSNetworkInterfaceProtocol> privateInterfaceProxy;
 
 @end
 
 @implementation JSNetworkRequest
 
-- (instancetype)init {
-    if (self = [super init]) {
-        _completedBlcoks = [NSMutableArray array];
-    }
-    return self;
-}
+#pragma mark - JSNetworkRequestProtocol
 
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
                      taskCompleted:(void(^)(id responseObject, NSError *error))taskCompleted {
@@ -35,36 +28,12 @@
     NSParameterAssert(taskCompleted);
 }
 
-- (void)requestUploadProgress:(nullable JSNetworkProgressBlock)uploadProgress {
-    self.uploadProgressBlock = uploadProgress;
+- (void)addInterfaceProxy:(id<JSNetworkInterfaceProtocol>)interfaceProxy {
+    _privateInterfaceProxy = interfaceProxy;
 }
 
-- (void)requestDownloadProgress:(nullable JSNetworkProgressBlock)downloadProgress {
-    self.downloadProgressBlock = downloadProgress;
-}
-
-- (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock {
-    if (completionBlock) {
-        [_completedBlcoks addObject:completionBlock];
-    }
-}
-
-- (nullable JSNetworkProgressBlock)uploadProgress {
-    return self.uploadProgressBlock;
-}
-
-- (nullable JSNetworkProgressBlock)downloadProgress {
-    return self.downloadProgressBlock;
-}
-
-- (NSArray<JSNetworkRequestCompletedFilter> *)completedFilters {
-    return _completedBlcoks.copy;
-}
-
-- (void)clearAllCallBack {
-    [_completedBlcoks removeAllObjects];
-    self.uploadProgressBlock = nil;
-    self.downloadProgressBlock = nil;
+- (id<JSNetworkInterfaceProtocol>)interfaceProxy {
+    return _privateInterfaceProxy;
 }
 
 - (NSURLSessionTask *)requestTask {
