@@ -88,22 +88,22 @@
 }
 
 - (BOOL)isCancelled {
-    if (!self.requestTask) return false;
+    if (!self.requestTask) return NO;
     return self.requestTask.state == NSURLSessionTaskStateCanceling;
 }
 
 - (BOOL)isExecuting {
-    if (!self.requestTask) return false;
+    if (!self.requestTask) return NO;
     return self.requestTask.state == NSURLSessionTaskStateRunning;
 }
 
 - (BOOL)isFinished {
-    if (!self.requestTask) return true;
+    if (!self.requestTask) return YES;
     return self.requestTask.state == NSURLSessionTaskStateCompleted || self.requestTask.state == NSURLSessionTaskStateCanceling;
 }
 
 - (BOOL)isAsynchronous {
-    return true;
+    return YES;
 }
 
 - (NSString *)description {
@@ -111,7 +111,7 @@
 }
 
 - (void)dealloc {
-    JSNetworkLog(@"JSNetworkRequest - 已经释放");
+    JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([self class]));
 }
 
 @end

@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 磁盘缓存的Class
  */
-@property (nonatomic, assign) Class<JSNetworkDiskCacheProtocol> diskCache;
+@property (nonatomic, assign) Class<JSNetworkDiskCacheProtocol> diskCacheClass;
 /**
  *  @brief 磁盘缓存的文件夹路径
  */

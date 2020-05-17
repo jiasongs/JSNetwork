@@ -54,8 +54,8 @@
 }
 
 - (IBAction)onPressDownload:(id)sender {
-    DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
     /// 生成接口
+    DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
     [JSNetworkProvider requestWithConfig:api
                         downloadProgress:^(NSProgress *downloadProgress) {
         NSLog(@"downloadProgress - %@", downloadProgress);

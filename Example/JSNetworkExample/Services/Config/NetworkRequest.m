@@ -31,28 +31,24 @@
     });
     BOOL useFormData = false;
     AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
-    if ([config respondsToSelector:@selector(requestSerializerType)]) {
-        switch (config.requestSerializerType) {
-            case JSRequestSerializerTypeFormData:
-                useFormData = true;
-                requestSerializer = [AFHTTPRequestSerializer serializer];
-                break;
-            default:
-                break;
-        }
+    switch (config.requestSerializerType) {
+        case JSRequestSerializerTypeFormData:
+            useFormData = true;
+            requestSerializer = [AFHTTPRequestSerializer serializer];
+            break;
+        default:
+            break;
     }
     AFHTTPResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializer];
-    if ([config respondsToSelector:@selector(responseSerializerType)]) {
-        switch (config.responseSerializerType) {
-            case JSResponseSerializerTypeHTTP:
-                responseSerializer = [AFHTTPResponseSerializer serializer];
-                break;
-            case JSResponseSerializerTypeXMLParser:
-                responseSerializer = [AFXMLParserResponseSerializer serializer];
-                break;
-            default:
-                break;
-        }
+    switch (config.responseSerializerType) {
+        case JSResponseSerializerTypeHTTP:
+            responseSerializer = [AFHTTPResponseSerializer serializer];
+            break;
+        case JSResponseSerializerTypeXMLParser:
+            responseSerializer = [AFXMLParserResponseSerializer serializer];
+            break;
+        default:
+            break;
     }
     NSDictionary *headers = config.requestHeaderFieldValueDictionary;
     for (NSString *headerField in headers.keyEnumerator) {
@@ -73,7 +69,9 @@
                          parameters:config.requestBody
                             headers:nil
           constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [config constructingMultipartFormData:formData];
+            if ([config respondsToSelector:@selector(constructingMultipartFormData:)]) {
+                [config constructingMultipartFormData:formData];
+            }
         } progress:^(NSProgress * _Nonnull uploadProgress) {
             if (self.uploadProgress) {
                 self.uploadProgress(uploadProgress);

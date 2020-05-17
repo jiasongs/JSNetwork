@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)baseUrl;
 
 /**
- *  @brief URL中需要拼接的参数
+ *  @brief URL中需要拼接的参数, 注意：会拼接上全局的设置
  */
 - (nullable NSDictionary *)requestArgument;
 
@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable id)requestBody;
 
 /**
- *  @brief 请求方式GET/POST
+ *  @brief 请求方式GET/POST, 默认为GET
  */
 - (JSRequestMethod)requestMethod;
 
@@ -75,12 +75,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (JSResponseSerializerType)responseSerializerType;
 
 /**
- *  @brief 请求超时时间
+ *  @brief 请求超时时间, 默认是全局设置的超时时间
  */
 - (NSTimeInterval)requestTimeoutInterval;
 
 /**
- *  @brief 请求头
+ *  @brief 请求头, 默认是全局设置的请求头, 注意：会拼接上全局的设置
  */
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
@@ -111,17 +111,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)requestUrlFilterWithURL:(NSString *)URL;
 
 /**
- *  @brief 请求类的Class，继承于NSOperation
+ *  @brief 请求类的Class，继承于NSOperation, 默认全局设置的requestClass
  */
 - (Class<JSNetworkRequestProtocol>)requestClass;
 
 /**
- *  @brief 响应类的Class
+ *  @brief 响应类的Class, 默认全局设置的responseClass
  */
 - (Class<JSNetworkResponseProtocol>)responseClass;
 
 /**
- *  @brief 插件
+ *  @brief 插件, 默认全局设置的Plugins, 注意：会拼接上全局的设置
  */
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
 

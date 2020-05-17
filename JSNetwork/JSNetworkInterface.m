@@ -11,13 +11,12 @@
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkResponseProtocol.h"
 #import "JSNetworkConfig.h"
-#import "JSNetworkRequestConfig.h"
 #import "JSNetworkUtil.h"
+#import "JSNetworkRequestConfigProxy.h"
 
 @implementation JSNetworkInterface
 
 @synthesize processedConfig = _processedConfig;
-@synthesize originalConfig = _originalConfig;
 @synthesize response = _response;
 @synthesize request = _request;
 @synthesize diskCache = _diskCache;
@@ -25,10 +24,8 @@
 - (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
     NSParameterAssert(config);
     if (self = [super init]) {
-        /// 原始的请求配置实例
-        _originalConfig = config;
         /// 处理过的请求配置实例
-        _processedConfig = [[JSNetworkRequestConfig alloc] initWithConfig:config];
+        _processedConfig = (id<JSNetworkRequestConfigProtocol>)[JSNetworkRequestConfigProxy proxyWithTarget:config];
         /// 请求实例
         Class RequestClass = JSNetworkConfig.sharedConfig.requestClass;
         if ([config respondsToSelector:@selector(requestClass)]) {
@@ -43,7 +40,7 @@
         _response = [[ResponseClass alloc] init];
         /// 磁盘缓存的实例
         if (!_processedConfig.cacheIgnore) {
-            Class DiskCacheClass = JSNetworkConfig.sharedConfig.diskCache;
+            Class DiskCacheClass = JSNetworkConfig.sharedConfig.diskCacheClass;
             _diskCache = [[DiskCacheClass alloc] init];
         }
     }
@@ -61,7 +58,7 @@
 }
 
 - (void)dealloc {
-    JSNetworkLog(@"JSNetworkInterface - 已经释放");
+    JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([self class]));
 }
 
 @end

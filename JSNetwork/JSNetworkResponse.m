@@ -55,7 +55,7 @@
 }
 
 - (void)dealloc {
-    JSNetworkLog(@"JSNetworkResponse - 已经释放");
+    JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([self class]));
 }
 
 @end

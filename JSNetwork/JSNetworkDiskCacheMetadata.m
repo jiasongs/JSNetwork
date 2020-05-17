@@ -33,7 +33,7 @@
 }
 
 + (BOOL)supportsSecureCoding {
-    return true;
+    return YES;
 }
 
 - (void)dealloc {

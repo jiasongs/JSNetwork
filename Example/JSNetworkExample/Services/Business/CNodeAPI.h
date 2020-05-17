@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CNodeAPI : BaseAPI 
 
-
-
 @end
 
 NS_ASSUME_NONNULL_END

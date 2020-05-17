@@ -61,19 +61,19 @@
         __weak typeof(interface) weakInterface = interface;
         /// 缓存处理
         [interface.diskCache buildTaskWithRequestConfig:processedConfig taskCompleted:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
-            if (metadata) {
-                /// 存在缓存时
-                @autoreleasepool {
+            @autoreleasepool {
+                if (metadata) {
+                    /// 存在缓存时
                     [weakSelf processingResponseWithInterface:weakInterface
                                                responseObject:metadata.cacheData
-                                             needSetCacheData:false
+                                             needSetCacheData:NO
                                                         error:nil];
+                } else {
+                    /// 执行网络请求
+                    [weakSelf processingRequestWithInterface:weakInterface];
+                    /// 不存在缓存时，需要清除缓存任务
+                    [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
                 }
-            } else {
-                /// 执行网络请求
-                [weakSelf processingRequestWithInterface:weakInterface];
-                /// 不存在缓存时，需要清除缓存任务
-                [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
             }
         }];
         [self addInterface:interface forTaskIdentifier:interface.diskCache.taskIdentifier];
@@ -90,10 +90,12 @@
     id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
     [interface.request buildTaskWithRequestConfig:processedConfig
                                     taskCompleted:^(id responseObject, NSError *error) {
-        [weakSelf processingResponseWithInterface:weakInterface
-                                   responseObject:responseObject
-                                 needSetCacheData:true
-                                            error:error];
+        @autoreleasepool {
+            [weakSelf processingResponseWithInterface:weakInterface
+                                       responseObject:responseObject
+                                     needSetCacheData:YES
+                                                error:error];
+        }
     }];
     [self addInterface:interface forTaskIdentifier:interface.request.taskIdentifier];
     [self addRequestOperation:interface.request];
@@ -108,31 +110,33 @@
     dispatch_queue_t completionQueue = JSNetworkConfig.sharedConfig.completionQueue;
     dispatch_async(processingQueue, ^{
         /// 处理响应
-        [interface.response processingTask:interface.request.requestTask
-                            responseObject:responseObject
-                                     error:error];
+        @autoreleasepool {
+            [interface.response processingTask:interface.request.requestTask
+                                responseObject:responseObject
+                                         error:error];
+        }
         __weak typeof(self) weakSelf = self;
         __weak typeof(interface) weakInterface = interface;
         void(^completionBlock)(void) = ^(void) {
             dispatch_async(completionQueue, ^{
-                [weakSelf toggleWillStopWithInterface:weakInterface];
                 @autoreleasepool {
+                    [weakSelf toggleWillStopWithInterface:weakInterface];
                     for (JSNetworkRequestCompletedFilter block in weakInterface.request.completedFilters) {
                         block(weakInterface);
                     }
-                }
-                [weakInterface.request clearAllCallBack];
-                [weakSelf toggleDidStopWithInterface:weakInterface];
-                if (weakInterface.request.requestTask) {
-                    [weakSelf removeRequestOperation:weakInterface.request];
-                    [weakSelf removeInterfaceForTaskIdentifier:weakInterface.request.taskIdentifier];
-                } else {
-                    [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
+                    [weakInterface.request clearAllCallBack];
+                    [weakSelf toggleDidStopWithInterface:weakInterface];
+                    if (weakInterface.request.requestTask) {
+                        [weakSelf removeRequestOperation:weakInterface.request];
+                        [weakSelf removeInterfaceForTaskIdentifier:weakInterface.request.taskIdentifier];
+                    } else {
+                        [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
+                    }
                 }
             });
         };
         id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-        BOOL isSaveCache = false;
+        BOOL isSaveCache = NO;
         if (needSetCacheData && !processedConfig.cacheIgnore && !error) {
             isSaveCache = [processedConfig cacheIsSavedWithResponse:interface.response];
         }

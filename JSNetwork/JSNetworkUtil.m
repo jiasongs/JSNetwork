@@ -20,8 +20,8 @@
 
 + (NSString *)filterURL:(NSString *)URL withParameter:(NSDictionary *)parameter {
     NSString *finalUrl = URL.js_urlDecode;
-    NSDictionary *finalParameters = @{};
     @autoreleasepool {
+        NSDictionary *finalParameters = @{};
         NSString *newUrl = URL;
         NSString *newQuery = @"";
         if ([URL containsString:@"?"]) {

@@ -22,10 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) id<JSNetworkRequestConfigProtocol> processedConfig;
 /**
- *  @brief 原始的请求配置类
- */
-@property (nonatomic, strong, readonly) id<JSNetworkRequestConfigProtocol> originalConfig;
-/**
  *  @brief 缓存类的实例
  */
 @property (nonatomic, strong, readonly) id<JSNetworkDiskCacheProtocol> diskCache;
