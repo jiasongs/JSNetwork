@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol JSNetworkDiskCacheMetadataProtocol <NSCoding, NSSecureCoding>
+@protocol JSNetworkDiskCacheMetadataProtocol <NSSecureCoding>
 
 @required
 /**
