@@ -7,6 +7,7 @@
 //
 
 #import "NSDictionary+JSURL.h"
+#import "NSString+JSURLCode.h"
 
 @implementation NSDictionary (JSURL)
 
@@ -37,7 +38,7 @@
             [string appendString:@"&"];
         }
         NSString *value = [[[self objectForKey:key] description] stringByRemovingPercentEncoding];
-        NSString *encode = [value stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSString *encode = value.js_urlEncode;
         [string appendFormat:@"%@=%@", key, encode];
     }
     return [NSString stringWithString:string];
