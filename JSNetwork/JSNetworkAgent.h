@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 当前执行的进度, 需设置totalUnitCount, 默认0
  */
-@property (readonly, strong) NSProgress *progress;
+@property (nonatomic, strong, readonly) NSProgress *progress;
 
 /**
  *  @brief 单例
