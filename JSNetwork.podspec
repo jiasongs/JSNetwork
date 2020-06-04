@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "JSNetwork"
-  s.version      = "0.5.4"
+  s.version      = "0.5.5"
   s.summary      = "离散式网络框架，面向协议编程，类似Swift的Moya"
   s.homepage     = "https://github.com/jiasongs/JSNetwork"
   s.author       = { "jiasong" => "593908937@qq.com" }

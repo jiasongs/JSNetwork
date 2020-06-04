@@ -58,10 +58,10 @@
     manger.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     manger.requestSerializer = requestSerializer;
     manger.responseSerializer = responseSerializer;
-    manger.responseSerializer.acceptableStatusCodes = config.acceptableStatusCodes;
-    if (config.acceptableContentTypes) {
+    manger.responseSerializer.acceptableStatusCodes = config.responseAcceptableStatusCodes;
+    if (config.responseAcceptableContentTypes) {
         NSMutableSet *contentTypes = [NSMutableSet setWithSet:manger.responseSerializer.acceptableContentTypes];
-        [contentTypes unionSet:config.acceptableContentTypes];
+        [contentTypes unionSet:config.responseAcceptableContentTypes];
         manger.responseSerializer.acceptableContentTypes = contentTypes.copy;
     }
     if (useFormData) {

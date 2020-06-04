@@ -92,16 +92,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)constructingMultipartFormData:(id)multipartFormData;
 
 /**
- *  @brief 内容类型
- */
-- (nullable NSSet<NSString *> *)acceptableContentTypes;
-
-/**
- *  @brief 状态码，默认是100 - 500
- */
-- (NSIndexSet *)acceptableStatusCodes;
-
-/**
  *  @brief 筛选URL
  *
  *  @param URL 需要筛选的URL
@@ -109,6 +99,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 返回新的URL
  */
 - (NSString *)requestUrlFilterWithURL:(NSString *)URL;
+
+/**
+ *  @brief 内容类型
+ */
+- (nullable NSSet<NSString *> *)responseAcceptableContentTypes;
+
+/**
+ *  @brief 状态码，默认是100 - 500
+ */
+- (NSIndexSet *)responseAcceptableStatusCodes;
 
 /**
  *  @brief 请求类的Class，继承于NSOperation, 默认全局设置的requestClass

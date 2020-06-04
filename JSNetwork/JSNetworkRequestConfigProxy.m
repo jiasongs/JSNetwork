@@ -110,11 +110,11 @@
     return _finalHTTPHeaderFields;
 }
 
-- (nullable NSSet<NSString *> *)acceptableContentTypes {
+- (nullable NSSet<NSString *> *)responseAcceptableContentTypes {
     return nil;
 }
 
-- (NSIndexSet *)acceptableStatusCodes {
+- (NSIndexSet *)responseAcceptableStatusCodes {
     return [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 500)];;
 }
 
