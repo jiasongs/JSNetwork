@@ -128,11 +128,12 @@ static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
 - (BOOL)createCacheDirectoryWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *cacheDirectoryPath = config.cacheDirectoryPath;
-    NSError *error;
+    NSError *error = nil;
+    BOOL result = YES;
     if (![fileManager fileExistsAtPath:cacheDirectoryPath]) {
-        [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
+        result = [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
     }
-    return !error;
+    return result && !error;
 }
 
 - (NSString *)taskIdentifier {
