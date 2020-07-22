@@ -16,28 +16,22 @@
 
 @end
 
-@implementation JSNetworkUtil (FilterURL)
+@implementation JSNetworkUtil (URL)
 
-+ (NSString *)filterURL:(NSString *)URL withParameter:(NSDictionary *)parameter {
-    NSString *finalUrl = URL.js_urlDecode;
-    @autoreleasepool {
-        NSDictionary *finalParameters = @{};
-        NSString *newUrl = URL;
-        NSString *newQuery = @"";
-        if ([URL containsString:@"?"]) {
-            NSArray *array = [URL componentsSeparatedByString:@"?"];
-            newUrl = array.firstObject;
-            newQuery = array.lastObject;
-        }
-        NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:parameter];
-        [newParameters addEntriesFromDictionary:[NSDictionary js_dictionaryWithURLQuery:newQuery]];
-        finalParameters = newParameters.copy;
-        finalUrl = newUrl;
-        if (finalParameters.count > 0) {
-            finalUrl = [finalUrl stringByAppendingFormat:@"?%@", finalParameters.js_URLQueryString];
-        }
++ (NSString *)spliceURLString:(NSString *)URLString withParameter:(NSDictionary *)parameter {
+    NSString *newUrl = [NSString stringWithString:URLString];
+    NSString *newQuery = @"";
+    if ([URLString containsString:@"?"]) {
+        NSArray *array = [URLString componentsSeparatedByString:@"?"];
+        newUrl = array.firstObject;
+        newQuery = array.lastObject;
     }
-    return finalUrl;
+    NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary js_dictionaryWithURLQuery:newQuery]];
+    [newParameters addEntriesFromDictionary:parameter];
+    if (newParameters.count > 0) {
+        newUrl = [newUrl stringByAppendingFormat:@"?%@", newParameters.js_URLQueryString];
+    }
+    return newUrl;
 }
 
 @end

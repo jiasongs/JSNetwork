@@ -33,7 +33,7 @@
         }
         NSString *baseUrl = [config respondsToSelector:@selector(baseUrl)] ? config.baseUrl : self.baseUrl;
         NSString *url = [NSString stringWithFormat:@"%@%@", baseUrl, config.requestUrl];
-        _finalURL = [JSNetworkUtil filterURL:url withParameter:parameters];
+        _finalURL = [JSNetworkUtil spliceURLString:url withParameter:parameters];
         if ([config respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
             _finalURL = [config requestUrlFilterWithURL:_finalURL];
         }

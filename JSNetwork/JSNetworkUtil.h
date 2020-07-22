@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface JSNetworkUtil (FilterURL)
+@interface JSNetworkUtil (URL)
 
-+ (NSString *)filterURL:(NSString *)URL withParameter:(NSDictionary<NSString *, id> *)parameter;
++ (NSString *)spliceURLString:(NSString *)URLString withParameter:(NSDictionary *)parameter;
 
 @end
 
