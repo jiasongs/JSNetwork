@@ -23,12 +23,7 @@
 
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
     [super buildTaskWithRequestConfig:config taskCompleted:taskCompleted];
-    /// 采用一个Manger的方式，否则可能会出现内存泄漏
-    static AFHTTPSessionManager *manger = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        manger = [AFHTTPSessionManager manager];
-    });
+    AFHTTPSessionManager *manger = [AFHTTPSessionManager manager];
     BOOL useFormData = false;
     AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
     switch (config.requestSerializerType) {

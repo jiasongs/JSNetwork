@@ -15,6 +15,7 @@
 @interface JSNetworkRequest ()
 
 @property (nonatomic, weak) id<JSNetworkInterfaceProtocol> privateInterfaceProxy;
+@property (nonatomic, strong) NSString *taskIdentifier;
 
 @end
 
@@ -22,10 +23,15 @@
 
 #pragma mark - JSNetworkRequestProtocol
 
+static NSUInteger JSNetworkRequestTaskIdentifier = 0;
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
                      taskCompleted:(void(^)(id responseObject, NSError *error))taskCompleted {
     NSParameterAssert(config);
     NSParameterAssert(taskCompleted);
+    @synchronized (self) {
+        JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
+        _taskIdentifier = [@"request_task" stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];
+    }
 }
 
 - (void)addInterfaceProxy:(id<JSNetworkInterfaceProtocol>)interfaceProxy {
@@ -41,7 +47,9 @@
 }
 
 - (NSString *)taskIdentifier {
-    return [@"request_task" stringByAppendingFormat:@"%@", @(self.requestTask.taskIdentifier)];
+    @synchronized (self) {
+        return _taskIdentifier;
+    }
 }
 
 #pragma mark - NSOperation, 以下必须实现

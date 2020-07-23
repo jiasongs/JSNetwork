@@ -28,11 +28,11 @@
     return self;
 }
 
-static NSUInteger JSNetworkDiskCache_TaskIdentifier = 0;
+static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(JSNetworkDiskCacheCompleted)taskCompleted {
     @synchronized (self) {
-        JSNetworkDiskCache_TaskIdentifier = JSNetworkDiskCache_TaskIdentifier + 1;
-        _taskIdentifier = [@"cache_task" stringByAppendingFormat:@"%@", @(JSNetworkDiskCache_TaskIdentifier)];
+        JSNetworkDiskCacheTaskIdentifier = JSNetworkDiskCacheTaskIdentifier + 1;
+        _taskIdentifier = [@"cache_task" stringByAppendingFormat:@"%@", @(JSNetworkDiskCacheTaskIdentifier)];
     }
     [self cacheForRequestConfig:config
                       completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
