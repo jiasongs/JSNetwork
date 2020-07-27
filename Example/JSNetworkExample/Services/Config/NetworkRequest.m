@@ -59,6 +59,11 @@
         [contentTypes unionSet:config.responseAcceptableContentTypes];
         manger.responseSerializer.acceptableContentTypes = contentTypes.copy;
     }
+    __weak __typeof(manger) weakManger = manger;
+    void (^completed)(id, NSError *) = ^(id responseObject, NSError *error) {
+        taskCompleted(responseObject, error);
+        [weakManger.session finishTasksAndInvalidate];
+    };
     if (useFormData) {
         _requestTask = [manger POST:config.requestUrl
                          parameters:config.requestBody
@@ -72,9 +77,9 @@
                 self.interfaceProxy.uploadProgress(uploadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
-            taskCompleted(responseObject, nil);
+            completed(responseObject, nil);
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            taskCompleted(nil, error);
+            completed(nil, error);
         }];
     } else {
         NSString *HTTPMethod = config.requestMethod == JSRequestMethodGET ? @"GET" : @"POST";
@@ -91,9 +96,9 @@
                 self.interfaceProxy.downloadProgress(downloadProgress);
             }
         } success:^(NSURLSessionDataTask *task, id responseObject) {
-            taskCompleted(responseObject, nil);
+            completed(responseObject, nil);
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            taskCompleted(nil, error);
+            completed(nil, error);
         }];
     }
 }
