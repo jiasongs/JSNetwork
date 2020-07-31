@@ -56,34 +56,12 @@
 - (void)addRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
     [self toggleWillStartWithInterface:interface];
-    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    if (!processedConfig.cacheIgnore) {
-        NSParameterAssert(processedConfig.cacheTimeInSeconds > 0 || processedConfig.cacheVersion > 0);
-        __weak typeof(self) weakSelf = self;
-        __weak typeof(interface) weakInterface = interface;
-        /// 缓存处理
-        [interface.diskCache buildTaskWithRequestConfig:processedConfig taskCompleted:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
-            @autoreleasepool {
-                if (metadata) {
-                    /// 存在缓存时
-                    [weakSelf processingResponseForInterface:weakInterface
-                                          withResponseObject:metadata.cacheData
-                                            needSetCacheData:NO
-                                                       error:nil];
-                } else {
-                    /// 处理网络请求
-                    [weakSelf processingRequestForInterface:weakInterface];
-                    /// 不存在缓存时，需要清除缓存任务
-                    [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
-                }
-            }
-        }];
-        [self addInterface:interface forTaskIdentifier:interface.diskCache.taskIdentifier];
-        [self toggleDidStartWithInterface:interface];
-    } else {
+    if (interface.processedConfig.cacheIgnore) {
         [self processingRequestForInterface:interface];
-        [self toggleDidStartWithInterface:interface];
+    } else {
+        [self processingDiskCacheForInterface:interface];
     }
+    [self toggleDidStartWithInterface:interface];
 }
 
 - (void)cancelRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
@@ -131,6 +109,32 @@
     }];
     [self addInterface:interface forTaskIdentifier:interface.request.taskIdentifier];
     [self addRequestOperation:interface.request];
+}
+
+/// 处理缓存
+- (void)processingDiskCacheForInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
+    NSParameterAssert(processedConfig.cacheTimeInSeconds > 0 || processedConfig.cacheVersion > 0);
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(interface) weakInterface = interface;
+    /// 缓存处理
+    [interface.diskCache buildTaskWithRequestConfig:processedConfig taskCompleted:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
+        @autoreleasepool {
+            if (metadata) {
+                /// 存在缓存时
+                [weakSelf processingResponseForInterface:weakInterface
+                                      withResponseObject:metadata.cacheData
+                                        needSetCacheData:NO
+                                                   error:nil];
+            } else {
+                /// 处理网络请求
+                [weakSelf processingRequestForInterface:weakInterface];
+                /// 不存在缓存时，需要清除缓存任务
+                [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
+            }
+        }
+    }];
+    [self addInterface:interface forTaskIdentifier:interface.diskCache.taskIdentifier];
 }
 
 /// 处理响应
@@ -220,7 +224,7 @@
     NSParameterAssert(interface && taskIdentifier);
     [self addLock];
     if ([_interfaceRecord objectForKey:taskIdentifier]) {
-        JSNetworkLog(@"interface即将被覆盖, 请检查是否添加了相同的taskIdentifier, 多发生在多个AFNManager的情况");
+        JSNetworkLog(@"警告 - interface即将被覆盖, 请检查是否添加了相同的taskIdentifier, 多发生在多个AFNManager的情况!!!");
     }
     [_interfaceRecord setObject:interface forKey:taskIdentifier];
     [self unLock];

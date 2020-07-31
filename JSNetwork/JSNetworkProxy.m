@@ -33,10 +33,7 @@
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
-    if ([_target respondsToSelector:aSelector]) {
-        return YES;
-    }
-    return NO;
+    return [_target respondsToSelector:aSelector];
 }
 
 - (BOOL)isEqual:(id)object {

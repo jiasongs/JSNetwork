@@ -11,6 +11,9 @@
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkUtil.h"
+#import "JSNetworkMutexLock.h"
+
+NSString *const JSNetworkRequestTaskPrefix = @"request_task";
 
 @interface JSNetworkRequest ()
 
@@ -28,10 +31,10 @@ static NSUInteger JSNetworkRequestTaskIdentifier = 0;
                      taskCompleted:(void(^)(id responseObject, NSError *error))taskCompleted {
     NSParameterAssert(config);
     NSParameterAssert(taskCompleted);
-    @synchronized (self) {
-        JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
-        _taskIdentifier = [@"request_task" stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];
-    }
+    [JSNetworkMutexLock.sharedLock addLock];
+    JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
+    [JSNetworkMutexLock.sharedLock unLock];
+    _taskIdentifier = [JSNetworkRequestTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];
 }
 
 - (void)addInterfaceProxy:(id<JSNetworkInterfaceProtocol>)interfaceProxy {
@@ -47,9 +50,10 @@ static NSUInteger JSNetworkRequestTaskIdentifier = 0;
 }
 
 - (NSString *)taskIdentifier {
-    @synchronized (self) {
-        return _taskIdentifier;
-    }
+    [JSNetworkMutexLock.sharedLock addLock];
+    NSString *identifier = _taskIdentifier;
+    [JSNetworkMutexLock.sharedLock unLock];
+    return identifier;
 }
 
 #pragma mark - NSOperation, 以下必须实现

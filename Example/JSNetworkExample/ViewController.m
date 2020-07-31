@@ -35,14 +35,23 @@
 }
 
 - (IBAction)onPressRequest:(id)sender {
-    CNodeAPI *api = [CNodeAPI new];
-    /// 生成接口
-    [JSNetworkProvider requestWithConfig:api
-                               completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-        NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
-        NSLog(@"%@", aInterface);
-        NSLog(@"%@", progress);
-    }];
+    void (^test)(void) = ^(void) {
+        CNodeAPI *api = [CNodeAPI new];
+        /// 生成接口
+        [JSNetworkProvider requestWithConfig:api
+                                   completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+            NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
+            NSLog(@"%@", aInterface);
+            NSLog(@"%@", progress);
+        }];
+    };
+    /// 测试
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        test();
+    });
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        test();
+    });
 }
 
 - (IBAction)onPressBatch:(id)sender {
