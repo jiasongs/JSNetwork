@@ -14,22 +14,16 @@
 + (NSDictionary *)js_dictionaryWithURLQuery:(NSString *)query {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if (query && query.length > 0) {
-        NSString *newQuery = query.stringByRemovingPercentEncoding ? : query;
-        /// 先使用url query编码
-        NSString *totalUrl = [newQuery stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSString *totalUrl = [query stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
         if (![totalUrl hasPrefix:@"http"]) {
             totalUrl = [@"https://host" stringByAppendingFormat:@"?%@", totalUrl];
         }
         NSURLComponents *components = [NSURLComponents componentsWithString:totalUrl];
         [components.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem *queryItem, NSUInteger idx, BOOL *stop) {
-            if (queryItem.value) {
-                /// 解除url query编码
-                NSString *value = queryItem.value.stringByRemovingPercentEncoding ? : queryItem.value;
-                [dict setObject:value forKey:queryItem.name];
-            }
+            [dict setObject:queryItem.value ? : @"" forKey:queryItem.name];
         }];
     }
-    return [NSDictionary dictionaryWithDictionary:dict];
+    return dict.copy;
 }
 
 - (NSString *)js_URLQueryString {
@@ -43,7 +37,7 @@
         NSString *encode = value.js_urlEncode;
         [string appendFormat:@"%@=%@", key, encode];
     }
-    return [NSString stringWithString:string];
+    return string.copy;
 }
 
 @end

@@ -16,7 +16,7 @@
 }
 
 - (NSString *)requestUrl {
-  return @"/topics?test=1111&zzz={中文}";
+  return @"/topics?test=1111&zzz={中文}&xxxx=%E4%B8%AD%E6%96%87&yyyy=+86-186&mmm=@69875456";
 }
 
 - (BOOL)cacheIgnore {
