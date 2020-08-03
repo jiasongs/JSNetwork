@@ -12,10 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JSNetworkMutexLock : NSObject
 
-+ (instancetype)sharedLock;
-
-- (void)addLock;
-- (void)unLock;
++ (void)execute:(void (NS_NOESCAPE ^)(void))block;
++ (id)executeWithReturnValue:(id (NS_NOESCAPE ^)(void))block;
 
 @end
 

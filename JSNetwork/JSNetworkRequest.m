@@ -31,9 +31,9 @@ static NSUInteger JSNetworkRequestTaskIdentifier = 0;
                      taskCompleted:(void(^)(id responseObject, NSError *error))taskCompleted {
     NSParameterAssert(config);
     NSParameterAssert(taskCompleted);
-    [JSNetworkMutexLock.sharedLock addLock];
-    JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
-    [JSNetworkMutexLock.sharedLock unLock];
+    [JSNetworkMutexLock execute:^{
+        JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
+    }];
     _taskIdentifier = [JSNetworkRequestTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];
 }
 
@@ -50,10 +50,9 @@ static NSUInteger JSNetworkRequestTaskIdentifier = 0;
 }
 
 - (NSString *)taskIdentifier {
-    [JSNetworkMutexLock.sharedLock addLock];
-    NSString *identifier = _taskIdentifier;
-    [JSNetworkMutexLock.sharedLock unLock];
-    return identifier;
+    return [JSNetworkMutexLock executeWithReturnValue:^id{
+        return _taskIdentifier;
+    }];
 }
 
 #pragma mark - NSOperation, 以下必须实现

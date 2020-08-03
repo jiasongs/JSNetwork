@@ -10,7 +10,7 @@
 
 @interface JSNetworkMutexLock ()
 
-@property (nonatomic, strong) dispatch_semaphore_t lock;
+@property (nonatomic, strong) dispatch_semaphore_t semaphore;
 
 @end
 
@@ -31,17 +31,30 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _lock = dispatch_semaphore_create(1);
+        _semaphore = dispatch_semaphore_create(1);
     }
     return self;
 }
 
-- (void)addLock {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+- (void)lock {
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
 }
 
 - (void)unLock {
-    dispatch_semaphore_signal(_lock);
+    dispatch_semaphore_signal(_semaphore);
+}
+
++ (void)execute:(void (NS_NOESCAPE ^)(void))block {
+    [self.sharedLock lock];
+    block();
+    [self.sharedLock unLock];
+}
+
++ (id)executeWithReturnValue:(id (NS_NOESCAPE ^)(void))block {
+    [self.sharedLock lock];
+    id returnValue = block();
+    [self.sharedLock unLock];
+    return returnValue;
 }
 
 @end

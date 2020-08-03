@@ -33,9 +33,9 @@ NSString *const JSNetworkDiskCacheTaskPrefix = @"cache_task";
 
 static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(JSNetworkDiskCacheCompleted)taskCompleted {
-    [JSNetworkMutexLock.sharedLock addLock];
-    JSNetworkDiskCacheTaskIdentifier = JSNetworkDiskCacheTaskIdentifier + 1;
-    [JSNetworkMutexLock.sharedLock unLock];
+    [JSNetworkMutexLock execute:^{
+        JSNetworkDiskCacheTaskIdentifier = JSNetworkDiskCacheTaskIdentifier + 1;
+    }];
     _taskIdentifier = [JSNetworkDiskCacheTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkDiskCacheTaskIdentifier)];
     [self cacheForRequestConfig:config
                       completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
@@ -140,10 +140,9 @@ static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
 }
 
 - (NSString *)taskIdentifier {
-    [JSNetworkMutexLock.sharedLock addLock];
-    NSString *identifier = _taskIdentifier;
-    [JSNetworkMutexLock.sharedLock unLock];
-    return identifier;
+    return [JSNetworkMutexLock executeWithReturnValue:^id{
+        return _taskIdentifier;
+    }];
 }
 
 - (void)addLock {
