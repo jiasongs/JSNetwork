@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief  将url参数转换成NSDictionary
  *
- *  @param query url参数
+ *  @param URLString url或者参数
  *
  *  @return NSDictionary
  */
