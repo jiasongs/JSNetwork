@@ -26,7 +26,7 @@
         newUrl = array.firstObject;
         newQuery = array.lastObject;
     }
-    NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary js_dictionaryWithURLQuery:newQuery]];
+    NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary js_dictionaryQueryWithURLString:newQuery]];
     [newParameters addEntriesFromDictionary:parameter];
     if (newParameters.count > 0) {
         newUrl = [newUrl stringByAppendingFormat:@"?%@", newParameters.js_URLQueryString];

@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return NSDictionary
  */
-+ (NSDictionary *)js_dictionaryWithURLQuery:(NSString *)query;
++ (NSDictionary *)js_dictionaryQueryWithURLString:(NSString *)URLString;
 
 /**
  *  @brief  将NSDictionary转换成url 参数字符串

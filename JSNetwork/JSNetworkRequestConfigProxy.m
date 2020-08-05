@@ -37,7 +37,7 @@
         if ([config respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
             _finalURL = [config requestUrlFilterWithURL:_finalURL];
         }
-        _finalArguments = [NSDictionary js_dictionaryWithURLQuery:_finalURL];
+        _finalArguments = [NSDictionary js_dictionaryQueryWithURLString:_finalURL];
         /// 拼接请求头
         NSDictionary *headers = JSNetworkConfig.sharedConfig.HTTPHeaderFields;
         if ([config respondsToSelector:@selector(requestHeaderFieldValueDictionary)]) {

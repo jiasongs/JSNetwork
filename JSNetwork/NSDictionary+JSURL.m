@@ -11,11 +11,12 @@
 
 @implementation NSDictionary (JSURL)
 
-+ (NSDictionary *)js_dictionaryWithURLQuery:(NSString *)query {
++ (NSDictionary *)js_dictionaryQueryWithURLString:(NSString *)URLString {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if (query && query.length > 0) {
-        NSString *totalUrl = [query stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        if (![totalUrl hasPrefix:@"http"]) {
+    if (URLString && URLString.length > 0) {
+        NSString *totalUrl = [URLString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSRange range = [totalUrl rangeOfString:@"^[a-zA-Z0-9]+?://" options:NSRegularExpressionSearch];
+        if (range.location == NSNotFound || range.location != 0) {
             totalUrl = [@"https://host" stringByAppendingFormat:@"?%@", totalUrl];
         }
         NSURLComponents *components = [NSURLComponents componentsWithString:totalUrl];
