@@ -7,11 +7,11 @@
 //
 
 #import "NSDictionary+JSURL.h"
-#import "NSString+JSURLCode.h"
+#import "NSString+JSURL.h"
 
 @implementation NSDictionary (JSURL)
 
-+ (NSDictionary *)js_dictionaryQueryWithURLString:(NSString *)URLString {
++ (NSDictionary *)js_URLQueryDictionaryWithURLString:(NSString *)URLString {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if (URLString && URLString.length > 0) {
         NSString *totalUrl = [URLString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
@@ -35,7 +35,7 @@
         }
         NSString *description = [[self objectForKey:key] description];
         NSString *value = description.stringByRemovingPercentEncoding ? : description;
-        NSString *encode = value.js_urlEncode;
+        NSString *encode = value.js_URLStringEncode;
         [string appendFormat:@"%@=%@", key, encode];
     }
     return string.copy;

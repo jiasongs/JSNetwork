@@ -7,6 +7,7 @@
 
 #import "JSNetworkRequestConfigProxy.h"
 #import "NSDictionary+JSURL.h"
+#import "NSString+JSURL.h"
 #import "JSNetworkConfig.h"
 #import "JSNetworkUtil.h"
 
@@ -33,11 +34,11 @@
         }
         NSString *baseUrl = [config respondsToSelector:@selector(baseUrl)] ? config.baseUrl : self.baseUrl;
         NSString *url = [NSString stringWithFormat:@"%@%@", baseUrl, config.requestUrl];
-        _finalURL = [JSNetworkUtil spliceURLString:url withParameter:parameters];
+        _finalURL = [url js_URLStringByAppendingParameters:parameters];
         if ([config respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
             _finalURL = [config requestUrlFilterWithURL:_finalURL];
         }
-        _finalArguments = [NSDictionary js_dictionaryQueryWithURLString:_finalURL];
+        _finalArguments = [NSDictionary js_URLQueryDictionaryWithURLString:_finalURL];
         /// 拼接请求头
         NSDictionary *headers = JSNetworkConfig.sharedConfig.HTTPHeaderFields;
         if ([config respondsToSelector:@selector(requestHeaderFieldValueDictionary)]) {

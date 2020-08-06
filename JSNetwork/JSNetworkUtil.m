@@ -8,31 +8,9 @@
 
 #import <CommonCrypto/CommonDigest.h>
 #import "JSNetworkUtil.h"
-#import "NSDictionary+JSURL.h"
-#import "NSString+JSURLCode.h"
 #import "JSNetworkConfig.h"
 
 @implementation JSNetworkUtil
-
-@end
-
-@implementation JSNetworkUtil (URL)
-
-+ (NSString *)spliceURLString:(NSString *)URLString withParameter:(NSDictionary *)parameter {
-    NSURLComponents *components = [NSURLComponents componentsWithString:[URLString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
-    NSString *scheme = components.scheme ? [NSString stringWithFormat:@"%@://", components.scheme] : @"";
-    NSString *host = components.host ? : @"";
-    NSString *port = components.port ? [NSString stringWithFormat:@":%@", components.port] : @"";
-    NSString *path = components.path ? : @"";
-    NSString *query = components.query ? : @"";
-    NSString *newUrl = [NSString stringWithFormat:@"%@%@%@%@", scheme, host, port, path];
-    NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary js_dictionaryQueryWithURLString:query]];
-    [newParameters addEntriesFromDictionary:parameter];
-    if (newParameters.count > 0) {
-        newUrl = [newUrl stringByAppendingFormat:@"?%@", newParameters.js_URLQueryString];
-    }
-    return newUrl;
-}
 
 @end
 

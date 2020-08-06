@@ -14,12 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface JSNetworkUtil (URL)
-
-+ (NSString *)spliceURLString:(NSString *)URLString withParameter:(NSDictionary *)parameter;
-
-@end
-
 @interface JSNetworkUtil (Cache)
 
 + (nullable NSData *)dataFromObject:(id)object;

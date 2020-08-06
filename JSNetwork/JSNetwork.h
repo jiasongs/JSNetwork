@@ -30,7 +30,7 @@
 #import <JSNetwork/JSNetworkRequestConfigProxy.h>
 #import <JSNetwork/JSNetworkUtil.h>
 #import <JSNetwork/NSDictionary+JSURL.h>
-#import <JSNetwork/NSString+JSURLCode.h>
+#import <JSNetwork/NSString+JSURL.h>
 
 #else
 
@@ -53,7 +53,7 @@
 #import "JSNetworkRequestConfigProxy.h"
 #import "JSNetworkUtil.h"
 #import "NSDictionary+JSURL.h"
-#import "NSString+JSURLCode.h"
+#import "NSString+JSURL.h"
 
 #endif /* __has_include */
 
