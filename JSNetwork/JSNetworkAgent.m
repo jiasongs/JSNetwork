@@ -46,7 +46,6 @@
         _lock = dispatch_semaphore_create(1);
         _requestQueue = [[NSOperationQueue alloc] init];
         _requestQueue.name = @"com.jsnetwork.agent.queue";
-        _progress = [[NSProgress alloc] init];
     }
     return self;;
 }
@@ -79,15 +78,6 @@
     if (interface) {
         [self cancelRequestForInterface:interface];
     }
-}
-
-- (void)setMaxConcurrentCount:(NSInteger)maxConcurrentCount {
-    [self addLock];
-    if (_maxConcurrentCount != maxConcurrentCount) {
-        _maxConcurrentCount = maxConcurrentCount;
-        _requestQueue.maxConcurrentOperationCount = maxConcurrentCount;
-    }
-    [self unLock];
 }
 
 #pragma mark - Private
@@ -157,11 +147,6 @@
         void(^completionBlock)(void) = ^(void) {
             dispatch_async(completionQueue, ^{
                 @autoreleasepool {
-                    /// 更新进度
-                    if (weakSelf.progress.totalUnitCount != 0 && weakSelf.interfaceRecord.count <= weakSelf.progress.totalUnitCount) {
-                        int64_t completedUnitCount = weakSelf.progress.totalUnitCount - weakSelf.interfaceRecord.count + 1;
-                        weakSelf.progress.completedUnitCount = completedUnitCount;
-                    }
                     [weakSelf toggleWillStopWithInterface:weakInterface];
                     for (JSNetworkRequestCompletedFilter block in weakInterface.completionBlocks) {
                         block(weakInterface);
@@ -199,6 +184,11 @@
 - (void)addRequestOperation:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     NSParameterAssert(request.requestTask);
     [self addLock];
+    /// 设置下最大并发数
+    NSInteger maxConcurrentCount = JSNetworkConfig.sharedConfig.requestMaxConcurrentCount;
+    if (self.requestQueue.maxConcurrentOperationCount != maxConcurrentCount) {
+        self.requestQueue.maxConcurrentOperationCount = maxConcurrentCount;
+    }
     [self.requestQueue addOperation:request];
     [self postExecutingAndFinishedKVOWithRequest:request];
     [self unLock];

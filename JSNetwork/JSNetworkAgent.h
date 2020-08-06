@@ -16,16 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface JSNetworkAgent : NSObject
 
 /**
- *  @brief 最大并发数, 默认是-1
- */
-@property (nonatomic, assign) NSInteger maxConcurrentCount;
-
-/**
- *  @brief 当前执行的进度, 需设置totalUnitCount, 默认0
- */
-@property (nonatomic, strong, readonly) NSProgress *progress;
-
-/**
  *  @brief 单例
  */
 + (instancetype)sharedAgent;

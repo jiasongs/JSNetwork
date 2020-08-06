@@ -28,10 +28,12 @@
     JSNetworkConfig.sharedConfig.debugLogEnabled = true;
     JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
     JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
+    JSNetworkConfig.sharedConfig.requestMaxConcurrentCount = 3;
     [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"token"}];
     [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"other": @"other"}];
     [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
     [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
+
 }
 
 - (IBAction)onPressRequest:(id)sender {
@@ -40,9 +42,7 @@
         /// 生成接口
         [JSNetworkProvider requestWithConfig:api
                                    completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-            NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
             NSLog(@"%@", aInterface);
-            NSLog(@"%@", progress);
         }];
     };
     /// 测试
@@ -62,9 +62,7 @@
         dispatch_group_enter(group);
         [JSNetworkProvider requestWithConfig:api
                                    completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-            NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
             NSLog(@"%@", aInterface);
-            NSLog(@"%@", progress);
             dispatch_group_leave(group);
         }];
     }
@@ -75,21 +73,18 @@
 
 - (IBAction)onPressChain:(id)sender {
     /// 暂未封装
-    JSNetworkAgent.sharedAgent.maxConcurrentCount = 1;
-    JSNetworkAgent.sharedAgent.progress.totalUnitCount = 10;
-    for (int i = 0; i < 10; i++) {
-        CNodeAPI *api = [CNodeAPI new];
-        [JSNetworkProvider requestWithConfig:api
-                                   completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-            NSProgress *progress = JSNetworkAgent.sharedAgent.progress;
-            NSLog(@"%@", aInterface);
-            NSLog(@"%@", progress);
-            if (progress.completedUnitCount == 10) {
-                JSNetworkAgent.sharedAgent.maxConcurrentCount = -1;
-                progress.totalUnitCount = 0;
-            }
-        }];
-    }
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        for (int i = 0; i < 10; i++) {
+            CNodeAPI *api = [CNodeAPI new];
+            [JSNetworkProvider requestWithConfig:api
+                                       completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+                NSLog(@"%@", aInterface);
+                dispatch_semaphore_signal(semaphore);
+            }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        }
+    });
 }
 
 - (IBAction)onPressUpload:(id)sender {

@@ -40,6 +40,7 @@
         _plugins = [NSMutableArray array];
         _baseURL = @"";
         _timeoutInterval = 20;
+        _requestMaxConcurrentCount = -1;
         _requestClass = JSNetworkRequest.class;
         _responseClass = JSNetworkResponse.class;
         _diskCacheClass = JSNetworkDiskCache.class;

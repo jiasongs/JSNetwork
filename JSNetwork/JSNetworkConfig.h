@@ -45,6 +45,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
 /**
+ *  @brief 最大并发数, 默认是-1, 也即不限制
+ *
+ *  @note  仅支持request网络任务, 不支持cache任务
+ */
+@property (nonatomic, assign) NSInteger requestMaxConcurrentCount;
+/**
  *  @brief 全局的请求Class, 默认JSNetworkRequest, 继承于NSOperation
  */
 @property (nonatomic, assign) Class<JSNetworkRequestProtocol> requestClass;
