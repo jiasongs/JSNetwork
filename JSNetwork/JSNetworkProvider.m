@@ -11,6 +11,7 @@
 #import "JSNetworkRequest.h"
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
+#import "JSNetworkConfig.h"
 
 @implementation JSNetworkProvider
 
@@ -54,6 +55,59 @@
     /// 处理接口
     [JSNetworkAgent.sharedAgent addRequestForInterface:interface];
     return interface;
+}
+
+@end
+
+#pragma mark - TODO
+
+@interface JSNetworkProvider (TODO)
+
+@end
+
+@implementation JSNetworkProvider (TODO)
+
++ (void)_batchRequestWithConfigs:(NSArray<id<JSNetworkRequestConfigProtocol>> *)configs
+                       completed:(nullable void(^)(NSArray<id<JSNetworkInterfaceProtocol>> *aInterfaces))completed {
+    dispatch_group_t group = dispatch_group_create();
+    NSMutableArray<id<JSNetworkInterfaceProtocol>> *resultArray = [NSMutableArray arrayWithCapacity:configs.count];
+    [configs enumerateObjectsUsingBlock:^(id<JSNetworkRequestConfigProtocol> config, NSUInteger idx, BOOL *stop) {
+        dispatch_group_enter(group);
+        [self requestWithConfig:config
+                 uploadProgress:nil
+               downloadProgress:nil
+                      completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+            [resultArray insertObject:aInterface atIndex:idx];
+            dispatch_group_leave(group);
+        }];
+    }];
+    dispatch_group_notify(group, JSNetworkConfig.sharedConfig.completionQueue, ^{
+        completed(resultArray);
+    });
+}
+
++ (void)_chainRequestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                      nextBlock:(nullable id<JSNetworkRequestConfigProtocol>(^)(id<JSNetworkInterfaceProtocol> aInterface))nextBlock {
+    [self requestWithConfig:config
+             uploadProgress:nil
+           downloadProgress:nil
+                  completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+        id<JSNetworkRequestConfigProtocol> nextConfig = nextBlock(aInterface);
+        if (nextConfig) {
+            [self _chainRequestWithConfig:nextConfig nextBlock:nextBlock];
+        }
+    }];
+}
+
++ (void)onPressTest {
+    [JSNetworkProvider _batchRequestWithConfigs:@[]
+                                      completed:^(NSArray<id<JSNetworkInterfaceProtocol>> *aInterfaces) {
+        
+    }];
+    [JSNetworkProvider _chainRequestWithConfig:nil
+                                     nextBlock:^id<JSNetworkRequestConfigProtocol>(id<JSNetworkInterfaceProtocol> aInterface) {
+        return nil;
+    }];
 }
 
 @end

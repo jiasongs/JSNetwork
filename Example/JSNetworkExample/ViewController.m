@@ -33,7 +33,6 @@
     [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"other": @"other"}];
     [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
     [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
-
 }
 
 - (IBAction)onPressRequest:(id)sender {
