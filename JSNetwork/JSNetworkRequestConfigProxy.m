@@ -34,7 +34,11 @@
         }
         NSString *baseUrl = [config respondsToSelector:@selector(baseUrl)] ? config.baseUrl : self.baseUrl;
         NSString *url = [NSString stringWithFormat:@"%@%@", baseUrl, config.requestUrl];
-        _finalURL = [url js_URLStringByAppendingParameters:parameters];
+        NSArray<NSString *> *paths = @[];
+        if ([config respondsToSelector:@selector(requestPaths)]) {
+            paths = config.requestPaths ? : @[];
+        }
+        _finalURL = [url js_URLStringByAppendingPaths:paths parameters:parameters];
         if ([config respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
             _finalURL = [config requestUrlFilterWithURL:_finalURL];
         }
@@ -81,6 +85,10 @@
 
 - (NSString *)baseUrl {
     return JSNetworkConfig.sharedConfig.baseURL;
+}
+
+- (nullable NSArray<NSString *> *)requestPaths {
+    return nil;
 }
 
 - (nullable NSDictionary *)requestArgument {

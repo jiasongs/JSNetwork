@@ -34,8 +34,7 @@
             [string appendString:@"&"];
         }
         NSString *description = [[self objectForKey:key] description];
-        NSString *value = description.stringByRemovingPercentEncoding ? : description;
-        NSString *encode = value.js_URLStringEncode;
+        NSString *encode = description.js_URLStringDecode.js_URLStringEncode;
         [string appendFormat:@"%@=%@", key, encode];
     }
     return string.copy;

@@ -19,6 +19,20 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters;
 
 /**
+ *  @brief  将一段URL字符串拼接上路径
+ *
+ *  @return NSString 拼接后的字符串
+ */
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths;
+
+/**
+ *  @brief  将一段URL字符串拼接上路径、参数
+ *
+ *  @return NSString 拼接后的字符串
+ */
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary *)parameters;
+
+/**
  *  @brief  将一段字符串进行URL编码
  *
  *  @return NSString 编码后的字符串

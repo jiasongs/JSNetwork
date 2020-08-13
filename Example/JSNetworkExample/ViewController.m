@@ -33,6 +33,14 @@
     [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"other": @"other"}];
     [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
     [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
+    /// test
+    NSString *test = @"http://www.ruanmei.com?test=%E4%B8%AD%E6%96%87";
+    NSString *url0 = [test js_URLStringByAppendingPaths:@[@"content", @"我是"]];
+    NSString *url1 = [test js_URLStringByAppendingPaths:@[]];
+    NSString *url2 = [test js_URLStringByAppendingParameters:@{@"a": @"bbbbbbb"}];
+    NSString *url3 = [test js_URLStringByAppendingPaths:@[@"post", @"1"] parameters:@{@"a": @"bbbbbbb"}];
+    NSString *url4 = [test js_URLStringByAppendingPaths:@[] parameters:@{}];
+    NSLog(@"");
 }
 
 - (IBAction)onPressRequest:(id)sender {

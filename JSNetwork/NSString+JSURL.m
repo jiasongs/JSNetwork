@@ -13,15 +13,28 @@
 #pragma mark - 拼接URL
 
 - (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters {
+    return [self js_URLStringByAppendingPaths:@[] parameters:parameters];
+}
+
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths {
+    return [self js_URLStringByAppendingPaths:paths parameters:@{}];
+}
+
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary *)parameters {
     NSURLComponents *components = [NSURLComponents componentsWithString:[self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     NSString *scheme = components.scheme ? [NSString stringWithFormat:@"%@://", components.scheme] : @"";
     NSString *host = components.host ? : @"";
     NSString *port = components.port ? [NSString stringWithFormat:@":%@", components.port] : @"";
     NSString *path = components.path ? : @"";
     NSString *query = components.query ? : @"";
-    NSString *newUrl = [NSString stringWithFormat:@"%@%@%@%@", scheme, host, port, path];
+    NSMutableArray *encodePaths = [NSMutableArray arrayWithCapacity:paths.count];
+    for (NSString *item in paths) {
+        [encodePaths addObject:item.js_URLStringDecode.js_URLStringEncode];
+    }
+    NSString *newPath = encodePaths.count > 0 ? [path stringByAppendingFormat:@"/%@", [encodePaths componentsJoinedByString:@"/"]] : path;
+    NSString *newUrl = [NSString stringWithFormat:@"%@%@%@%@", scheme, host, port, newPath];
     NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary js_URLQueryDictionaryWithURLString:query]];
-    [newParameters addEntriesFromDictionary:parameters];
+    [newParameters addEntriesFromDictionary:parameters ? : @{}];
     if (newParameters.count > 0) {
         newUrl = [newUrl stringByAppendingFormat:@"?%@", newParameters.js_URLQueryString];
     }
