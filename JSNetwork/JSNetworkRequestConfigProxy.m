@@ -182,26 +182,27 @@
 #pragma mark - NSProxy
 
 - (id)forwardingTargetForSelector:(SEL)aSelector {
-    if ([_ignoreForwardingSelectors containsObject:NSStringFromSelector(aSelector)]) {
+    if ([self __needForwardingPrivateConfigForSelector:aSelector]) {
         return _privateConfig;
     }
     if ([self.target respondsToSelector:aSelector]) {
         return self.target;
     }
-    if ([_privateConfig respondsToSelector:aSelector]) {
-        return _privateConfig;
-    }
-    return nil;
+    return _privateConfig;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
+    if ([self __needForwardingPrivateConfigForSelector:aSelector]) {
+        return [_privateConfig respondsToSelector:aSelector];
+    }
     if ([self.target respondsToSelector:aSelector]) {
         return YES;
     }
-    if ([_privateConfig respondsToSelector:aSelector]) {
-        return YES;
-    }
-    return NO;
+    return [_privateConfig respondsToSelector:aSelector];
+}
+
+- (BOOL)__needForwardingPrivateConfigForSelector:(SEL)aSelector {
+    return [_ignoreForwardingSelectors containsObject:NSStringFromSelector(aSelector)];
 }
 
 - (NSString *)description {
@@ -218,7 +219,7 @@
 }
 
 - (void)dealloc {
-    //    JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([_privateConfig class]));
+    
 }
 
 @end
