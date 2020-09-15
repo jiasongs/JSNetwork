@@ -23,6 +23,10 @@
     return @[@"topics"];
 }
 
+- (NSArray<NSString *> *)filterGlobalArgumentForKeys {
+    return @[@"other"];
+}
+
 - (BOOL)cacheIgnore {
     return true;
 }

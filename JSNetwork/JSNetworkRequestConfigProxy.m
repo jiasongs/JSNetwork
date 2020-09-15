@@ -27,6 +27,15 @@
     if (self = [super init]) {
         /// URL拼接参数
         NSDictionary *parameters = JSNetworkConfig.sharedConfig.urlFilterArguments;
+        if ([config respondsToSelector:@selector(filterGlobalArgumentForKeys)]) {
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
+            [[config filterGlobalArgumentForKeys] enumerateObjectsUsingBlock:^(NSString *item, NSUInteger idx, BOOL *stop) {
+                if ([parameters.allKeys containsObject:item]) {
+                    [dictionary removeObjectForKey:item];
+                }
+            }];
+            parameters = dictionary.copy;
+        }
         if ([config respondsToSelector:@selector(requestArgument)]) {
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
             [dictionary addEntriesFromDictionary:config.requestArgument ? : @{}];

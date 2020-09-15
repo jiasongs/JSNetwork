@@ -60,6 +60,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSDictionary *)requestArgument;
 
 /**
+ *  @brief 需要过滤的全局设置的参数
+ */
+- (NSArray<NSString *> *)filterGlobalArgumentForKeys;
+
+/**
  *  @brief request中的HTTPBody
  */
 - (nullable id)requestBody;
