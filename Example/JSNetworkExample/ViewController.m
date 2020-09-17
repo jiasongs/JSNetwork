@@ -29,8 +29,8 @@
     JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
     JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
     JSNetworkConfig.sharedConfig.requestMaxConcurrentCount = 3;
-    [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"app": @"1.0.0", @"token": @"token"}];
-    [JSNetworkConfig.sharedConfig addUrlFilterArguments:@{@"other": @"other"}];
+    [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"app": @"1.0.0", @"token": @"token"}];
+    [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"other": @"other"}];
     [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
     [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
     /// test

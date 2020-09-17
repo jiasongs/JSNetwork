@@ -13,7 +13,7 @@
 
 @interface JSNetworkConfig () {
     NSMutableArray *_plugins;
-    NSDictionary *_urlFilterArguments;
+    NSDictionary *_URLGlobalArguments;
     NSDictionary *_HTTPHeaderFields;
 }
 
@@ -36,7 +36,8 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _urlFilterArguments = @{};
+        _URLGlobalArguments = @{};
+        _HTTPHeaderFields = @{};
         _plugins = [NSMutableArray array];
         _baseURL = @"";
         _timeoutInterval = 20;
@@ -48,23 +49,22 @@
         _completionQueue = dispatch_get_main_queue();
         NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         _cacheDirectoryPath = [NSString stringWithFormat:@"%@/com.jsnetwork.cache", cachePaths.firstObject];
-        _HTTPHeaderFields = @{};
     }
     return self;
 }
 
-- (void)addUrlFilterArguments:(NSDictionary *)filter {
-    NSParameterAssert(filter);
+- (void)addURLGlobalArguments:(NSDictionary *)arguments {
+    NSParameterAssert(arguments);
     @synchronized (self) {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_urlFilterArguments];
-        [dictionary addEntriesFromDictionary:filter];
-        _urlFilterArguments = filter;
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_URLGlobalArguments];
+        [dictionary addEntriesFromDictionary:arguments];
+        _URLGlobalArguments = dictionary;
     }
 }
 
-- (void)clearUrlFilterArguments {
+- (void)clearURLGlobalArguments {
     @synchronized (self) {
-        _urlFilterArguments = @{};
+        _URLGlobalArguments = @{};
     }
 }
 
@@ -96,8 +96,8 @@
     }
 }
 
-- (NSDictionary *)urlFilterArguments {
-    return _urlFilterArguments;;
+- (NSDictionary *)URLGlobalArguments {
+    return _URLGlobalArguments;;
 }
 
 - (NSArray *)plugins {

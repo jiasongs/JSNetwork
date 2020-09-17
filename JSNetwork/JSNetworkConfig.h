@@ -37,9 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly) NSDictionary *HTTPHeaderFields;
 /**
- *  @brief 全局用于URL筛选的字典，只读
+ *  @brief 全局URL参数的字典，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary *urlFilterArguments;
+@property (nonatomic, strong, readonly) NSDictionary *URLGlobalArguments;
 /**
  *  @brief 全局超时时间
  */
@@ -77,15 +77,15 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)sharedConfig;
 
 /**
- *  @brief 添加一个用于URL筛选的字典
+ *  @brief 添加一个用于URL全局参数的字典
  *
- *  @param filter 字典
+ *  @param arguments 字典
  */
-- (void)addUrlFilterArguments:(NSDictionary *)filter;
+- (void)addURLGlobalArguments:(NSDictionary *)arguments;
 /**
- *  @brief 清除全部URL筛选的字典
+ *  @brief 清除全部URL全局参数的字典
  */
-- (void)clearUrlFilterArguments;
+- (void)clearURLGlobalArguments;
 
 /**
  *  @brief 添加一个HTTPHeaderField

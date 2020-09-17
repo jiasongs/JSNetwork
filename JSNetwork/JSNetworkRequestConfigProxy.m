@@ -26,10 +26,10 @@
 - (instancetype)initWithConfig:(id<JSNetworkRequestConfigProtocol>)config {
     if (self = [super init]) {
         /// URL拼接参数
-        NSDictionary *parameters = JSNetworkConfig.sharedConfig.urlFilterArguments;
-        if ([config respondsToSelector:@selector(filterGlobalArgumentForKeys)]) {
+        NSDictionary *parameters = JSNetworkConfig.sharedConfig.URLGlobalArguments;
+        if ([config respondsToSelector:@selector(ignoreGlobalArgumentForKeys)]) {
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
-            [[config filterGlobalArgumentForKeys] enumerateObjectsUsingBlock:^(NSString *item, NSUInteger idx, BOOL *stop) {
+            [[config ignoreGlobalArgumentForKeys] enumerateObjectsUsingBlock:^(NSString *item, NSUInteger idx, BOOL *stop) {
                 if ([parameters.allKeys containsObject:item]) {
                     [dictionary removeObjectForKey:item];
                 }
