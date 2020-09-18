@@ -12,6 +12,27 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSString (JSURL)
 
 /**
+ *  @brief  获取URL最后一条路径
+ *
+ *  @return NSString 最后一条路径
+ */
+- (NSString *)js_URLLastPath;
+
+/**
+ *  @brief  删除URL最后一条路径
+ *
+ *  @return NSString 删除后的URL字符串
+ */
+- (NSString *)js_URLByDeletingLastPath;
+
+/**
+ *  @brief  获取URL路径的数组
+ *
+ *  @return NSArray 路径的数组
+ */
+- (NSArray<NSString *> *)js_URLPaths;
+
+/**
  *  @brief  将一段URL字符串拼接上参数
  *
  *  @return NSString 拼接后的字符串

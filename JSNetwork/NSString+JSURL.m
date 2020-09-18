@@ -10,6 +10,27 @@
 
 @implementation NSString (JSURL)
 
+#pragma mark - 工具
+
+- (NSString *)js_URLLastPath {
+    NSURL *URL = [NSURL URLWithString:self];
+    return URL.lastPathComponent;
+}
+
+- (NSString *)js_URLByDeletingLastPath {
+    NSURL *URL = [NSURL URLWithString:self];
+    NSString *absoluteString = URL.URLByDeletingLastPathComponent.absoluteString;
+    if ([absoluteString containsString:@"?"]) {
+        absoluteString = [absoluteString componentsSeparatedByString:@"?"].firstObject;
+    }
+    return absoluteString;
+}
+
+- (NSArray<NSString *> *)js_URLPaths {
+    NSURL *URL = [NSURL URLWithString:self];
+    return URL.pathComponents;
+}
+
 #pragma mark - 拼接URL
 
 - (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters {
