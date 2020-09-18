@@ -34,12 +34,15 @@
     [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
     [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
     /// test
-    NSString *test = @"http://www.ruanmei.com?test=%E4%B8%AD%E6%96%87";
+    NSString *test = @"http://www.ruanmei.com/#/123456?test=%E4%B8%AD%E6%96%87";
     NSString *url0 = [test js_URLStringByAppendingPaths:@[@"content", @"我是"]];
     NSString *url1 = [test js_URLStringByAppendingPaths:@[]];
     NSString *url2 = [test js_URLStringByAppendingParameters:@{@"a": @"bbbbbbb"}];
     NSString *url3 = [test js_URLStringByAppendingPaths:@[@"post", @"1"] parameters:@{@"a": @"bbbbbbb"}];
     NSString *url4 = [test js_URLStringByAppendingPaths:@[] parameters:@{}];
+    NSString *lastPath = [test js_URLLastPath];
+    NSString *deletingLastPath = [test js_URLByDeletingLastPath];
+    NSArray *paths = [test js_URLPaths];
     NSLog(@"");
 }
 

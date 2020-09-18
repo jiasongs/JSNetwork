@@ -12,23 +12,27 @@
 
 #pragma mark - 工具
 
-- (NSString *)js_URLLastPath {
-    NSURL *URL = [NSURL URLWithString:self];
-    return URL.lastPathComponent;
+- (nullable NSString *)js_URLLastPath {
+    return self.js_URLPaths.lastObject;
 }
 
 - (NSString *)js_URLByDeletingLastPath {
-    NSURL *URL = [NSURL URLWithString:self];
-    NSString *absoluteString = URL.URLByDeletingLastPathComponent.absoluteString;
-    if ([absoluteString containsString:@"?"]) {
-        absoluteString = [absoluteString componentsSeparatedByString:@"?"].firstObject;
+    if (self.js_URLPaths.count > 0) {
+        NSMutableArray *array = [NSMutableArray arrayWithArray:[self componentsSeparatedByString:@"/"]];
+        [array removeLastObject];
+        return [array componentsJoinedByString:@"/"];
     }
-    return absoluteString;
+    return self;
 }
 
 - (NSArray<NSString *> *)js_URLPaths {
-    NSURL *URL = [NSURL URLWithString:self];
-    return URL.pathComponents;
+    NSURLComponents *components = [NSURLComponents componentsWithString:[self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+    NSString *path = components.path ? : @"";
+    NSMutableArray<NSString *> *paths = [NSMutableArray arrayWithArray:[path componentsSeparatedByString:@"/"]];
+    if (paths.count > 0 && paths.firstObject.length == 0) {
+        [paths removeObjectAtIndex:0];
+    }
+    return paths;
 }
 
 #pragma mark - 拼接URL

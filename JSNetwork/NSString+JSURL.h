@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return NSString 最后一条路径
  */
-- (NSString *)js_URLLastPath;
+- (nullable NSString *)js_URLLastPath;
 
 /**
  *  @brief  删除URL最后一条路径
