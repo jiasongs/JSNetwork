@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 原始的响应
  */
-- (NSHTTPURLResponse *)originalResponse;
+- (nullable NSHTTPURLResponse *)originalResponse;
 
 /**
  *  @brief 状态码
@@ -38,17 +38,17 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 响应头
  */
-- (NSDictionary *)responseHeaders;
+- (nullable NSDictionary *)responseHeaders;
 
 /**
  *  @brief 响应数据
  */
-- (id)responseObject;
+- (nullable id)responseObject;
 
 /**
  *  @brief 错误
  */
-- (NSError *)error;
+- (nullable NSError *)error;
 
 @end
 

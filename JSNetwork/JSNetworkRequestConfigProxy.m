@@ -48,8 +48,8 @@
             paths = config.requestPaths ? : @[];
         }
         _finalURL = [url js_URLStringByAppendingPaths:paths parameters:parameters];
-        if ([config respondsToSelector:@selector(requestUrlFilterWithURL:)]) {
-            _finalURL = [config requestUrlFilterWithURL:_finalURL];
+        if ([config respondsToSelector:@selector(requestUrlFilterWithURLString:)]) {
+            _finalURL = [config requestUrlFilterWithURLString:_finalURL];
         }
         _finalArguments = [NSDictionary js_URLQueryDictionaryWithURLString:_finalURL];
         /// 拼接请求头

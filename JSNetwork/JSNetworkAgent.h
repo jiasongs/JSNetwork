@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  */
-- (void)addRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface;
+- (void)addRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(addRequest(forInterface:));
 
 /**
  *  @brief 取消一个请求
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  */
-- (void)cancelRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface;
+- (void)cancelRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(cancelRequest(forInterface:));
 
 /**
  *  @brief 取消一个请求, 根据任务ID
@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param taskIdentifier 任务ID
  *
  */
-- (void)cancelRequestForTaskIdentifier:(NSString *)taskIdentifier;
+- (void)cancelRequestForTaskIdentifier:(NSString *)taskIdentifier NS_SWIFT_NAME(cancelRequest(forTaskIdentifier:));
 
 /**
  *  @brief 获得一个接口
@@ -50,16 +50,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param taskIdentifier 任务ID
  *
  */
-- (nullable id<JSNetworkInterfaceProtocol>)interfaceForTaskIdentifier:(NSString *)taskIdentifier;
+- (nullable id<JSNetworkInterfaceProtocol>)interfaceForTaskIdentifier:(NSString *)taskIdentifier NS_SWIFT_NAME(interface(forTaskIdentifier:));
 
 @end
 
 @interface JSNetworkAgent (Plugin)
 
-- (void)toggleWillStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface;
-- (void)toggleDidStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface;
-- (void)toggleWillStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface;
-- (void)toggleDidStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface;
+- (void)toggleWillStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(toggleWillStart(interface:));
+- (void)toggleDidStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(toggleDidStart(interface:));
+- (void)toggleWillStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(toggleWillStop(interface:));
+- (void)toggleDidStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(toggleDidStop(interface:));
 
 @end
 

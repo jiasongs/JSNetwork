@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 遵循<JSNetworkInterfaceProtocol>的接口
  */
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:completed:));
 
 /**
  *  @brief requestConfig、uploadProgress、completed
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                      uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:completed:));
 
 /**
  *  @brief requestConfig、downloadProgress、completed
@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                    downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:downloadProgress:completed:));
 
 /**
  *  @brief requestConfig、uploadProgress、downloadProgress、completed
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                      uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                    downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed;
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:downloadProgress:completed:));
 
 
 @end

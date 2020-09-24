@@ -12,23 +12,23 @@
 @protocol JSNetworkResponseProtocol;
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
-    JSRequestMethodGET,
-    JSRequestMethodPOST,
-    JSRequestMethodHEAD,
-    JSRequestMethodPUT,
-    JSRequestMethodDELETE,
-    JSRequestMethodPATCH,
+    JSRequestMethodGET    NS_SWIFT_NAME(GET),
+    JSRequestMethodPOST   NS_SWIFT_NAME(POST),
+    JSRequestMethodHEAD   NS_SWIFT_NAME(HEAD),
+    JSRequestMethodPUT    NS_SWIFT_NAME(PUT),
+    JSRequestMethodDELETE NS_SWIFT_NAME(DELETE),
+    JSRequestMethodPATCH  NS_SWIFT_NAME(PATCH),
 };
 
 typedef NS_ENUM(NSInteger, JSRequestSerializerType) {
-    JSRequestSerializerTypeJSON,      /// POST时Body转换为JSON字符串传输
-    JSRequestSerializerTypeFormData,  /// POST时Body转换为FormData传输
+    JSRequestSerializerTypeJSON     NS_SWIFT_NAME(JSON),      /// POST时Body转换为JSON字符串传输
+    JSRequestSerializerTypeFormData NS_SWIFT_NAME(FormData),  /// POST时Body转换为FormData传输
 };
 
 typedef NS_ENUM(NSInteger, JSResponseSerializerType) {
-    JSResponseSerializerTypeJSON,
-    JSResponseSerializerTypeHTTP,
-    JSResponseSerializerTypeXMLParser,
+    JSResponseSerializerTypeJSON      NS_SWIFT_NAME(JSON),
+    JSResponseSerializerTypeHTTP      NS_SWIFT_NAME(HTTP),
+    JSResponseSerializerTypeXMLParser NS_SWIFT_NAME(XML),
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 需要忽略的全局设置的参数
  */
-- (NSArray<NSString *> *)ignoreGlobalArgumentForKeys;
+- (nullable NSArray<NSString *> *)ignoreGlobalArgumentForKeys;
 
 /**
  *  @brief request中的HTTPBody
@@ -99,16 +99,16 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param multipartFormData 可拼接的FormData, 如果外部使用AFN, 则是AFMultipartFormData
  */
-- (void)constructingMultipartFormData:(id)multipartFormData;
+- (void)constructingMultipartFormData:(id)multipartFormData NS_SWIFT_NAME(constructingMultipart(formData:));
 
 /**
  *  @brief 筛选URL
  *
- *  @param URL 需要筛选的URL
+ *  @param URLString 需要筛选的URL
  *
  *  @return 返回新的URL
  */
-- (NSString *)requestUrlFilterWithURL:(NSString *)URL;
+- (NSString *)requestUrlFilterWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestUrlFilter(URLString:));
 
 /**
  *  @brief 内容类型
@@ -157,7 +157,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param response 响应
  */
-- (BOOL)cacheIsSavedWithResponse:(id<JSNetworkResponseProtocol>)response;
+- (BOOL)cacheIsSavedWithResponse:(id<JSNetworkResponseProtocol>)response NS_SWIFT_NAME(cacheIsSaved(response:));
 
 /**
  *  @brief 缓存的文件名

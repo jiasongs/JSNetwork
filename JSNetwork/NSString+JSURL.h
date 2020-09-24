@@ -37,21 +37,21 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return NSString 拼接后的字符串
  */
-- (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters;
+- (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters NS_SWIFT_NAME(js_URLStringByAppending(parameters:));
 
 /**
  *  @brief  将一段URL字符串拼接上路径
  *
  *  @return NSString 拼接后的字符串
  */
-- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths;
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths NS_SWIFT_NAME(js_URLStringByAppending(paths:));
 
 /**
  *  @brief  将一段URL字符串拼接上路径、参数
  *
  *  @return NSString 拼接后的字符串
  */
-- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary *)parameters;
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary *)parameters NS_SWIFT_NAME(js_URLStringByAppending(paths:parameters:));
 
 /**
  *  @brief  将一段字符串进行URL编码
@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return NSString 编码后的字符串
  */
-- (NSString *)js_URLStringEncodeUsingEncoding:(NSStringEncoding)encoding;
+- (NSString *)js_URLStringEncodeUsingEncoding:(NSStringEncoding)encoding NS_SWIFT_NAME(js_URLStringEncode(usingEncoding:));
 
 /**
  *  @brief  将一段字符串进行URL解码
@@ -83,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return NSString 解码后的字符串
  */
-- (NSString *)js_URLStringDecodeUsingEncoding:(NSStringEncoding)encoding;
+- (NSString *)js_URLStringDecodeUsingEncoding:(NSStringEncoding)encoding NS_SWIFT_NAME(js_URLStringDecode(usingEncoding:));
 
 @end
 

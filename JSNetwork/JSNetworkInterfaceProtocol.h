@@ -36,7 +36,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 /**
  *  @brief 缓存类的实例
  */
-@property (nonatomic, strong, readonly) id<JSNetworkDiskCacheProtocol> diskCache;
+@property (nullable, nonatomic, strong, readonly) id<JSNetworkDiskCacheProtocol> diskCache;
 /**
  *  @brief 上传进度的回调
  */
@@ -55,7 +55,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *
  *  @param config JSNetworkRequestConfigProtocol
  */
-- (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config;
+- (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config NS_SWIFT_NAME(init(requestConfig:));
 
 /**
  *  @brief 设置上传进度的回调

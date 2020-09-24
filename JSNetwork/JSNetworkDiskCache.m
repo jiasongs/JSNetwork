@@ -35,8 +35,8 @@ static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(JSNetworkDiskCacheCompleted)taskCompleted {
     [JSNetworkMutexLock execute:^{
         JSNetworkDiskCacheTaskIdentifier = JSNetworkDiskCacheTaskIdentifier + 1;
+        _taskIdentifier = [JSNetworkDiskCacheTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkDiskCacheTaskIdentifier)];
     }];
-    _taskIdentifier = [JSNetworkDiskCacheTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkDiskCacheTaskIdentifier)];
     [self cacheForRequestConfig:config
                       completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         if (metadata) {

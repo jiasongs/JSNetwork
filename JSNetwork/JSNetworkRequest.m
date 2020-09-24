@@ -33,8 +33,8 @@ static NSUInteger JSNetworkRequestTaskIdentifier = 0;
     NSParameterAssert(taskCompleted);
     [JSNetworkMutexLock execute:^{
         JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
+        _taskIdentifier = [JSNetworkRequestTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];
     }];
-    _taskIdentifier = [JSNetworkRequestTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];
 }
 
 - (void)addInterfaceProxy:(id<JSNetworkInterfaceProtocol>)interfaceProxy {
