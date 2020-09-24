@@ -40,11 +40,11 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 /**
  *  @brief 上传进度的回调
  */
-@property (nonatomic, copy, readonly) JSNetworkProgressBlock uploadProgress;
+@property (nullable, nonatomic, copy, readonly) JSNetworkProgressBlock uploadProgress;
 /**
  *  @brief 下载进度的回调
  */
-@property (nonatomic, copy, readonly) JSNetworkProgressBlock downloadProgress;
+@property (nullable, nonatomic, copy, readonly) JSNetworkProgressBlock downloadProgress;
 /**
  *  @brief 返回已经完成的回调
  */
