@@ -12,12 +12,76 @@
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkConfig.h"
+#import <objc/runtime.h>
+
+@interface JSNetworkProviderEntity : NSObject
+
+@property (nonatomic, copy) NSString *taskIdentifier;
+
+@end
+
+@implementation JSNetworkProviderEntity
+
++ (instancetype)entityWithTaskIdentifier:(NSString *)taskIdentifier {
+    return [[self.class alloc] initWithTaskIdentifier:taskIdentifier];
+}
+
+- (instancetype)initWithTaskIdentifier:(NSString *)taskIdentifier {
+    if (self = [super init]) {
+        _taskIdentifier = taskIdentifier;
+    }
+    return self;
+}
+
+- (void)dealloc {
+    if (self.taskIdentifier && self.taskIdentifier.length > 0) {
+        [JSNetworkAgent.sharedAgent cancelRequestForTaskIdentifier:self.taskIdentifier];
+        self.taskIdentifier = nil;
+    }
+}
+
+@end
+
+@interface NSObject (__JSNetworkProvider)
+
+@property (nonatomic, strong, readonly) NSMutableArray<JSNetworkProviderEntity *> *jsnet_providerEntitys;
+
+@end
+
+@implementation NSObject (__JSNetworkProvider)
+
+- (void)js_bindTaskIdentifier:(NSString *)taskIdentifier {
+    NSParameterAssert(taskIdentifier);
+    [self.jsnet_providerEntitys addObject:[JSNetworkProviderEntity entityWithTaskIdentifier:taskIdentifier]];
+}
+
+- (NSMutableArray<JSNetworkProviderEntity *> *)jsnet_providerEntitys {
+    NSMutableArray *providerEntitys = objc_getAssociatedObject(self, _cmd);
+    if (!providerEntitys) {
+        providerEntitys = [NSMutableArray array];
+        objc_setAssociatedObject(self, _cmd, providerEntitys, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return providerEntitys;
+}
+
+@end
 
 @implementation JSNetworkProvider
 
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
+                          onTarget:nil
+                    uploadProgress:nil
+                  downloadProgress:nil
+                         completed:completed];
+}
+
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+    return [self requestWithConfig:config
+                          onTarget:target
                     uploadProgress:nil
                   downloadProgress:nil
                          completed:completed];
@@ -27,6 +91,18 @@
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
+                          onTarget:nil
+                    uploadProgress:uploadProgress
+                  downloadProgress:nil
+                         completed:completed];
+}
+
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                     uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
+                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+    return [self requestWithConfig:config
+                          onTarget:target
                     uploadProgress:uploadProgress
                   downloadProgress:nil
                          completed:completed];
@@ -36,6 +112,18 @@
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
+                          onTarget:nil
+                    uploadProgress:nil
+                  downloadProgress:downloadProgress
+                         completed:completed];
+}
+
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                   downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
+                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+    return [self requestWithConfig:config
+                          onTarget:target
                     uploadProgress:nil
                   downloadProgress:downloadProgress
                          completed:completed];
@@ -45,6 +133,18 @@
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
+    return [self requestWithConfig:config
+                          onTarget:nil
+                    uploadProgress:uploadProgress
+                  downloadProgress:downloadProgress
+                         completed:completed];
+}
+
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed  {
     NSParameterAssert(config);
     /// 生成接口
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
@@ -54,6 +154,13 @@
     [interface requestCompletedFilter:completed];
     /// 处理接口
     [JSNetworkAgent.sharedAgent addRequestForInterface:interface];
+    /// 存储taskIdentifier
+    if (target) {
+        /// 保证线程安全
+        @synchronized (self) {
+            [target js_bindTaskIdentifier:interface.request.taskIdentifier];
+        }
+    }
     return interface;
 }
 

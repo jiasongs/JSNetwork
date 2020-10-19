@@ -47,10 +47,12 @@
 }
 
 - (IBAction)onPressRequest:(id)sender {
+    NSObject *object = NSObject.new;
     void (^test)(void) = ^(void) {
         CNodeAPI *api = [CNodeAPI new];
         /// 生成接口
         [JSNetworkProvider requestWithConfig:api
+                                    onTarget:object
                                    completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
             NSLog(@"%@", aInterface);
         }];

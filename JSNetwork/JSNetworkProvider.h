@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                           completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:completed:));
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:completed:));
 
 /**
  *  @brief requestConfig、uploadProgress、completed
@@ -38,6 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                      uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                           completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:completed:));
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:uploadProgress:completed:));
 
 /**
  *  @brief requestConfig、downloadProgress、completed
@@ -51,6 +58,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                    downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
                                           completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:downloadProgress:completed:));
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:downloadProgress:completed:));
 
 /**
  *  @brief requestConfig、uploadProgress、downloadProgress、completed
@@ -66,6 +77,11 @@ NS_ASSUME_NONNULL_BEGIN
                                      uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                    downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
                                           completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:downloadProgress:completed:));
++ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                           onTarget:(nullable __kindof NSObject *)target
+                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:uploadProgress:downloadProgress:completed:));
 
 
 @end
