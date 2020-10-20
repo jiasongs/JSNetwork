@@ -70,7 +70,6 @@
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
-                          onTarget:nil
                     uploadProgress:nil
                   downloadProgress:nil
                          completed:completed];
@@ -78,7 +77,7 @@
 
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                            onTarget:(nullable __kindof NSObject *)target
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     return [self requestWithConfig:config
                           onTarget:target
                     uploadProgress:nil
@@ -90,7 +89,6 @@
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
-                          onTarget:nil
                     uploadProgress:uploadProgress
                   downloadProgress:nil
                          completed:completed];
@@ -99,7 +97,7 @@
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                            onTarget:(nullable __kindof NSObject *)target
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     return [self requestWithConfig:config
                           onTarget:target
                     uploadProgress:uploadProgress
@@ -111,7 +109,6 @@
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
                                           completed:(nullable JSNetworkRequestCompletedFilter)completed {
     return [self requestWithConfig:config
-                          onTarget:nil
                     uploadProgress:nil
                   downloadProgress:downloadProgress
                          completed:completed];
@@ -120,7 +117,7 @@
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                            onTarget:(nullable __kindof NSObject *)target
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     return [self requestWithConfig:config
                           onTarget:target
                     uploadProgress:nil
@@ -136,26 +133,36 @@
                           onTarget:nil
                     uploadProgress:uploadProgress
                   downloadProgress:downloadProgress
-                         completed:completed];
+                         completed:^(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface) {
+        if (completed) {
+            completed(aInterface);
+        }
+    }];
 }
 
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                            onTarget:(nullable __kindof NSObject *)target
                                      uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                    downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed  {
+                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     NSParameterAssert(config);
     /// 生成接口
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
-    /// 设置请求回调
+    /// 设置Progress
     [interface requestUploadProgress:uploadProgress];
     [interface requestDownloadProgress:downloadProgress];
-    [interface requestCompletedFilter:completed];
+    /// 设置回调
+    __weak __typeof(target) weakTarget = target;
+    [interface requestCompletedFilter:^(id<JSNetworkInterfaceProtocol> aInterface) {
+        if (completed) {
+            completed(weakTarget, aInterface);
+        }
+    }];
     /// 处理接口
     [JSNetworkAgent.sharedAgent addRequestForInterface:interface];
-    /// 绑定任务ID
+    /// 绑定任务id
     if (target) {
-        /// 保证线程安全
+        /// 务必保证线程安全
         @synchronized (self) {
             [target js_bindTaskIdentifier:interface.request.taskIdentifier];
         }

@@ -65,7 +65,6 @@
 
 - (void)cancelRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     if (interface.request.requestTask) {
-        /// 理论上只要调用了processingRequestForInterface就已经是运行状态了
         /// 正在运行时才可以取消
         if (interface.request.isExecuting) {
             [interface.request cancel];

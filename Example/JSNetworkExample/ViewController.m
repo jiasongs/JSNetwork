@@ -31,7 +31,6 @@
         JSNetworkConfig.sharedConfig.debugLogEnabled = true;
         JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
         JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
-        JSNetworkConfig.sharedConfig.requestMaxConcurrentCount = 3;
         [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"app": @"1.0.0", @"token": @"token"}];
         [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"other": @"other"}];
         [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
@@ -59,14 +58,14 @@
 - (IBAction)onPressRequest:(id)sender {
     void (^test)(void) = ^(void) {
         DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
-//        CNodeAPI *api = [CNodeAPI new];
+        //        CNodeAPI *api = [CNodeAPI new];
         /// 生成接口
         __weak __typeof(self) weakSelf = self;
         [JSNetworkProvider requestWithConfig:api
                                     onTarget:self
-                                   completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-            /// 持有self
-            NSLog(@"%@ %@", weakSelf, aInterface);
+                                   completed:^(ViewController *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface) {
+            /// 注意此Block会持有外部变量, 所以若内部引入了target, 必须使用weak, 否则自动释放机制会失效
+            NSLog(@"%@ %@ %@", weakSelf, target, aInterface);
         }];
     };
     /// 测试
