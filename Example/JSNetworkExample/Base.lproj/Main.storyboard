@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PMW-5l-dbG">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -19,7 +21,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w3i-9P-I6E">
                                 <rect key="frame" x="147" y="339" width="120" height="218"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vt2-db-dZQ">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vt2-db-dZQ">
                                         <rect key="frame" x="0.0" y="0.0" width="120" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="UMp-ZF-LdF"/>
@@ -30,7 +32,7 @@
                                             <action selector="onPressRequest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="l4c-Kr-HTX"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ngc-i7-bbq">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ngc-i7-bbq">
                                         <rect key="frame" x="0.0" y="188" width="120" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="Ihn-Wv-LLB"/>
@@ -41,7 +43,7 @@
                                             <action selector="onPressDownload:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UqQ-AS-5fe"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ok-IX-hfd">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ok-IX-hfd">
                                         <rect key="frame" x="0.0" y="47" width="120" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="3oX-df-Su2"/>
@@ -52,7 +54,7 @@
                                             <action selector="onPressBatch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="38v-3t-uWw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NhZ-Ck-pvR">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NhZ-Ck-pvR">
                                         <rect key="frame" x="0.0" y="94" width="120" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="120" id="Llf-gW-RFr"/>
@@ -63,7 +65,7 @@
                                             <action selector="onPressChain:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F47-dg-ZOI"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="32K-Nu-afh">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="32K-Nu-afh">
                                         <rect key="frame" x="0.0" y="141" width="120" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="RqN-Xl-tSZ"/>
@@ -75,7 +77,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="32K-Nu-afh" firstAttribute="top" secondItem="NhZ-Ck-pvR" secondAttribute="bottom" constant="17" id="5Jv-g8-Yrc"/>
                                     <constraint firstAttribute="bottom" secondItem="Ngc-i7-bbq" secondAttribute="bottom" id="7Xr-44-vfv"/>
@@ -92,18 +94,51 @@
                                     <constraint firstItem="NhZ-Ck-pvR" firstAttribute="top" secondItem="7Ok-IX-hfd" secondAttribute="bottom" constant="17" id="pYA-mu-sDS"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m7m-wK-xZ9">
+                                <rect key="frame" x="147" y="178" width="120" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="315-J6-IVt"/>
+                                </constraints>
+                                <state key="normal" title="跳转"/>
+                                <connections>
+                                    <action selector="onPressNext:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iL5-0a-dNH"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="m7m-wK-xZ9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LYH-rV-Zhe"/>
                             <constraint firstItem="w3i-9P-I6E" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Nnj-BG-ft9"/>
                             <constraint firstItem="w3i-9P-I6E" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YGO-dq-AlI"/>
+                            <constraint firstItem="m7m-wK-xZ9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="90" id="hQu-iA-0qd"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="0en-9d-Xix"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-113.04347826086958" y="142.63392857142856"/>
+            <point key="canvasLocation" x="471" y="232"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="laL-Go-1K1">
+            <objects>
+                <navigationController id="PMW-5l-dbG" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="asN-De-aru">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="Cgz-Vi-ELt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uQo-L0-6h7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-336" y="233"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

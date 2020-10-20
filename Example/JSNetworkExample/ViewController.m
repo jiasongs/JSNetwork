@@ -24,15 +24,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    /// 全局配置
-    JSNetworkConfig.sharedConfig.debugLogEnabled = true;
-    JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
-    JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
-    JSNetworkConfig.sharedConfig.requestMaxConcurrentCount = 3;
-    [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"app": @"1.0.0", @"token": @"token"}];
-    [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"other": @"other"}];
-    [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
-    [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
+    self.view.backgroundColor = UIColor.whiteColor;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        /// 全局配置
+        JSNetworkConfig.sharedConfig.debugLogEnabled = true;
+        JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
+        JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
+        JSNetworkConfig.sharedConfig.requestMaxConcurrentCount = 3;
+        [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"app": @"1.0.0", @"token": @"token"}];
+        [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"other": @"other"}];
+        [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
+        [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
+    });
     /// test
     NSString *test = @"http://www.ruanmei.com/#/123456?test=%E4%B8%AD%E6%96%87";
     NSString *url0 = [test js_URLStringByAppendingPaths:@[@"content", @"我是"]];
@@ -46,15 +50,21 @@
     NSLog(@"");
 }
 
+- (IBAction)onPressNext:(id)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    ViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+    [self.navigationController pushViewController:vc animated:true];
+}
+
 - (IBAction)onPressRequest:(id)sender {
-    NSObject *object = NSObject.new;
     void (^test)(void) = ^(void) {
-        CNodeAPI *api = [CNodeAPI new];
+        DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
+//        CNodeAPI *api = [CNodeAPI new];
         /// 生成接口
         [JSNetworkProvider requestWithConfig:api
-                                    onTarget:object
+                                    onTarget:self
                                    completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-            NSLog(@"%@", aInterface);
+            NSLog(@"%@ %@", self, aInterface);
         }];
     };
     /// 测试
