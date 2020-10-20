@@ -17,12 +17,17 @@
     NSURLSessionTask *_requestTask;
 }
 
+@property (nonatomic, copy) id taskCompleted;
+@property (nonatomic, strong) id config;
+
 @end
 
 @implementation NetworkRequest
 
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
     [super buildTaskWithRequestConfig:config taskCompleted:taskCompleted];
+    _taskCompleted = taskCompleted;
+    _config = config;
     AFHTTPSessionManager *manger = [AFHTTPSessionManager manager];
     BOOL useFormData = false;
     AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
@@ -62,7 +67,7 @@
     __weak __typeof(manger) weakManger = manger;
     void (^completed)(id, NSError *) = ^(id responseObject, NSError *error) {
         taskCompleted(responseObject, error);
-        [weakManger.session finishTasksAndInvalidate];
+        [weakManger invalidateSessionCancelingTasks:false resetSession:false];
     };
     if (useFormData) {
         _requestTask = [manger POST:config.requestUrl

@@ -61,10 +61,12 @@
         DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
 //        CNodeAPI *api = [CNodeAPI new];
         /// 生成接口
+        __weak __typeof(self) weakSelf = self;
         [JSNetworkProvider requestWithConfig:api
                                     onTarget:self
                                    completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
-            NSLog(@"%@ %@", self, aInterface);
+            /// 持有self
+            NSLog(@"%@ %@", weakSelf, aInterface);
         }];
     };
     /// 测试

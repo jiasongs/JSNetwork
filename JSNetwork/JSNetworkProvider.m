@@ -36,7 +36,6 @@
 - (void)dealloc {
     if (self.taskIdentifier && self.taskIdentifier.length > 0) {
         [JSNetworkAgent.sharedAgent cancelRequestForTaskIdentifier:self.taskIdentifier];
-        self.taskIdentifier = nil;
     }
 }
 
@@ -154,7 +153,7 @@
     [interface requestCompletedFilter:completed];
     /// 处理接口
     [JSNetworkAgent.sharedAgent addRequestForInterface:interface];
-    /// 存储taskIdentifier
+    /// 绑定任务ID
     if (target) {
         /// 保证线程安全
         @synchronized (self) {

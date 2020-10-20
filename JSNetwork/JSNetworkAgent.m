@@ -47,7 +47,7 @@
         _requestQueue = [[NSOperationQueue alloc] init];
         _requestQueue.name = @"com.jsnetwork.agent.queue";
     }
-    return self;;
+    return self;
 }
 
 #pragma mark - Pubilc
