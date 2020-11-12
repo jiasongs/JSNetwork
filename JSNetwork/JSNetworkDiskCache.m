@@ -76,7 +76,11 @@ static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
                                                                  fromData:data
                                                                     error:NULL];
                 } else {
-                    metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+                    @try {
+                        metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+                    } @catch (NSException *exception) {
+                        NSLog(@"NSKeyedUnarchiver unarchive failed with exception: %@", exception);
+                    }
                 }
                 if (completed) {
                     completed(metadata);
@@ -109,7 +113,11 @@ static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
                     NSData *newData = [NSKeyedArchiver archivedDataWithRootObject:metadata requiringSecureCoding:YES error:NULL];
                     [newData writeToFile:filePath atomically:YES];
                 } else {
-                    [NSKeyedArchiver archiveRootObject:metadata toFile:filePath];
+                    @try {
+                        [NSKeyedArchiver archiveRootObject:metadata toFile:filePath];
+                    } @catch (NSException *exception) {
+                        NSLog(@"NSKeyedArchiver archive failed with exception: %@", exception);
+                    }
                 }
                 if (completed) {
                     completed(metadata);
