@@ -7,10 +7,11 @@
 //
 
 #import "JSNetworkMutexLock.h"
+#import <os/lock.h>
 
-@interface JSNetworkMutexLock ()
-
-@property (nonatomic, strong) dispatch_semaphore_t semaphore;
+@interface JSNetworkMutexLock () {
+    os_unfair_lock _lock;
+}
 
 @end
 
@@ -31,27 +32,27 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _semaphore = dispatch_semaphore_create(1);
+        _lock = OS_UNFAIR_LOCK_INIT;
     }
     return self;
 }
 
-- (void)lock {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+- (void)addLock {
+    os_unfair_lock_lock(&_lock);
 }
 
 - (void)unLock {
-    dispatch_semaphore_signal(_semaphore);
+    os_unfair_lock_unlock(&_lock);
 }
 
 + (void)execute:(void (NS_NOESCAPE ^)(void))block {
-    [self.sharedLock lock];
+    [self.sharedLock addLock];
     block();
     [self.sharedLock unLock];
 }
 
 + (id)executeWithReturnValue:(id (NS_NOESCAPE ^)(void))block {
-    [self.sharedLock lock];
+    [self.sharedLock addLock];
     id returnValue = block();
     [self.sharedLock unLock];
     return returnValue;

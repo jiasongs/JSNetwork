@@ -16,12 +16,14 @@
 #import "JSNetworkDiskCacheMetadataProtocol.h"
 #import "JSNetworkUtil.h"
 #import "JSNetworkConfig.h"
+#import <os/lock.h>
 
-@interface JSNetworkAgent ()
+@interface JSNetworkAgent () {
+    os_unfair_lock _lock;
+}
 
 @property (nonatomic, strong) NSOperationQueue *requestQueue;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, id<JSNetworkInterfaceProtocol>> *interfaceRecord;
-@property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
 
@@ -43,7 +45,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         _interfaceRecord = [NSMutableDictionary dictionary];
-        _lock = dispatch_semaphore_create(1);
+        _lock = OS_UNFAIR_LOCK_INIT;
         _requestQueue = [[NSOperationQueue alloc] init];
         _requestQueue.name = @"com.jsnetwork.agent.queue";
     }
@@ -213,7 +215,7 @@
     NSParameterAssert(interface && taskIdentifier);
     [self addLock];
     if ([_interfaceRecord objectForKey:taskIdentifier]) {
-        JSNetworkLog(@"警告 - interface即将被覆盖, 请检查是否添加了相同的taskIdentifier, 多发生在多个AFNManager的情况!!!");
+        JSNetworkLog(@"警告 - interface即将被覆盖, 请检查是否添加了相同的taskIdentifier!!!");
     }
     [_interfaceRecord setObject:interface forKey:taskIdentifier];
     [self unLock];
@@ -239,11 +241,11 @@
 #pragma mark - 锁
 
 - (void)addLock {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    os_unfair_lock_lock(&_lock);
 }
 
 - (void)unLock {
-    dispatch_semaphore_signal(_lock);
+    os_unfair_lock_unlock(&_lock);
 }
 
 @end

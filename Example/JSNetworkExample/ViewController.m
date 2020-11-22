@@ -29,6 +29,7 @@
     dispatch_once(&onceToken, ^{
         /// 全局配置
         JSNetworkConfig.sharedConfig.debugLogEnabled = true;
+        JSNetworkConfig.sharedConfig.timeoutInterval = 5;
         JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
         JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
         [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"app": @"1.0.0", @"token": @"token"}];

@@ -10,14 +10,16 @@
 #import "JSNetworkDiskCacheMetadata.h"
 #import "JSNetworkUtil.h"
 #import "JSNetworkMutexLock.h"
+#import <os/lock.h>
 
 NSString *const JSNetworkDiskCacheTaskPrefix = @"cache_task";
 
-@interface JSNetworkDiskCache ()
+@interface JSNetworkDiskCache () {
+    os_unfair_lock _lock;
+}
 
 @property (nonatomic, strong) NSString *taskIdentifier;
 @property (nonatomic, strong) dispatch_queue_t processingQueue;
-@property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
 
@@ -26,7 +28,7 @@ NSString *const JSNetworkDiskCacheTaskPrefix = @"cache_task";
 - (instancetype)init {
     if (self = [super init]) {
         _processingQueue = dispatch_queue_create("com.jsnetwork.cache.queue", DISPATCH_QUEUE_CONCURRENT);
-        _lock = dispatch_semaphore_create(1);
+        _lock = OS_UNFAIR_LOCK_INIT;
     }
     return self;
 }
@@ -154,11 +156,11 @@ static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
 }
 
 - (void)addLock {
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    os_unfair_lock_lock(&_lock);
 }
 
 - (void)unLock {
-    dispatch_semaphore_signal(_lock);
+    os_unfair_lock_unlock(&_lock);
 }
 
 - (void)dealloc {
