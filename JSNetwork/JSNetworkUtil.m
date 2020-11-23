@@ -49,6 +49,46 @@
     return _appVersionString;
 }
 
++ (long long)fileSizeAtPath:(NSString *)filePath {
+    if (![NSFileManager.defaultManager fileExistsAtPath:filePath]) {
+        return 0;
+    }
+    NSError *error;
+    NSDictionary<NSFileAttributeKey, id> *attributes = [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:&error];
+    if (attributes && !error) {
+        return attributes.fileSize;
+    } else {
+        return 0;
+    }
+}
+
++ (long long )directorySizeAtPath:(NSString *)directoryPath {
+    BOOL isDirectory;
+    if (![NSFileManager.defaultManager fileExistsAtPath:directoryPath isDirectory:&isDirectory]) {
+        return 0;
+    }
+    if (isDirectory) {
+        __block long long folderSize = 0;
+        NSError *error;
+        NSArray<NSString *> *items = [NSFileManager.defaultManager contentsOfDirectoryAtPath:directoryPath error:&error];
+        if (items && !error) {
+            [items enumerateObjectsUsingBlock:^(NSString *path, NSUInteger idx, BOOL *stop) {
+                NSString *filePath = [directoryPath stringByAppendingPathComponent:path];
+                BOOL isDirectoryForSub;
+                [NSFileManager.defaultManager fileExistsAtPath:filePath isDirectory:&isDirectoryForSub];
+                if (isDirectoryForSub) {
+                    folderSize += [self directorySizeAtPath:filePath];
+                } else {
+                    folderSize += [self fileSizeAtPath:filePath];
+                }
+            }];
+        }
+        return folderSize;
+    } else {
+        return [self fileSizeAtPath:directoryPath];
+    }
+}
+
 @end
 
 @implementation JSNetworkUtil (Logger)

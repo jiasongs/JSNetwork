@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSData *)dataFromObject:(id)object;
 + (NSString *)md5StringFromString:(NSString *)string;
 + (NSString *)appVersionString;
++ (long long)fileSizeAtPath:(NSString *)filePath;
++ (long long )directorySizeAtPath:(NSString *)directoryPath;
 
 @end
 
