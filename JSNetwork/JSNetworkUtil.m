@@ -62,7 +62,7 @@
     }
 }
 
-+ (long long )directorySizeAtPath:(NSString *)directoryPath {
++ (long long)directorySizeAtPath:(NSString *)directoryPath {
     BOOL isDirectory;
     if (![NSFileManager.defaultManager fileExistsAtPath:directoryPath isDirectory:&isDirectory]) {
         return 0;
