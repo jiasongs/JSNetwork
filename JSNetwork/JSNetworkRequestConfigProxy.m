@@ -66,21 +66,14 @@
             [plugins addObjectsFromArray:config.requestPlugins];
         }
         _finalPlugins = plugins.copy;
-        /// 缓存的文件名
-        if ([config respondsToSelector:@selector(cacheFileName)]) {
-            _finalCacheFileName = config.cacheFileName;
-        } else {
-            NSString *requestUrl = config.requestUrl;
-            NSDictionary *argument = @{};
-            if ([config respondsToSelector:@selector(requestArgument)]) {
-                argument = config.requestArgument ? : @{};
+        if ([config respondsToSelector:@selector(cacheIgnore)] && !config.cacheIgnore) {
+            /// 缓存的文件名
+            if ([config respondsToSelector:@selector(cacheFileName)]) {
+                _finalCacheFileName = config.cacheFileName;
+            } else {
+                NSString *requestInfo = [NSString stringWithFormat:@"Url:%@ Method:%@", _finalURL, @(self.requestMethod)];
+                _finalCacheFileName = [JSNetworkUtil md5StringFromString:requestInfo];
             }
-            NSString *requestInfo = [NSString stringWithFormat:@"Host:%@ Url:%@ Argument:%@ Method:%@",
-                                     baseUrl,
-                                     requestUrl,
-                                     argument,
-                                     @(self.requestMethod)];
-            _finalCacheFileName = [JSNetworkUtil md5StringFromString:requestInfo];
         }
     }
     return self;
