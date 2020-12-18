@@ -26,20 +26,17 @@
 - (instancetype)initWithConfig:(id<JSNetworkRequestConfigProtocol>)config {
     if (self = [super init]) {
         /// URL拼接参数
-        NSDictionary *parameters = JSNetworkConfig.sharedConfig.URLGlobalArguments;
+        NSDictionary *URLGlobalArguments = JSNetworkConfig.sharedConfig.URLGlobalArguments ? : @{};
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:URLGlobalArguments];
         if ([config respondsToSelector:@selector(ignoreGlobalArgumentForKeys)]) {
-            NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
-            [[config ignoreGlobalArgumentForKeys] enumerateObjectsUsingBlock:^(NSString *item, NSUInteger idx, BOOL *stop) {
-                if ([parameters.allKeys containsObject:item]) {
-                    [dictionary removeObjectForKey:item];
+            [config.ignoreGlobalArgumentForKeys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+                if ([parameters.allKeys containsObject:key]) {
+                    [parameters removeObjectForKey:key];
                 }
             }];
-            parameters = dictionary.copy;
         }
         if ([config respondsToSelector:@selector(requestArgument)]) {
-            NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:parameters];
-            [dictionary addEntriesFromDictionary:config.requestArgument ? : @{}];
-            parameters = dictionary.copy;
+            [parameters addEntriesFromDictionary:config.requestArgument ? : @{}];
         }
         NSString *baseUrl = [config respondsToSelector:@selector(baseUrl)] ? config.baseUrl : self.baseUrl;
         NSString *url = [NSString stringWithFormat:@"%@%@", baseUrl, config.requestUrl];
@@ -47,17 +44,17 @@
         if ([config respondsToSelector:@selector(requestPaths)]) {
             paths = config.requestPaths ? : @[];
         }
-        _finalURL = [url js_URLStringByAppendingPaths:paths parameters:parameters];
+        NSString *finalURL = [url js_URLStringByAppendingPaths:paths parameters:parameters];
         if ([config respondsToSelector:@selector(requestUrlFilterWithURLString:)]) {
-            _finalURL = [config requestUrlFilterWithURLString:_finalURL];
+            finalURL = [config requestUrlFilterWithURLString:finalURL];
         }
+        _finalURL = finalURL;
         _finalArguments = [NSDictionary js_URLQueryDictionaryWithURLString:_finalURL];
         /// 拼接请求头
-        NSDictionary *headers = JSNetworkConfig.sharedConfig.HTTPHeaderFields;
+        NSDictionary *HTTPHeaderFields = JSNetworkConfig.sharedConfig.HTTPHeaderFields ? : @{};
+        NSMutableDictionary *headers = [NSMutableDictionary dictionaryWithDictionary:HTTPHeaderFields];
         if ([config respondsToSelector:@selector(requestHeaderFieldValueDictionary)]) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:headers];
-            [dic addEntriesFromDictionary:config.requestHeaderFieldValueDictionary ? : @{}];
-            headers = dic.copy;
+            [headers addEntriesFromDictionary:config.requestHeaderFieldValueDictionary ? : @{}];
         }
         _finalHTTPHeaderFields = headers;
         /// 全部的插件
@@ -65,7 +62,7 @@
         if ([config respondsToSelector:@selector(requestPlugins)]) {
             [plugins addObjectsFromArray:config.requestPlugins];
         }
-        _finalPlugins = plugins.copy;
+        _finalPlugins = plugins;
         if ([config respondsToSelector:@selector(cacheIgnore)] && !config.cacheIgnore) {
             /// 缓存的文件名
             if ([config respondsToSelector:@selector(cacheFileName)]) {
@@ -126,7 +123,7 @@
 }
 
 - (NSIndexSet *)responseAcceptableStatusCodes {
-    return [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 500)];;
+    return [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(100, 500)];
 }
 
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins {

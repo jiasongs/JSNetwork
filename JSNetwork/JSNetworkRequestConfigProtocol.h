@@ -12,25 +12,25 @@
 @protocol JSNetworkResponseProtocol;
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
-    JSRequestMethodGET     NS_SWIFT_NAME(GET),
-    JSRequestMethodPOST    NS_SWIFT_NAME(POST),
-    JSRequestMethodHEAD    NS_SWIFT_NAME(HEAD),
-    JSRequestMethodPUT     NS_SWIFT_NAME(PUT),
-    JSRequestMethodDELETE  NS_SWIFT_NAME(DELETE),
-    JSRequestMethodPATCH   NS_SWIFT_NAME(PATCH),
+    JSRequestMethodGET,
+    JSRequestMethodPOST,
+    JSRequestMethodHEAD,
+    JSRequestMethodPUT,
+    JSRequestMethodDELETE,
+    JSRequestMethodPATCH,
 };
 
 typedef NS_ENUM(NSInteger, JSRequestSerializerType) {
-    JSRequestSerializerTypeJSON        NS_SWIFT_NAME(JSON),        /// POST时Body转换为JSON字符串传输
-    JSRequestSerializerTypeHTTP        NS_SWIFT_NAME(HTTP),        /// POST时Body转换为自定义的字符串传输
-    JSRequestSerializerTypeFormData    NS_SWIFT_NAME(FormData),    /// POST时Body转换为FormData传输
-    JSRequestSerializerTypeBinaryData  NS_SWIFT_NAME(BinaryData),  /// POST时Body转换为二进制数据传输
+    JSRequestSerializerTypeJSON,        /// POST时Body转换为JSON字符串传输
+    JSRequestSerializerTypeHTTP,        /// POST时Body转换为自定义的字符串传输
+    JSRequestSerializerTypeFormData,    /// POST时Body转换为FormData传输
+    JSRequestSerializerTypeBinaryData,  /// POST时Body转换为二进制数据传输
 };
 
 typedef NS_ENUM(NSInteger, JSResponseSerializerType) {
-    JSResponseSerializerTypeJSON       NS_SWIFT_NAME(JSON),
-    JSResponseSerializerTypeHTTP       NS_SWIFT_NAME(HTTP),
-    JSResponseSerializerTypeXMLParser  NS_SWIFT_NAME(XML),
+    JSResponseSerializerTypeJSON,
+    JSResponseSerializerTypeHTTP,
+    JSResponseSerializerTypeXMLParser,
 };
 
 NS_ASSUME_NONNULL_BEGIN

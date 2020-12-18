@@ -97,7 +97,7 @@
 }
 
 - (NSDictionary *)URLGlobalArguments {
-    return _URLGlobalArguments;;
+    return _URLGlobalArguments;
 }
 
 - (NSArray *)plugins {

@@ -45,7 +45,7 @@
     if (self.downloadURLType == DownloadURLTypeTypeCnblogs) {
         return [NSSet setWithObjects:@"application/x-rar-compressed", nil];
     }
-    return [NSSet setWithObjects:@"application/octet-stream", nil];;
+    return [NSSet setWithObjects:@"application/octet-stream", nil];
 }
 
 - (BOOL)cacheIgnore {
