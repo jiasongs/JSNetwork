@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4313601C1FE9F5A01CEB76DE /* libPods-JSNetworkExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D96877093A893C78B41773D /* libPods-JSNetworkExample.a */; };
+		7A23BEB3258CE06D00A4063B /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A23BEB2258CE06D00A4063B /* File.swift */; };
 		7A2684D4244E7700004A7C82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684D3244E7700004A7C82 /* AppDelegate.m */; };
 		7A2684DA244E7700004A7C82 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684D9244E7700004A7C82 /* ViewController.m */; };
 		7A2684DD244E7700004A7C82 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A2684DB244E7700004A7C82 /* Main.storyboard */; };
@@ -22,11 +22,14 @@
 		7A268509244EB459004A7C82 /* NetworkRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A268508244EB459004A7C82 /* NetworkRequest.m */; };
 		7A98C863246FDD5800123894 /* DownloadAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C862246FDD5800123894 /* DownloadAPI.m */; };
 		7A98C869246FFD1500123894 /* UploadImageAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C868246FFD1500123894 /* UploadImageAPI.m */; };
+		98BE71BF735857902847A1ED /* Pods_JSNetworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JSNetworkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		415F8A3331005085C610FDAD /* Pods-JSNetworkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExample.debug.xcconfig"; path = "Target Support Files/Pods-JSNetworkExample/Pods-JSNetworkExample.debug.xcconfig"; sourceTree = "<group>"; };
-		4D96877093A893C78B41773D /* libPods-JSNetworkExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JSNetworkExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A23BEB1258CE06D00A4063B /* JSNetworkExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JSNetworkExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		7A23BEB2258CE06D00A4063B /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		7A2684CF244E7700004A7C82 /* JSNetworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSNetworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A2684D2244E7700004A7C82 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		7A2684D3244E7700004A7C82 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -62,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4313601C1FE9F5A01CEB76DE /* libPods-JSNetworkExample.a in Frameworks */,
+				98BE71BF735857902847A1ED /* Pods_JSNetworkExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,7 +84,7 @@
 		53E0ADECE6834B41DB6F3D52 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4D96877093A893C78B41773D /* libPods-JSNetworkExample.a */,
+				2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,12 +115,14 @@
 				7A2684D3244E7700004A7C82 /* AppDelegate.m */,
 				7A2684D8244E7700004A7C82 /* ViewController.h */,
 				7A2684D9244E7700004A7C82 /* ViewController.m */,
+				7A23BEB2258CE06D00A4063B /* File.swift */,
 				7A2684ED244E823B004A7C82 /* Services */,
 				7A2684DB244E7700004A7C82 /* Main.storyboard */,
 				7A2684DE244E7701004A7C82 /* Assets.xcassets */,
 				7A2684E0244E7701004A7C82 /* LaunchScreen.storyboard */,
 				7A2684E3244E7701004A7C82 /* Info.plist */,
 				7A2684E4244E7701004A7C82 /* main.m */,
+				7A23BEB1258CE06D00A4063B /* JSNetworkExample-Bridging-Header.h */,
 			);
 			path = JSNetworkExample;
 			sourceTree = "<group>";
@@ -202,6 +207,7 @@
 				TargetAttributes = {
 					7A2684CE244E7700004A7C82 = {
 						CreatedOnToolsVersion = 11.4.1;
+						LastSwiftMigration = 1220;
 					};
 				};
 			};
@@ -284,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A98C869246FFD1500123894 /* UploadImageAPI.m in Sources */,
+				7A23BEB3258CE06D00A4063B /* File.swift in Sources */,
 				7A2684FE244E8263004A7C82 /* NetworkLoggerPlugin.m in Sources */,
 				7A2684DA244E7700004A7C82 /* ViewController.m in Sources */,
 				7A2684F3244E824B004A7C82 /* BaseAPI.m in Sources */,
@@ -434,6 +441,7 @@
 			baseConfigurationReference = 415F8A3331005085C610FDAD /* Pods-JSNetworkExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = JSNetworkExample/JSNetworkExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KJ6AEY5JEH;
@@ -446,6 +454,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jsnetwork.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "JSNetworkExample/JSNetworkExample-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -455,6 +466,7 @@
 			baseConfigurationReference = BD48473650C390EFD4AEA50C /* Pods-JSNetworkExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = JSNetworkExample/JSNetworkExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KJ6AEY5JEH;
@@ -467,6 +479,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jsnetwork.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "JSNetworkExample/JSNetworkExample-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
