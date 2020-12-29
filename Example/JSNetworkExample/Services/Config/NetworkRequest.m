@@ -123,7 +123,6 @@
             } completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
                 completed(responseObject, error);
             }];
-            [_requestTask resume];
         }
     }
 }
