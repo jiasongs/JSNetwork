@@ -95,6 +95,10 @@
 #import <JSNetwork/JSNetworkLoggerPlugin.h>
 #endif
 
+#if __has_include(<JSNetwork/JSNetworkAFRequest.h>)
+#import <JSNetwork/JSNetworkAFRequest.h>
+#endif
+
 #else
 
 #if __has_include("JSNetworkRequestProtocol.h")
@@ -179,6 +183,10 @@
 
 #if __has_include("JSNetworkLoggerPlugin.h")
 #import "JSNetworkLoggerPlugin.h"
+#endif
+
+#if __has_include("JSNetworkAFRequest.h")
+#import "JSNetworkAFRequest.h"
 #endif
 
 #endif /* __has_include */
