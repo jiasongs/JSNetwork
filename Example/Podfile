@@ -4,14 +4,16 @@ use_frameworks! :linkage => :static
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'JSNetworkExample' do
-
+  
   # 网络请求
   pod 'JSNetwork', :path => '..'
+  pod 'JSNetwork/RequestForAFNetworking', :path => '..'
+  pod 'JSNetwork/Response', :path => '..'
+  pod 'JSNetwork/Cache', :path => '..'
+  pod 'JSNetwork/Plugins', :path => '..'
   pod 'AFNetworking', '~> 4.0'
   pod 'QMUIKit'
   pod 'PromisesObjC'
   pod 'MLeaksFinder'
   
 end
-
-

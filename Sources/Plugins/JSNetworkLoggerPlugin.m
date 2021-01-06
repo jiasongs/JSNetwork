@@ -1,15 +1,15 @@
 //
-//  NetworkLoggerPlugin.m
+//  JSNetworkLoggerPlugin.m
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/19.
 //  Copyright © 2020 jiasong. All rights reserved.
 //
 
-#import "NetworkLoggerPlugin.h"
+#import "JSNetworkLoggerPlugin.h"
 #import <JSNetworkInterfaceProtocol.h>
 
-@implementation NetworkLoggerPlugin
+@implementation JSNetworkLoggerPlugin
 
 - (void)requestWillStart:(id<JSNetworkInterfaceProtocol>)interface {
     NSLog(@"requestWillStart - ");

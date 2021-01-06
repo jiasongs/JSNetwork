@@ -1,5 +1,5 @@
 //
-//  NetworkLoggerPlugin.h
+//  JSNetworkLoggerPlugin.h
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/19.
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NetworkLoggerPlugin : NSObject <JSNetworkPluginProtocol>
+@interface JSNetworkLoggerPlugin : NSObject <JSNetworkPluginProtocol>
 
 @end
 

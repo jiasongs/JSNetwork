@@ -1,25 +1,24 @@
 //
-//  NetworkRequest.m
-//  JSNetworkExample
+//  JSNetworkAFRequest.m
+//  JSNetwork
 //
-//  Created by jiasong on 2020/4/21.
-//  Copyright © 2020 jiasong. All rights reserved.
+//  Created by jiasong on 2021/1/6.
 //
 
-#import "NetworkRequest.h"
+#import "JSNetworkAFRequest.h"
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
-#import <JSNetworkConfig.h>
-#import <AFNetworking.h>
+#import "JSNetworkConfig.h"
+#import "AFNetworking.h"
 
-@interface NetworkRequest () {
+@interface JSNetworkAFRequest () {
     NSURLSessionTask *_requestTask;
 }
 
 @end
 
-@implementation NetworkRequest
+@implementation JSNetworkAFRequest
 
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
     [super buildTaskWithRequestConfig:config taskCompleted:taskCompleted];

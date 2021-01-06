@@ -7,9 +7,6 @@
 //
 
 #import "JSNetworkConfig.h"
-#import "JSNetworkResponse.h"
-#import "JSNetworkRequest.h"
-#import "JSNetworkDiskCache.h"
 
 @interface JSNetworkConfig () {
     NSMutableArray *_plugins;
@@ -42,9 +39,6 @@
         _baseURL = @"";
         _timeoutInterval = 20;
         _requestMaxConcurrentCount = -1;
-        _requestClass = JSNetworkRequest.class;
-        _responseClass = JSNetworkResponse.class;
-        _diskCacheClass = JSNetworkDiskCache.class;
         _processingQueue = dispatch_queue_create("com.jsnetwork.agent.processing", DISPATCH_QUEUE_CONCURRENT);
         _completionQueue = dispatch_get_main_queue();
         NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);

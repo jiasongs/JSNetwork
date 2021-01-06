@@ -8,7 +8,6 @@
 
 #import "JSNetworkProvider.h"
 #import "JSNetworkAgent.h"
-#import "JSNetworkRequest.h"
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkConfig.h"

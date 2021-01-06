@@ -10,6 +10,7 @@
 @protocol JSNetworkPluginProtocol;
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkResponseProtocol;
+@protocol JSNetworkDiskCacheProtocol;
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
     JSRequestMethodGET,
@@ -123,14 +124,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSIndexSet *)responseAcceptableStatusCodes;
 
 /**
- *  @brief 请求类的Class，继承于NSOperation, 默认全局设置的requestClass
+ *  @brief 请求类，继承于NSOperation, 默认全局设置的request
  */
-- (Class<JSNetworkRequestProtocol>)requestClass;
+- (__kindof NSOperation<JSNetworkRequestProtocol> *)request;
 
 /**
- *  @brief 响应类的Class, 默认全局设置的responseClass
+ *  @brief 响应类, 默认全局设置的response
  */
-- (Class<JSNetworkResponseProtocol>)responseClass;
+- (id<JSNetworkResponseProtocol>)response;
+
+/**
+ *  @brief 磁盘缓存类, 默认全局设置的diskCache
+ */
+- (id<JSNetworkDiskCacheProtocol>)diskCache;
 
 /**
  *  @brief 插件, 默认全局设置的Plugins, 注意：会拼接上全局的设置

@@ -41,25 +41,32 @@
         _config = config;
         /// 处理过的请求配置实例
         _processedConfig = (id<JSNetworkRequestConfigProtocol>)[JSNetworkRequestConfigProxy proxyWithTarget:config];
+        JSNetworkConfig *sharedConfig = JSNetworkConfig.sharedConfig;
         /// 请求实例
-        Class RequestClass = JSNetworkConfig.sharedConfig.requestClass;
-        if ([config respondsToSelector:@selector(requestClass)]) {
-            RequestClass = config.requestClass;
+        if ([config respondsToSelector:@selector(request)]) {
+            _request = config.request;
+        } else if (sharedConfig.buildNetworkRequest) {
+            _request = sharedConfig.buildNetworkRequest(self);
         }
-        _request = [[RequestClass alloc] init];
+        NSAssert(_request, @"请设置request");
         /// 必须设置代理, 先持有一下, 防止提前释放
         _interfaceProxy = [JSNetworkProxy proxyWithTarget:self];
         [_request addInterfaceProxy:(id<JSNetworkInterfaceProtocol>)_interfaceProxy];
         /// 响应实例
-        Class ResponseClass = JSNetworkConfig.sharedConfig.responseClass;
-        if ([config respondsToSelector:@selector(responseClass)]) {
-            ResponseClass = config.responseClass;
+        if ([config respondsToSelector:@selector(response)]) {
+            _response = config.response;
+        } else if (sharedConfig.buildNetworkResponse) {
+            _response = sharedConfig.buildNetworkResponse(self);
         }
-        _response = [[ResponseClass alloc] init];
+        NSAssert(_response, @"请设置response");
         /// 磁盘缓存的实例
         if (!_processedConfig.cacheIgnore) {
-            Class DiskCacheClass = JSNetworkConfig.sharedConfig.diskCacheClass;
-            _diskCache = [[DiskCacheClass alloc] init];
+            if ([config respondsToSelector:@selector(diskCache)]) {
+                _diskCache = config.diskCache;
+            } else if (sharedConfig.buildNetworkDiskCache) {
+                _diskCache = sharedConfig.buildNetworkDiskCache(self);
+            }
+            NSAssert(_diskCache, @"请设置diskCache");
         }
         _completionBlocks = [NSMutableArray array];
     }

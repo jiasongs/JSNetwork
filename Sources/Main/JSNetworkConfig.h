@@ -11,6 +11,7 @@
 @protocol JSNetworkResponseProtocol;
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkDiskCacheProtocol;
+@protocol JSNetworkInterfaceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,17 +52,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) NSInteger requestMaxConcurrentCount;
 /**
- *  @brief 全局的请求Class, 默认JSNetworkRequest, 继承于NSOperation
+ *  @brief 全局的请求类, 继承于NSOperation
  */
-@property (nonatomic, assign) Class<JSNetworkRequestProtocol> requestClass;
+@property (nonatomic, copy) __kindof NSOperation<JSNetworkRequestProtocol> *(^buildNetworkRequest)(id<JSNetworkInterfaceProtocol> interface);
 /**
- *  @brief 全局的响应Class, 默认JSNetworkResponse
+ *  @brief 全局的响应类
  */
-@property (nonatomic, assign) Class<JSNetworkResponseProtocol> responseClass;
+@property (nonatomic, copy) id<JSNetworkResponseProtocol>(^buildNetworkResponse)(id<JSNetworkInterfaceProtocol> interface);
 /**
- *  @brief 磁盘缓存的Class
+ *  @brief 磁盘缓存的类
  */
-@property (nonatomic, assign) Class<JSNetworkDiskCacheProtocol> diskCacheClass;
+@property (nonatomic, copy) id<JSNetworkDiskCacheProtocol>(^buildNetworkDiskCache)(id<JSNetworkInterfaceProtocol> interface);
 /**
  *  @brief 磁盘缓存的文件夹路径
  */

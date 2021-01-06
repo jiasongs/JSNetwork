@@ -9,9 +9,9 @@
 #import "ViewController.h"
 #import <JSNetwork.h>
 #import <AFNetworking.h>
-#import "NetworkLoggerPlugin.h"
+#import "JSNetworkLoggerPlugin.h"
 #import "NetworkResponse.h"
-#import "NetworkRequest.h"
+#import "JSNetworkAFRequest.h"
 #import "CNodeAPI.h"
 #import "DownloadAPI.h"
 #import "UploadImageAPI.h"
@@ -30,12 +30,19 @@
         /// 全局配置
         JSNetworkConfig.sharedConfig.debugLogEnabled = true;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
-        JSNetworkConfig.sharedConfig.requestClass = NetworkRequest.class;
-        JSNetworkConfig.sharedConfig.responseClass = NetworkResponse.class;
+        JSNetworkConfig.sharedConfig.buildNetworkRequest = ^__kindof NSOperation<JSNetworkRequestProtocol> *(id<JSNetworkInterfaceProtocol> interface) {
+            return [[JSNetworkAFRequest alloc] init];
+        };
+        JSNetworkConfig.sharedConfig.buildNetworkResponse = ^id<JSNetworkResponseProtocol>(id<JSNetworkInterfaceProtocol> interface) {
+            return [[NetworkResponse alloc] init];
+        };
+        JSNetworkConfig.sharedConfig.buildNetworkDiskCache = ^id<JSNetworkDiskCacheProtocol>(id<JSNetworkInterfaceProtocol> interface) {
+            return [[JSNetworkDiskCache alloc] init];
+        };
         [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"app": @"1.0.0", @"token": @"token"}];
         [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"other": @"other"}];
         [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
-        [JSNetworkConfig.sharedConfig addPlugin:NetworkLoggerPlugin.new];
+        [JSNetworkConfig.sharedConfig addPlugin:JSNetworkLoggerPlugin.new];
     });
     /// test
     //    NSString *test = @"http://www.ruanmei.com/#/123456?test=%E4%B8%AD%E6%96%87";
