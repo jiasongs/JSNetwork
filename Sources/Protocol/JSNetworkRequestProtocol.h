@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 设置代理
  *
- *  @param interfaceProxy 遵循<JSNetworkRequestConfigProtocol>的配置类
+ *  @param interfaceProxy 遵循<JSNetworkInterfaceProtocol>的接口
  *
  *  @see JSNetworkInterface.m
  */
@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSURLSessionTask *)requestTask;
 
 /**
- *  @brief 任务ID
+ *  @brief 任务ID, 保证唯一, 注意线程安全
  *
  * @return NSString
  */
