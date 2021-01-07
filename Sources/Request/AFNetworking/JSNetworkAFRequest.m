@@ -20,8 +20,18 @@
 
 @implementation JSNetworkAFRequest
 
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config taskCompleted:(void (^)(id _Nullable, NSError * _Nullable))taskCompleted {
-    [super buildTaskWithRequestConfig:config taskCompleted:taskCompleted];
+- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+            constructingURLRequest:(void(^)(NSMutableURLRequest *urlRequest))constructingURLRequest
+         constructingFormDataBlock:(void(^)(id formData))constructingFormDataBlock
+                    uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
+                  downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
+                     taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
+    [super buildTaskWithRequestConfig:config
+               constructingURLRequest:constructingURLRequest
+            constructingFormDataBlock:constructingFormDataBlock
+                       uploadProgress:uploadProgressBlock
+                     downloadProgress:downloadProgressBlock
+                        taskCompleted:taskCompleted];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     BOOL useFormData = false;
     AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
@@ -62,64 +72,64 @@
         [contentTypes unionSet:config.responseAcceptableContentTypes];
         manager.responseSerializer.acceptableContentTypes = contentTypes.copy;
     }
+    NSString *method = @"";
+    switch (config.requestMethod) {
+        case JSRequestMethodGET:
+            method = @"GET";
+            break;
+        case JSRequestMethodPOST:
+            method = @"POST";
+            break;
+        case JSRequestMethodHEAD:
+            method = @"HEAD";
+            break;
+        case JSRequestMethodPUT:
+            method = @"PUT";
+            break;
+        case JSRequestMethodDELETE:
+            method = @"DELETE";
+            break;
+        case JSRequestMethodPATCH:
+            method = @"PATCH";
+            break;
+        default:
+            break;
+    }
+    id requestBody = config.requestBody;
+    NSError *serializationError = nil;
+    NSMutableURLRequest *request = nil;
     __weak __typeof(manager) weakManager = manager;
     void (^completed)(id, NSError *) = ^(id responseObject, NSError *error) {
         taskCompleted(responseObject, error);
         [weakManager invalidateSessionCancelingTasks:false resetSession:false];
     };
     if (useFormData) {
-        _requestTask = [manager
-                        POST:config.requestUrl
-                        parameters:config.requestBody
-                        headers:nil
-                        constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-            if ([config respondsToSelector:@selector(constructingMultipartFormData:)]) {
-                [config constructingMultipartFormData:formData];
-            }
-        } progress:^(NSProgress * _Nonnull uploadProgress) {
-            if (self.interfaceProxy.uploadProgress) {
-                self.interfaceProxy.uploadProgress(uploadProgress);
-            }
-        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            completed(responseObject, nil);
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            completed(nil, error);
-        }];
+        request = [manager.requestSerializer multipartFormRequestWithMethod:method
+                                                                  URLString:[[NSURL URLWithString:config.requestUrl relativeToURL:manager.baseURL] absoluteString]
+                                                                 parameters:requestBody
+                                                  constructingBodyWithBlock:constructingFormDataBlock
+                                                                      error:&serializationError];
     } else {
-        NSString *method = @"";
-        switch (config.requestMethod) {
-            case JSRequestMethodGET:
-                method = @"GET";
-                break;
-            case JSRequestMethodPOST:
-                method = @"POST";
-                break;
-            default:
-                break;
-        }
-        id requestBody = config.requestBody;
-        BOOL isBinaryBody = config.requestSerializerType == JSRequestSerializerTypeBinaryData && [requestBody isKindOfClass:NSData.class];
-        NSError *serializationError = nil;
-        NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:method
-                                                                          URLString:[[NSURL URLWithString:config.requestUrl relativeToURL:manager.baseURL] absoluteString]
-                                                                         parameters:isBinaryBody ? nil : requestBody
-                                                                              error:&serializationError];
-        if (serializationError) {
-            completed(nil, serializationError);
+        request = [manager.requestSerializer requestWithMethod:method
+                                                     URLString:[[NSURL URLWithString:config.requestUrl relativeToURL:manager.baseURL] absoluteString]
+                                                    parameters:requestBody
+                                                         error:&serializationError];
+    }
+    if (serializationError) {
+        completed(nil, serializationError);
+    } else {
+        constructingURLRequest(request);
+        if (useFormData) {
+            _requestTask = [manager uploadTaskWithStreamedRequest:request
+                                                         progress:uploadProgressBlock
+                                                completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+                completed(responseObject, error);
+            }];
         } else {
-            if (isBinaryBody) {
-                [request setHTTPBody:requestBody];
-            }
             _requestTask = [manager dataTaskWithRequest:request
-                                         uploadProgress:^(NSProgress * _Nonnull uploadProgress) {
-                if (self.interfaceProxy.uploadProgress) {
-                    self.interfaceProxy.uploadProgress(uploadProgress);
-                }
-            } downloadProgress:^(NSProgress * _Nonnull downloadProgress) {
-                if (self.interfaceProxy.downloadProgress) {
-                    self.interfaceProxy.downloadProgress(downloadProgress);
-                }
-            } completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+                                         uploadProgress:uploadProgressBlock
+                                       downloadProgress:downloadProgressBlock
+                                      completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
                 completed(responseObject, error);
             }];
         }

@@ -67,7 +67,7 @@
 @implementation JSNetworkProvider
 
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                     uploadProgress:nil
                   downloadProgress:nil
@@ -86,7 +86,7 @@
 
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                     uploadProgress:uploadProgress
                   downloadProgress:nil
@@ -106,7 +106,7 @@
 
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                     uploadProgress:nil
                   downloadProgress:downloadProgress
@@ -127,7 +127,7 @@
 + (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
                                      uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
                                    downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable JSNetworkRequestCompletedFilter)completed {
+                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                           onTarget:nil
                     uploadProgress:uploadProgress
@@ -152,7 +152,7 @@
     [interface requestDownloadProgress:downloadProgress];
     /// 设置回调
     __weak __typeof(target) weakTarget = target;
-    [interface requestCompletedFilter:^(id<JSNetworkInterfaceProtocol> aInterface) {
+    [interface requestCompletedBlock:^(id<JSNetworkInterfaceProtocol> aInterface) {
         if (completed) {
             completed(weakTarget, aInterface);
         }

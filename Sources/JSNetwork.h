@@ -11,6 +11,10 @@
 
 #if __has_include(<JSNetwork/JSNetwork.h>)
 
+#if __has_include(<JSNetwork/JSNetworkMacroVariable.h>)
+#import <JSNetwork/JSNetworkMacroVariable.h>
+#endif
+
 #if __has_include(<JSNetwork/JSNetworkRequestProtocol.h>)
 #import <JSNetwork/JSNetworkRequestProtocol.h>
 #endif
@@ -100,6 +104,10 @@
 #endif
 
 #else
+
+#if __has_include("JSNetworkMacroVariable.h")
+#import "JSNetworkMacroVariable.h"
+#endif
 
 #if __has_include("JSNetworkRequestProtocol.h")
 #import "JSNetworkRequestProtocol.h"

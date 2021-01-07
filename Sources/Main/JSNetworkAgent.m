@@ -85,12 +85,37 @@
 
 /// 处理请求
 - (void)processingRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
-    NSParameterAssert(interface && interface.request.interfaceProxy);
+    NSParameterAssert(interface);
     __weak typeof(self) weakSelf = self;
     __weak typeof(interface) weakInterface = interface;
-    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    [interface.request buildTaskWithRequestConfig:processedConfig
-                                    taskCompleted:^(id responseObject, NSError *error) {
+    [interface.request buildTaskWithRequestConfig:interface.processedConfig
+                           constructingURLRequest:^(NSMutableURLRequest *urlRequest) {
+        NSAssert([urlRequest isKindOfClass:NSMutableURLRequest.class], @"必须为 NSMutableURLRequest或其子类");
+        /// 二进制的数据
+        if (weakInterface.processedConfig.requestSerializerType == JSRequestSerializerTypeBinaryData) {
+            id body = weakInterface.processedConfig.requestBody;
+            if ([body isKindOfClass:NSData.class]) {
+                [urlRequest setHTTPBody:body];
+            } else {
+                NSAssert(NO, @"必须为 NSData类型");
+            }
+        }
+        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
+            [weakInterface.processedConfig constructingMultipartURLRequest:urlRequest];
+        }
+    } constructingFormDataBlock:^(id formData) {
+        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartFormData:)]) {
+            [weakInterface.processedConfig constructingMultipartFormData:formData];
+        }
+    } uploadProgress:^(NSProgress *uploadProgress) {
+        if (weakInterface.uploadProgress) {
+            weakInterface.uploadProgress(uploadProgress);
+        }
+    } downloadProgress:^(NSProgress *downloadProgress) {
+        if (weakInterface.downloadProgress) {
+            weakInterface.downloadProgress(downloadProgress);
+        }
+    } taskCompleted:^(id responseObject, NSError *error) {
         @autoreleasepool {
             [weakSelf processingResponseForInterface:weakInterface
                                   withResponseObject:responseObject
@@ -149,7 +174,7 @@
             dispatch_async(completionQueue, ^{
                 @autoreleasepool {
                     [weakSelf toggleWillStopWithInterface:weakInterface];
-                    for (JSNetworkRequestCompletedFilter block in weakInterface.completionBlocks) {
+                    for (JSNetworkRequestCompletedBlock block in weakInterface.completionBlocks) {
                         block(weakInterface);
                     }
                     [weakInterface clearAllCallBack];

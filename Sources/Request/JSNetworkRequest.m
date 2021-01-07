@@ -28,9 +28,18 @@ NSString *const JSNetworkRequestTaskPrefix = @"request_task";
 
 static NSUInteger JSNetworkRequestTaskIdentifier = 0;
 - (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-                     taskCompleted:(void(^)(id responseObject, NSError *error))taskCompleted {
-    NSParameterAssert(config);
-    NSParameterAssert(taskCompleted);
+            constructingURLRequest:(void(^)(NSMutableURLRequest *urlRequest))constructingURLRequest
+         constructingFormDataBlock:(void(^)(id formData))constructingFormDataBlock
+                    uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
+                  downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
+                     taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
+    NSParameterAssert(config &&
+                      constructingURLRequest &&
+                      constructingFormDataBlock &&
+                      uploadProgressBlock &&
+                      uploadProgressBlock &&
+                      downloadProgressBlock &&
+                      taskCompleted);
     [JSNetworkMutexLock execute:^{
         JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
         _taskIdentifier = [JSNetworkRequestTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];

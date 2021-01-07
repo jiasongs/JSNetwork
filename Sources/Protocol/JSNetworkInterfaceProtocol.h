@@ -15,8 +15,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^JSNetworkRequestCompletedFilter)(id<JSNetworkInterfaceProtocol> aInterface);
 typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
+typedef void(^JSNetworkRequestCompletedBlock)(id<JSNetworkInterfaceProtocol> aInterface);
 
 @protocol JSNetworkInterfaceProtocol <NSObject>
 
@@ -48,7 +48,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
 /**
  *  @brief 返回已经完成的回调
  */
-@property (nonatomic, strong, readonly) NSArray<JSNetworkRequestCompletedFilter> *completionBlocks;
+@property (nonatomic, strong, readonly) NSArray<JSNetworkRequestCompletedBlock> *completionBlocks;
 
 /**
  *  @brief 根据config初始化一个Interface
@@ -83,7 +83,7 @@ typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
  *  @use 实现此方法时需要用一个数组持有completionBlock，因为外部会设置多个回调
  *  @see JSNetworkRequest.m
  */
-- (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock;
+- (void)requestCompletedBlock:(nullable JSNetworkRequestCompletedBlock)completionBlock;
 
 /**
  *  @brief 清空所有回调

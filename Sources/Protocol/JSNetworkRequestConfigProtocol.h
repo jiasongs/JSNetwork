@@ -98,13 +98,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
 /**
- *  @brief 拼接FormData
- *
- *  @param multipartFormData 可拼接的FormData, 如果外部使用AFN, 则是AFMultipartFormData
- */
-- (void)constructingMultipartFormData:(id)multipartFormData NS_SWIFT_NAME(constructingMultipart(formData:));
-
-/**
  *  @brief 筛选URL
  *
  *  @param URLString 需要筛选的URL
@@ -112,6 +105,20 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 返回新的URL
  */
 - (NSString *)requestUrlFilterWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestUrlFilter(URLString:));
+
+/**
+ *  @brief 拼接FormData
+ *
+ *  @param multipartFormData 可拼接的FormData, 如果外部使用AFN, 则是AFMultipartFormData
+ */
+- (void)constructingMultipartFormData:(id)multipartFormData NS_SWIFT_NAME(constructingMultipart(formData:));
+
+/**
+ *  @brief 拼接URLRequest
+ *
+ *  @param urlRequest 可拼接的URLRequest
+ */
+- (void)constructingMultipartURLRequest:(NSMutableURLRequest *)urlRequest NS_SWIFT_NAME(constructingMultipart(urlRequest:));
 
 /**
  *  @brief 内容类型

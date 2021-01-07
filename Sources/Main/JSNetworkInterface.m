@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong) id<JSNetworkRequestConfigProtocol> config;
 @property (nonatomic, strong) JSNetworkProxy *interfaceProxy;
-@property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedFilter> *completionBlocks;
+@property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedBlock> *completionBlocks;
 
 @end
 
@@ -49,9 +49,6 @@
             _request = sharedConfig.buildNetworkRequest(self);
         }
         NSAssert(_request, @"请设置request");
-        /// 必须设置代理, 先持有一下, 防止提前释放
-        _interfaceProxy = [JSNetworkProxy proxyWithTarget:self];
-        [_request addInterfaceProxy:(id<JSNetworkInterfaceProtocol>)_interfaceProxy];
         /// 响应实例
         if ([config respondsToSelector:@selector(response)]) {
             _response = config.response;
@@ -81,7 +78,7 @@
     _downloadProgress = downloadProgress;
 }
 
-- (void)requestCompletedFilter:(nullable JSNetworkRequestCompletedFilter)completionBlock {
+- (void)requestCompletedBlock:(nullable JSNetworkRequestCompletedBlock)completionBlock {
     if (completionBlock) {
         [_completionBlocks addObject:completionBlock];
     }
