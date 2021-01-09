@@ -48,8 +48,8 @@
     return [NSSet setWithObjects:@"application/octet-stream", nil];
 }
 
-- (BOOL)cacheIgnore {
-    return true;
+- (JSRequestCachePolicy)cachePolicy {
+    return JSRequestCachePolicyUseCacheDataElseLoad;
 }
 
 - (long long)cacheVersion {

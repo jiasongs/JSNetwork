@@ -28,8 +28,8 @@
     return @[@"other"];
 }
 
-- (BOOL)cacheIgnore {
-    return true;
+- (JSRequestCachePolicy)cachePolicy {
+    return JSRequestCachePolicyUseCacheDataElseLoad;
 }
 
 - (long long)cacheVersion {

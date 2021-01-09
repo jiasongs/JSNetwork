@@ -18,37 +18,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 @required
 
-/**
- *  @brief 构建一个NSURLSessionTask
- *
- *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置类
- *  @param constructingURLRequest     配置请求, 可自定义
- *  @param constructingFormDataBlock  拼接FormData
- *  @param uploadProgressBlock        上传进度
- *  @param downloadProgressBlock      下载进度
- *  @param taskCompleted            任务 <完全结束> 后的回调
- *
- *  @see JSNetworkRequest.m JSNetworkProvider.m
- */
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-                    uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
-                  downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
-                     taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted;
 
-- (NSMutableURLRequest *)requestWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-                        constructingFormDataBlock:(void(^)(id formData))constructingFormDataBlock;
+- (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+          multipartFormData:(void(^)(id formData))multipartFormDataBlock
+        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
+              didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTaskBlock
+             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
+           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
+               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock;
 
 /**
  *  @brief SessionTask
  */
 - (NSURLSessionTask *)requestTask;
-
-/**
- *  @brief 任务ID, 保证唯一, 注意线程安全
- *
- * @return NSString
- */
-- (NSString *)taskIdentifier;
 
 @end
 

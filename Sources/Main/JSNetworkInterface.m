@@ -15,12 +15,13 @@
 #import "JSNetworkRequestConfigProxy.h"
 #import "JSNetworkProxy.h"
 #import "JSNetworkRequestProtocol.h"
+#import "JSNetworkMutexLock.h"
 
-@interface JSNetworkInterface ()
-
-@property (nonatomic, strong) id<JSNetworkRequestConfigProtocol> config;
-@property (nonatomic, strong) JSNetworkProxy *interfaceProxy;
-@property (nonatomic, strong) NSMutableArray<JSNetworkRequestCompletedBlock> *completionBlocks;
+@interface JSNetworkInterface () {
+    id<JSNetworkRequestConfigProtocol> _config;
+    NSMutableArray<JSNetworkRequestCompletedBlock> *_completionBlocks;
+    NSString *_taskIdentifier;
+}
 
 @end
 
@@ -57,7 +58,7 @@
         }
         NSAssert(_response, @"请设置response");
         /// 磁盘缓存的实例
-        if (!_processedConfig.cacheIgnore) {
+        if (_processedConfig.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
             if ([config respondsToSelector:@selector(diskCache)]) {
                 _diskCache = config.diskCache;
             } else if (sharedConfig.buildNetworkDiskCache) {
@@ -66,6 +67,12 @@
             NSAssert(_diskCache, @"请设置diskCache");
         }
         _completionBlocks = [NSMutableArray array];
+        /// 生成任务ID
+        static NSUInteger jsNetworkRequestTaskIdentifier = 0;
+        [JSNetworkMutexLock execute:^{
+            jsNetworkRequestTaskIdentifier = jsNetworkRequestTaskIdentifier + 1;
+            _taskIdentifier = [NSString stringWithFormat:@"%@_%@", @"task", @(jsNetworkRequestTaskIdentifier)];
+        }];
     }
     return self;
 }
@@ -88,6 +95,12 @@
     [_completionBlocks removeAllObjects];
     _uploadProgress = nil;
     _downloadProgress = nil;
+}
+
+- (NSString *)taskIdentifier {
+    return [JSNetworkMutexLock executeWithReturnValue:^id{
+        return _taskIdentifier;
+    }];
 }
 
 - (NSString *)description {

@@ -90,6 +90,13 @@ typedef void(^JSNetworkRequestCompletedBlock)(id<JSNetworkInterfaceProtocol> aIn
  */
 - (void)clearAllCallBack;
 
+/**
+ *  @brief 任务ID, 保证唯一, 注意线程安全
+ *
+ * @return NSString
+ */
+- (NSString *)taskIdentifier;
+
 @end
 
 NS_ASSUME_NONNULL_END

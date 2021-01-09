@@ -26,42 +26,18 @@ NSString *const JSNetworkRequestTaskPrefix = @"request_task";
 
 #pragma mark - JSNetworkRequestProtocol
 
-static NSUInteger JSNetworkRequestTaskIdentifier = 0;
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-            constructingURLRequest:(void(^)(NSMutableURLRequest *urlRequest))constructingURLRequest
-         constructingFormDataBlock:(void(^)(id formData))constructingFormDataBlock
-                    uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
-                  downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
-                     taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
-    NSParameterAssert(config &&
-                      constructingURLRequest &&
-                      constructingFormDataBlock &&
-                      uploadProgressBlock &&
-                      uploadProgressBlock &&
-                      downloadProgressBlock &&
-                      taskCompleted);
-    [JSNetworkMutexLock execute:^{
-        JSNetworkRequestTaskIdentifier = JSNetworkRequestTaskIdentifier + 1;
-        _taskIdentifier = [JSNetworkRequestTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkRequestTaskIdentifier)];
-    }];
-}
-
-- (void)addInterfaceProxy:(id<JSNetworkInterfaceProtocol>)interfaceProxy {
-    _privateInterfaceProxy = interfaceProxy;
-}
-
-- (id<JSNetworkInterfaceProtocol>)interfaceProxy {
-    return _privateInterfaceProxy;
+- (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+          multipartFormData:(void(^)(id formData))multipartFormDataBlock
+        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
+              didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTaskBlock
+             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
+           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
+               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
+    NSAssert(NO, @"子类继承使用");
 }
 
 - (NSURLSessionTask *)requestTask {
     return nil;
-}
-
-- (NSString *)taskIdentifier {
-    return [JSNetworkMutexLock executeWithReturnValue:^id{
-        return _taskIdentifier;
-    }];
 }
 
 #pragma mark - NSOperation, 以下必须实现

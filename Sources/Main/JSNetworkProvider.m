@@ -158,12 +158,12 @@
         }
     }];
     /// 处理接口
-    [JSNetworkAgent.sharedAgent addRequestForInterface:interface];
+    [JSNetworkAgent.sharedAgent performRequestForInterface:interface];
     /// 绑定任务id
     if (target) {
         /// 务必保证线程安全
         @synchronized (self) {
-            [target js_bindTaskIdentifier:interface.request.taskIdentifier];
+            [target js_bindTaskIdentifier:interface.taskIdentifier];
         }
     }
     return interface;

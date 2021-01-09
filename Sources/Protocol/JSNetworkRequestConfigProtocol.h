@@ -28,6 +28,11 @@ typedef NS_ENUM(NSInteger, JSRequestSerializerType) {
     JSRequestSerializerTypeBinaryData,  /// POST时Body转换为二进制数据传输
 };
 
+typedef NS_ENUM(NSInteger, JSRequestCachePolicy) {
+    JSRequestCachePolicyIgnoringCacheData = 0,      /// 忽略本地缓存, 直接从后台请求数据
+    JSRequestCachePolicyUseCacheDataElseLoad = 1,   /// 若缓存存在则使用缓存, 否则从后台请求数据
+};
+
 typedef NS_ENUM(NSInteger, JSResponseSerializerType) {
     JSResponseSerializerTypeJSON,
     JSResponseSerializerTypeHTTP,
@@ -151,11 +156,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<id<JSNetworkPluginProtocol>> *)requestPlugins;
 
 /**
- *  @brief 是否忽略缓存, 默认为true
+ *  @brief 缓存策略, 注意并不是<NSURLRequestCachePolicy>
  *
- *  @use 当设置不忽略缓存时, 则必须设置cacheVersion或者cacheTimeInSeconds
+ *  @use 当设置JSRequestCachePolicyUseCacheDataElseLoad时, 则必须设置cacheVersion或者cacheTimeInSeconds
  */
-- (BOOL)cacheIgnore;
+- (JSRequestCachePolicy)cachePolicy;
 
 /**
  *  @brief 缓存版本, 默认是-1

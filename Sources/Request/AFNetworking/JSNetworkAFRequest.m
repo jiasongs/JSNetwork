@@ -16,24 +16,21 @@
     NSURLSessionTask *_requestTask;
 }
 
+@property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
+
 @end
 
 @implementation JSNetworkAFRequest
 
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-            constructingURLRequest:(void(^)(NSMutableURLRequest *urlRequest))constructingURLRequest
-         constructingFormDataBlock:(void(^)(id formData))constructingFormDataBlock
-                    uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
-                  downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
-                     taskCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))taskCompleted {
-    [super buildTaskWithRequestConfig:config
-               constructingURLRequest:constructingURLRequest
-            constructingFormDataBlock:constructingFormDataBlock
-                       uploadProgress:uploadProgressBlock
-                     downloadProgress:downloadProgressBlock
-                        taskCompleted:taskCompleted];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    BOOL useFormData = false;
+- (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+          multipartFormData:(void(^)(id formData))multipartFormDataBlock
+        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
+              didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTaskBlock
+             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
+           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
+               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
+    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
+    BOOL useFormData = NO;
     AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
     switch (config.requestSerializerType) {
         case JSRequestSerializerTypeHTTP:
@@ -41,7 +38,7 @@
             requestSerializer = [AFHTTPRequestSerializer serializer];
             break;
         case JSRequestSerializerTypeFormData:
-            useFormData = true;
+            useFormData = YES;
             requestSerializer = [AFHTTPRequestSerializer serializer];
             break;
         default:
@@ -63,14 +60,14 @@
         [requestSerializer setValue:headers[headerField] forHTTPHeaderField:headerField];
     }
     requestSerializer.timeoutInterval = config.requestTimeoutInterval;
-    manager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
-    manager.requestSerializer = requestSerializer;
-    manager.responseSerializer = responseSerializer;
-    manager.responseSerializer.acceptableStatusCodes = config.responseAcceptableStatusCodes;
+    self.sessionManager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
+    self.sessionManager.requestSerializer = requestSerializer;
+    self.sessionManager.responseSerializer = responseSerializer;
+    self.sessionManager.responseSerializer.acceptableStatusCodes = config.responseAcceptableStatusCodes;
     if (config.responseAcceptableContentTypes) {
-        NSMutableSet *contentTypes = [NSMutableSet setWithSet:manager.responseSerializer.acceptableContentTypes];
+        NSMutableSet *contentTypes = [NSMutableSet setWithSet:self.sessionManager.responseSerializer.acceptableContentTypes];
         [contentTypes unionSet:config.responseAcceptableContentTypes];
-        manager.responseSerializer.acceptableContentTypes = contentTypes.copy;
+        self.sessionManager.responseSerializer.acceptableContentTypes = contentTypes.copy;
     }
     NSString *method = @"";
     switch (config.requestMethod) {
@@ -96,48 +93,58 @@
             break;
     }
     id requestBody = config.requestBody;
-    NSError *serializationError = nil;
     NSMutableURLRequest *request = nil;
-    __weak __typeof(manager) weakManager = manager;
-    void (^completed)(id, NSError *) = ^(id responseObject, NSError *error) {
-        taskCompleted(responseObject, error);
-        [weakManager invalidateSessionCancelingTasks:false resetSession:false];
-    };
     if (useFormData) {
-        request = [manager.requestSerializer multipartFormRequestWithMethod:method
-                                                                  URLString:[[NSURL URLWithString:config.requestUrl relativeToURL:manager.baseURL] absoluteString]
-                                                                 parameters:requestBody
-                                                  constructingBodyWithBlock:constructingFormDataBlock
-                                                                      error:&serializationError];
+        request = [self.sessionManager.requestSerializer multipartFormRequestWithMethod:method
+                                                                              URLString:[[NSURL URLWithString:config.requestUrl relativeToURL:self.sessionManager.baseURL] absoluteString]
+                                                                             parameters:requestBody
+                                                              constructingBodyWithBlock:multipartFormDataBlock
+                                                                                  error:nil];
     } else {
-        request = [manager.requestSerializer requestWithMethod:method
-                                                     URLString:[[NSURL URLWithString:config.requestUrl relativeToURL:manager.baseURL] absoluteString]
-                                                    parameters:requestBody
-                                                         error:&serializationError];
+        request = [self.sessionManager.requestSerializer requestWithMethod:method
+                                                                 URLString:[[NSURL URLWithString:config.requestUrl relativeToURL:self.sessionManager.baseURL] absoluteString]
+                                                                parameters:requestBody
+                                                                     error:nil];
     }
-    if (serializationError) {
-        completed(nil, serializationError);
+    /// 创建完成时需要调用
+    didCreateURLRequestBlock(request);
+    __weak typeof(self) weakSelf = self;
+    void (^completed)(id, NSError *) = ^(id responseObject, NSError *error) {
+        didCompletedBlock(responseObject, error);
+        [weakSelf.sessionManager invalidateSessionCancelingTasks:NO resetSession:YES];
+        weakSelf.sessionManager = nil;
+    };
+    if (config.requestSerializerType == JSRequestSerializerTypeFormData) {
+        _requestTask = [self.sessionManager uploadTaskWithStreamedRequest:request
+                                                                 progress:uploadProgressBlock
+                                                        completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+            completed(responseObject, error);
+        }];
     } else {
-        constructingURLRequest(request);
-        if (useFormData) {
-            _requestTask = [manager uploadTaskWithStreamedRequest:request
-                                                         progress:uploadProgressBlock
-                                                completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-                completed(responseObject, error);
-            }];
-        } else {
-            _requestTask = [manager dataTaskWithRequest:request
-                                         uploadProgress:uploadProgressBlock
-                                       downloadProgress:downloadProgressBlock
-                                      completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-                completed(responseObject, error);
-            }];
-        }
+        _requestTask = [self.sessionManager dataTaskWithRequest:request
+                                                 uploadProgress:uploadProgressBlock
+                                               downloadProgress:downloadProgressBlock
+                                              completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+            completed(responseObject, error);
+        }];
     }
+    /// 创建完成时需要调用
+    didCreateTaskBlock(_requestTask);
 }
 
 - (NSURLSessionTask *)requestTask {
     return _requestTask;
+}
+
+- (void)cancel {
+    [self.sessionManager invalidateSessionCancelingTasks:YES resetSession:NO];
+}
+
+- (void)dealloc {
+    if (self.sessionManager) {
+        [self.sessionManager invalidateSessionCancelingTasks:YES resetSession:YES];
+        self.sessionManager = nil;
+    }
 }
 
 @end

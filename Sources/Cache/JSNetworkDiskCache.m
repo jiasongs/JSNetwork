@@ -33,13 +33,8 @@ NSString *const JSNetworkDiskCacheTaskPrefix = @"cache_task";
     return self;
 }
 
-static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
-- (void)buildTaskWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-                     taskCompleted:(JSNetworkDiskCacheCompleted)taskCompleted {
-    [JSNetworkMutexLock execute:^{
-        JSNetworkDiskCacheTaskIdentifier = JSNetworkDiskCacheTaskIdentifier + 1;
-        _taskIdentifier = [JSNetworkDiskCacheTaskPrefix stringByAppendingFormat:@"%@", @(JSNetworkDiskCacheTaskIdentifier)];
-    }];
+- (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+               didCompleted:(JSNetworkDiskCacheCompleted)didCompletedBlock {
     [self cacheForRequestConfig:config
                       completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         if (metadata) {
@@ -54,12 +49,12 @@ static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
                 resultMetadata = metadata;
             }
             /// TODO: App version
-            if (taskCompleted) {
-                taskCompleted(resultMetadata);
+            if (didCompletedBlock) {
+                didCompletedBlock(resultMetadata);
             }
         } else {
-            if (taskCompleted) {
-                taskCompleted(nil);
+            if (didCompletedBlock) {
+                didCompletedBlock(nil);
             }
         }
     }];
@@ -148,12 +143,6 @@ static NSUInteger JSNetworkDiskCacheTaskIdentifier = 0;
         result = [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
     }
     return result && !error;
-}
-
-- (NSString *)taskIdentifier {
-    return [JSNetworkMutexLock executeWithReturnValue:^id{
-        return _taskIdentifier;
-    }];
 }
 
 - (void)addLock {

@@ -54,23 +54,23 @@
 
 #pragma mark - Pubilc
 
-- (void)addRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
+- (void)performRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
+    /// 添加interface
+    [self performInterface:interface forTaskIdentifier:interface.taskIdentifier];
+    /// 处理请求
     [self toggleWillStartWithInterface:interface];
-    if (interface.processedConfig.cacheIgnore) {
-        [self processingRequestForInterface:interface];
-    } else {
+    if (interface.processedConfig.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
         [self processingDiskCacheForInterface:interface];
+    } else {
+        [self processingRequestForInterface:interface];
     }
     [self toggleDidStartWithInterface:interface];
 }
 
 - (void)cancelRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     if (interface.request.requestTask) {
-        /// 正在运行时才可以取消
-        if (interface.request.isExecuting) {
-            [interface.request cancel];
-        }
+        [interface.request cancel];
     }
 }
 
@@ -78,6 +78,8 @@
     id<JSNetworkInterfaceProtocol> interface = [self interfaceForTaskIdentifier:taskIdentifier];
     if (interface) {
         [self cancelRequestForInterface:interface];
+    } else {
+        JSNetworkLog(@"检查 interface 是否被提前释放");
     }
 }
 
@@ -88,8 +90,12 @@
     NSParameterAssert(interface);
     __weak typeof(self) weakSelf = self;
     __weak typeof(interface) weakInterface = interface;
-    [interface.request buildTaskWithRequestConfig:interface.processedConfig
-                           constructingURLRequest:^(NSMutableURLRequest *urlRequest) {
+    [interface.request buildTaskWithConfig:interface.processedConfig
+                         multipartFormData:^(id formData) {
+        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartFormData:)]) {
+            [weakInterface.processedConfig constructingMultipartFormData:formData];
+        }
+    } didCreateURLRequest:^(NSMutableURLRequest *urlRequest) {
         NSAssert([urlRequest isKindOfClass:NSMutableURLRequest.class], @"必须为 NSMutableURLRequest或其子类");
         /// 二进制的数据
         if (weakInterface.processedConfig.requestSerializerType == JSRequestSerializerTypeBinaryData) {
@@ -100,13 +106,8 @@
                 NSAssert(NO, @"必须为 NSData类型");
             }
         }
-        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
-            [weakInterface.processedConfig constructingMultipartURLRequest:urlRequest];
-        }
-    } constructingFormDataBlock:^(id formData) {
-        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartFormData:)]) {
-            [weakInterface.processedConfig constructingMultipartFormData:formData];
-        }
+    } didCreateTask:^(NSURLSessionTask *task) {
+        [weakSelf performRequestOperation:interface.request];
     } uploadProgress:^(NSProgress *uploadProgress) {
         if (weakInterface.uploadProgress) {
             weakInterface.uploadProgress(uploadProgress);
@@ -115,16 +116,14 @@
         if (weakInterface.downloadProgress) {
             weakInterface.downloadProgress(downloadProgress);
         }
-    } taskCompleted:^(id responseObject, NSError *error) {
+    } didCompleted:^(id _Nullable responseObject, NSError *_Nullable error) {
         @autoreleasepool {
             [weakSelf processingResponseForInterface:weakInterface
                                   withResponseObject:responseObject
-                                    needSetCacheData:YES
+                                setCacheDataIfNeeded:YES
                                                error:error];
         }
     }];
-    [self addInterface:interface forTaskIdentifier:interface.request.taskIdentifier];
-    [self addRequestOperation:interface.request];
 }
 
 /// 处理缓存
@@ -134,29 +133,27 @@
     __weak typeof(self) weakSelf = self;
     __weak typeof(interface) weakInterface = interface;
     /// 缓存处理
-    [interface.diskCache buildTaskWithRequestConfig:processedConfig taskCompleted:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
+    [interface.diskCache buildTaskWithConfig:processedConfig
+                                didCompleted:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         @autoreleasepool {
             if (metadata) {
                 /// 存在缓存时
                 [weakSelf processingResponseForInterface:weakInterface
                                       withResponseObject:metadata.cacheData
-                                        needSetCacheData:NO
+                                    setCacheDataIfNeeded:NO
                                                    error:nil];
             } else {
                 /// 处理网络请求
                 [weakSelf processingRequestForInterface:weakInterface];
-                /// 不存在缓存时，需要清除缓存任务
-                [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
             }
         }
     }];
-    [self addInterface:interface forTaskIdentifier:interface.diskCache.taskIdentifier];
 }
 
 /// 处理响应
 - (void)processingResponseForInterface:(id<JSNetworkInterfaceProtocol>)interface
                     withResponseObject:(nullable id)responseObject
-                      needSetCacheData:(BOOL)needSetCacheData
+                  setCacheDataIfNeeded:(BOOL)setCacheDataIfNeeded
                                  error:(nullable NSError *)error {
     NSParameterAssert(interface);
     dispatch_queue_t processingQueue = JSNetworkConfig.sharedConfig.processingQueue;
@@ -181,16 +178,14 @@
                     [weakSelf toggleDidStopWithInterface:weakInterface];
                     if (weakInterface.request.requestTask) {
                         [weakSelf removeRequestOperation:weakInterface.request];
-                        [weakSelf removeInterfaceForTaskIdentifier:weakInterface.request.taskIdentifier];
-                    } else {
-                        [weakSelf removeInterfaceForTaskIdentifier:weakInterface.diskCache.taskIdentifier];
                     }
+                    [weakSelf removeInterfaceForTaskIdentifier:weakInterface.taskIdentifier];
                 }
             });
         };
         id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
         BOOL isSaveCache = NO;
-        if (needSetCacheData && !processedConfig.cacheIgnore && !error) {
+        if (setCacheDataIfNeeded && processedConfig.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad && !error) {
             isSaveCache = [processedConfig cacheIsSavedWithResponse:interface.response];
         }
         if (isSaveCache) {
@@ -207,7 +202,7 @@
 }
 
 /// 添加请求
-- (void)addRequestOperation:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
+- (void)performRequestOperation:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
     NSParameterAssert(request.requestTask);
     [self addLock];
     /// 设置下最大并发数
@@ -236,7 +231,7 @@
 }
 
 /// 添加接口
-- (void)addInterface:(id<JSNetworkInterfaceProtocol>)interface forTaskIdentifier:(NSString *)taskIdentifier {
+- (void)performInterface:(id<JSNetworkInterfaceProtocol>)interface forTaskIdentifier:(NSString *)taskIdentifier {
     NSParameterAssert(interface && taskIdentifier);
     [self addLock];
     if ([_interfaceRecord objectForKey:taskIdentifier]) {

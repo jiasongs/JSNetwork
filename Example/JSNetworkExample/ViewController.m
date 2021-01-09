@@ -67,8 +67,7 @@
 
 - (IBAction)onPressRequest:(id)sender {
     void (^test)(void) = ^(void) {
-        DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
-        //        CNodeAPI *api = [CNodeAPI new];
+        CNodeAPI *api = [[CNodeAPI alloc] init];
         /// 生成接口
         __weak __typeof(self) weakSelf = self;
         [JSNetworkProvider requestWithConfig:api
@@ -134,9 +133,10 @@
     /// 生成接口
     DownloadAPI *api = [DownloadAPI apiWithDownloadURLType:DownloadURLTypeTypeCachefly];
     [JSNetworkProvider requestWithConfig:api
-                        downloadProgress:^(NSProgress *downloadProgress) {
+                                onTarget:self
+                        downloadProgress:^(NSProgress * _Nonnull downloadProgress) {
         NSLog(@"downloadProgress - %@", downloadProgress);
-    } completed:^(id<JSNetworkInterfaceProtocol> aInterface) {
+    } completed:^(__kindof NSObject * _Nullable target, id<JSNetworkInterfaceProtocol>  _Nonnull aInterface) {
         NSLog(@"%@", aInterface);
     }];
 }

@@ -63,7 +63,7 @@
             [plugins addObjectsFromArray:config.requestPlugins];
         }
         _finalPlugins = plugins;
-        if ([config respondsToSelector:@selector(cacheIgnore)] && !config.cacheIgnore) {
+        if (config.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
             /// 缓存的文件名
             if ([config respondsToSelector:@selector(cacheFileName)]) {
                 _finalCacheFileName = config.cacheFileName;
@@ -130,8 +130,8 @@
     return _finalPlugins;
 }
 
-- (BOOL)cacheIgnore {
-    return YES;
+- (JSRequestCachePolicy)cachePolicy {
+    return JSRequestCachePolicyIgnoringCacheData;
 }
 
 - (long long)cacheVersion {
@@ -205,6 +205,7 @@
 }
 
 - (NSString *)description {
+    JSRequestCachePolicy cachePolicy = (JSRequestCachePolicy)[self performSelector:@selector(cachePolicy)];
     return [NSString stringWithFormat:@"%@: <%p>\n{\nURL: %@\nArguments: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
             NSStringFromClass([self.target class]),
             self.target,
@@ -213,7 +214,7 @@
             [self performSelector:@selector(requestBody)],
             [self performSelector:@selector(requestHeaderFieldValueDictionary)],
             @((JSRequestMethod)[self performSelector:@selector(requestMethod)]),
-            !(BOOL)[self performSelector:@selector(cacheIgnore)] ? [NSString stringWithFormat:@"%@/%@.metadata", [self performSelector:@selector(cacheDirectoryPath)], [self performSelector:@selector(cacheFileName)]] : @""
+            cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad ? [NSString stringWithFormat:@"%@/%@.metadata", [self performSelector:@selector(cacheDirectoryPath)], [self performSelector:@selector(cacheFileName)]] : @""
             ];
 }
 

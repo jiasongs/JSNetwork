@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param interface 遵循<JSNetworkInterfaceProtocol>的接口类
  *
  */
-- (void)addRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(addRequest(forInterface:));
+- (void)performRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(addRequest(forInterface:));
 
 /**
  *  @brief 取消一个请求
