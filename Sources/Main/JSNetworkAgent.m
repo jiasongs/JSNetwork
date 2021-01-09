@@ -56,7 +56,7 @@
 
 - (void)performRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
-    /// 添加interface
+    /// 首先添加interface, 防止释放
     [self performInterface:interface forTaskIdentifier:interface.taskIdentifier];
     /// 处理请求
     [self toggleWillStartWithInterface:interface];
@@ -106,8 +106,11 @@
                 NSAssert(NO, @"必须为 NSData类型");
             }
         }
+        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
+            [weakInterface.processedConfig constructingMultipartURLRequest:urlRequest];
+        }
     } didCreateTask:^(NSURLSessionTask *task) {
-        [weakSelf performRequestOperation:interface.request];
+        [weakSelf performRequestOperation:weakInterface.request];
     } uploadProgress:^(NSProgress *uploadProgress) {
         if (weakInterface.uploadProgress) {
             weakInterface.uploadProgress(uploadProgress);
@@ -156,17 +159,17 @@
                   setCacheDataIfNeeded:(BOOL)setCacheDataIfNeeded
                                  error:(nullable NSError *)error {
     NSParameterAssert(interface);
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(interface) weakInterface = interface;
     dispatch_queue_t processingQueue = JSNetworkConfig.sharedConfig.processingQueue;
     dispatch_queue_t completionQueue = JSNetworkConfig.sharedConfig.completionQueue;
     dispatch_async(processingQueue, ^{
         /// 处理响应
         @autoreleasepool {
-            [interface.response processingTask:interface.request.requestTask
-                                responseObject:responseObject
-                                         error:error];
+            [weakInterface.response processingTask:weakInterface.request.requestTask
+                                    responseObject:responseObject
+                                             error:error];
         }
-        __weak typeof(self) weakSelf = self;
-        __weak typeof(interface) weakInterface = interface;
         void(^completionBlock)(void) = ^(void) {
             dispatch_async(completionQueue, ^{
                 @autoreleasepool {
@@ -183,16 +186,16 @@
                 }
             });
         };
-        id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
+        id<JSNetworkRequestConfigProtocol> processedConfig = weakInterface.processedConfig;
         BOOL isSaveCache = NO;
         if (setCacheDataIfNeeded && processedConfig.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad && !error) {
-            isSaveCache = [processedConfig cacheIsSavedWithResponse:interface.response];
+            isSaveCache = [processedConfig cacheIsSavedWithResponse:weakInterface.response];
         }
         if (isSaveCache) {
             /// 设置缓存
-            [interface.diskCache setCacheData:responseObject
-                             forRequestConfig:processedConfig
-                                    completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
+            [weakInterface.diskCache setCacheData:responseObject
+                                 forRequestConfig:processedConfig
+                                        completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
                 completionBlock();
             }];
         } else {

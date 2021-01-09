@@ -18,6 +18,7 @@
 		7A2684F6244E825A004A7C82 /* CNodeAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684F4244E825A004A7C82 /* CNodeAPI.m */; };
 		7A2684FD244E8263004A7C82 /* NetworkResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684F7244E8262004A7C82 /* NetworkResponse.m */; };
 		7A2684FF244E8263004A7C82 /* NetworkToastPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684FC244E8263004A7C82 /* NetworkToastPlugin.m */; };
+		7A36CCE825AA0CF60094224C /* AlamofireRequest1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A36CCE725AA0CF60094224C /* AlamofireRequest1.swift */; };
 		7A98C863246FDD5800123894 /* DownloadAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C862246FDD5800123894 /* DownloadAPI.m */; };
 		7A98C869246FFD1500123894 /* UploadImageAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C868246FFD1500123894 /* UploadImageAPI.m */; };
 		98BE71BF735857902847A1ED /* Pods_JSNetworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */; };
@@ -47,6 +48,7 @@
 		7A2684FB244E8263004A7C82 /* NetworkToastPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkToastPlugin.h; sourceTree = "<group>"; };
 		7A2684FC244E8263004A7C82 /* NetworkToastPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkToastPlugin.m; sourceTree = "<group>"; };
 		7A30EA912455B8520066CE8E /* JSNetworkExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JSNetworkExample.entitlements; sourceTree = "<group>"; };
+		7A36CCE725AA0CF60094224C /* AlamofireRequest1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireRequest1.swift; sourceTree = "<group>"; };
 		7A98C861246FDD5800123894 /* DownloadAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadAPI.h; sourceTree = "<group>"; };
 		7A98C862246FDD5800123894 /* DownloadAPI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadAPI.m; sourceTree = "<group>"; };
 		7A98C867246FFD1500123894 /* UploadImageAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UploadImageAPI.h; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				7A2684D3244E7700004A7C82 /* AppDelegate.m */,
 				7A2684D8244E7700004A7C82 /* ViewController.h */,
 				7A2684D9244E7700004A7C82 /* ViewController.m */,
+				7A36CCE725AA0CF60094224C /* AlamofireRequest1.swift */,
 				7A23BEB2258CE06D00A4063B /* File.swift */,
 				7A2684ED244E823B004A7C82 /* Services */,
 				7A2684DB244E7700004A7C82 /* Main.storyboard */,
@@ -281,6 +284,7 @@
 			files = (
 				7A98C869246FFD1500123894 /* UploadImageAPI.m in Sources */,
 				7A23BEB3258CE06D00A4063B /* File.swift in Sources */,
+				7A36CCE825AA0CF60094224C /* AlamofireRequest1.swift in Sources */,
 				7A2684DA244E7700004A7C82 /* ViewController.m in Sources */,
 				7A2684F3244E824B004A7C82 /* BaseAPI.m in Sources */,
 				7A98C863246FDD5800123894 /* DownloadAPI.m in Sources */,

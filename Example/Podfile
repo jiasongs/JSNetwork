@@ -8,6 +8,7 @@ target 'JSNetworkExample' do
   # 网络请求
   pod 'JSNetwork', :path => '..'
   pod 'JSNetwork/RequestForAFNetworking', :path => '..'
+  pod 'JSNetwork/RequestForAlamofire', :path => '..'
   pod 'JSNetwork/Response', :path => '..'
   pod 'JSNetwork/Cache', :path => '..'
   pod 'JSNetwork/Plugins', :path => '..'

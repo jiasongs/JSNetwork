@@ -29,6 +29,12 @@ Pod::Spec.new do |s|
     ss.dependency "AFNetworking", "~> 4.0"
   end
 
+  s.subspec "RequestForAlamofire" do |ss|
+    ss.source_files = "Sources/Request/Alamofire/*.{swift,h,m}"
+    ss.dependency "JSNetwork/Request"
+    ss.dependency "Alamofire", "~> 5.0"
+  end
+
   s.subspec "Response" do |ss|
     ss.source_files = "Sources/Response/*.{h,m}"
     ss.dependency "JSNetwork/Core"

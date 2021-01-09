@@ -33,7 +33,7 @@ NSString *const JSNetworkRequestTaskPrefix = @"request_task";
              uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
-    NSAssert(NO, @"子类继承使用");
+    NSAssert(NO, @"需子类继承使用, 此方法不作任何事情");
 }
 
 - (NSURLSessionTask *)requestTask {
