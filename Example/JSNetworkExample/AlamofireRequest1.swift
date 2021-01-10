@@ -17,7 +17,7 @@ import JSNetwork
                                  multipartFormData multipartFormDataBlock: @escaping (Any) -> Void,
                                  uploadProgress uploadProgressBlock: @escaping (Progress) -> Void,
                                  downloadProgress downloadProgressBlock: @escaping (Progress) -> Void,
-                                 didCreateURLRequest didCreateURLRequestBlock: @escaping (NSMutableURLRequest) -> Void,
+                                 didCreateURLRequest didCreateURLRequestBlock: @escaping (URLRequest) -> Void,
                                  didCreateTask didCreateTaskBlock: @escaping (URLSessionTask) -> Void,
                                  didCompleted didCompletedBlock: @escaping (Any?, Error?) -> Void) {
         guard let url: URL = URL(string: config.requestUrl()) else {
@@ -36,15 +36,19 @@ import JSNetwork
             break
         }
         let requestBody: Dictionary<String, Any>? = config.requestBody?() as? Dictionary
-        
-//        AF.request(url, method: method, parameters: nil, encoding: URLEncodedFormParameterEncoder.default as! ParameterEncoding, headers: nil, interceptor: nil, requestModifier: nil).response(queue: JSNetworkConfig.shared().completionQueue, responseSerializer: self.buildResponseSerializer<StringResponseSerializer>(with: config)) { (response: AFDataResponse) in
-//
-//        }
-        //        AF.request(url).response(queue: JSNetworkConfig.shared().completionQueue, responseSerializer: self.buildResponseSerializer(with: config)) { (response: AFDataResponse<JSONResponseSerializer>) in
-        //
-        //        }
-        
-        //        AF.request("https://httpbin.org/get")
+        let responseSerializer = self.buildResponseSerializer(with: config)
+        let monitor = ClosureEventMonitor()
+        monitor.requestDidCreateURLRequest = { (requst: Request, urlRequest: URLRequest) in
+            didCreateURLRequestBlock(urlRequest)
+        }
+        monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
+            didCreateTaskBlock(task)
+            self?.task = task
+        }
+        let session = Session(eventMonitors: [monitor])
+        session.request(url).responseJSON { (r) in
+            
+        }
     }
     
     open override func requestTask() -> URLSessionTask {
@@ -63,16 +67,12 @@ import JSNetwork
 
 extension AlamofireRequest1 {
     
-    func buildResponseSerializer<Serializer: ResponseSerializer>(with config: JSNetworkRequestConfigProtocol) -> Serializer {
-        switch config.responseSerializerType?() {
-        case .HTTP:
-            return StringResponseSerializer() as! Serializer
-        case .xmlParser:
-            break
-        default:
-            return JSONResponseSerializer() as! Serializer
+    func buildResponseSerializer(with config: JSNetworkRequestConfigProtocol) -> Any {
+        let type: JSResponseSerializerType = config.responseSerializerType?() ?? .JSON
+        if type == .HTTP {
+            return StringResponseSerializer()
         }
-        return JSONResponseSerializer() as! Serializer
+        return JSONResponseSerializer()
     }
     
 }

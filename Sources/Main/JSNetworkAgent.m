@@ -103,21 +103,22 @@
         if (weakInterface.downloadProgress) {
             weakInterface.downloadProgress(downloadProgress);
         }
-    } didCreateURLRequest:^(NSMutableURLRequest *urlRequest) {
-        NSAssert([urlRequest isKindOfClass:NSMutableURLRequest.class], @"必须为 NSMutableURLRequest或其子类");
-        /// 二进制的数据
-        if (weakInterface.processedConfig.requestSerializerType == JSRequestSerializerTypeBinaryData) {
-            id body = weakInterface.processedConfig.requestBody;
-            if ([body isKindOfClass:NSData.class]) {
-                [urlRequest setHTTPBody:body];
-            } else {
-                NSAssert(NO, @"必须为 NSData类型");
+    } didCreateURLRequest:^(__kindof NSURLRequest *urlRequest) {
+        if ([urlRequest isKindOfClass:NSMutableURLRequest.class]) {
+            /// 二进制的数据
+            if (weakInterface.processedConfig.requestSerializerType == JSRequestSerializerTypeBinaryData) {
+                id body = weakInterface.processedConfig.requestBody;
+                if ([body isKindOfClass:NSData.class]) {
+                    [urlRequest setHTTPBody:body];
+                } else {
+                    NSAssert(NO, @"必须为 NSData类型");
+                }
+            }
+            if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
+                [weakInterface.processedConfig constructingMultipartURLRequest:urlRequest];
             }
         }
-        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
-            [weakInterface.processedConfig constructingMultipartURLRequest:urlRequest];
-        }
-    } didCreateTask:^(NSURLSessionTask *task) {
+    } didCreateTask:^(__kindof NSURLSessionTask *task) {
         [weakSelf performRequestOperation:weakInterface.request];
     } didCompleted:^(id responseObject, NSError *error) {
         @autoreleasepool {
