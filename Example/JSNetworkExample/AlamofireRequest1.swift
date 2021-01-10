@@ -42,13 +42,11 @@ import JSNetwork
             didCreateURLRequestBlock(urlRequest)
         }
         monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
-            didCreateTaskBlock(task)
             self?.task = task
+            didCreateTaskBlock(task)
         }
         let session = Session(eventMonitors: [monitor])
-        session.request(url).responseJSON { (r) in
-            
-        }
+        let dataRequest = session.request(url)
     }
     
     open override func requestTask() -> URLSessionTask {
