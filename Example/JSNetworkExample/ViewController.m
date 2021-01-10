@@ -32,7 +32,7 @@
         JSNetworkConfig.sharedConfig.debugLogEnabled = true;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
         JSNetworkConfig.sharedConfig.buildNetworkRequest = ^__kindof NSOperation<JSNetworkRequestProtocol> *(id<JSNetworkInterfaceProtocol> interface) {
-            return [[AlamofireRequest1 alloc] init];
+//            return [[AlamofireRequest1 alloc] init];
             return [[JSNetworkAFRequest alloc] init];
         };
         JSNetworkConfig.sharedConfig.buildNetworkResponse = ^id<JSNetworkResponseProtocol>(id<JSNetworkInterfaceProtocol> interface) {

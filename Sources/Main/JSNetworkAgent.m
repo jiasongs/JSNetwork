@@ -95,6 +95,14 @@
         if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartFormData:)]) {
             [weakInterface.processedConfig constructingMultipartFormData:formData];
         }
+    } uploadProgress:^(NSProgress *uploadProgress) {
+        if (weakInterface.uploadProgress) {
+            weakInterface.uploadProgress(uploadProgress);
+        }
+    } downloadProgress:^(NSProgress *downloadProgress) {
+        if (weakInterface.downloadProgress) {
+            weakInterface.downloadProgress(downloadProgress);
+        }
     } didCreateURLRequest:^(NSMutableURLRequest *urlRequest) {
         NSAssert([urlRequest isKindOfClass:NSMutableURLRequest.class], @"必须为 NSMutableURLRequest或其子类");
         /// 二进制的数据
@@ -111,15 +119,7 @@
         }
     } didCreateTask:^(NSURLSessionTask *task) {
         [weakSelf performRequestOperation:weakInterface.request];
-    } uploadProgress:^(NSProgress *uploadProgress) {
-        if (weakInterface.uploadProgress) {
-            weakInterface.uploadProgress(uploadProgress);
-        }
-    } downloadProgress:^(NSProgress *downloadProgress) {
-        if (weakInterface.downloadProgress) {
-            weakInterface.downloadProgress(downloadProgress);
-        }
-    } didCompleted:^(id _Nullable responseObject, NSError *_Nullable error) {
+    } didCompleted:^(id responseObject, NSError *error) {
         @autoreleasepool {
             [weakSelf processingResponseForInterface:weakInterface
                                   withResponseObject:responseObject

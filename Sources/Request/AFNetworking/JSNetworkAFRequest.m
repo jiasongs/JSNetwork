@@ -24,10 +24,10 @@
 
 - (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
           multipartFormData:(void(^)(id formData))multipartFormDataBlock
-        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
-              didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTaskBlock
              uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
+        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
+              didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTaskBlock
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
     self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
     BOOL useFormData = NO;

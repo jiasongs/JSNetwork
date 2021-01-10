@@ -103,10 +103,6 @@
 #import <JSNetwork/JSNetworkAFRequest.h>
 #endif
 
-#if __has_include(<JSNetwork/JSNetwork-Swift.h>)
-#import <JSNetwork/JSNetwork-Swift.h>
-#endif
-
 #else
 
 #if __has_include("JSNetworkMacroVariable.h")
@@ -199,10 +195,6 @@
 
 #if __has_include("JSNetworkAFRequest.h")
 #import "JSNetworkAFRequest.h"
-#endif
-
-#if __has_include("JSNetwork-Swift.h")
-#import "JSNetwork-Swift.h"
 #endif
 
 #endif /* __has_include */

@@ -13,13 +13,13 @@ import JSNetwork
     
     private var task: URLSessionTask!
     
-    public override func buildTask(withConfig config: JSNetworkRequestConfigProtocol,
-                                   multipartFormData multipartFormDataBlock: @escaping (Any) -> Void,
-                                   didCreateURLRequest didCreateURLRequestBlock: @escaping (NSMutableURLRequest) -> Void,
-                                   didCreateTask didCreateTaskBlock: @escaping (URLSessionTask) -> Void,
-                                   uploadProgress uploadProgressBlock: @escaping (Progress) -> Void,
-                                   downloadProgress downloadProgressBlock: @escaping (Progress) -> Void,
-                                   didCompleted didCompletedBlock: @escaping (Any?, Error?) -> Void) {
+    open override func buildTask(withConfig config: JSNetworkRequestConfigProtocol,
+                                 multipartFormData multipartFormDataBlock: @escaping (Any) -> Void,
+                                 uploadProgress uploadProgressBlock: @escaping (Progress) -> Void,
+                                 downloadProgress downloadProgressBlock: @escaping (Progress) -> Void,
+                                 didCreateURLRequest didCreateURLRequestBlock: @escaping (NSMutableURLRequest) -> Void,
+                                 didCreateTask didCreateTaskBlock: @escaping (URLSessionTask) -> Void,
+                                 didCompleted didCompletedBlock: @escaping (Any?, Error?) -> Void) {
         guard let url: URL = URL(string: config.requestUrl()) else {
             let error: NSError = NSError(domain: "com.alamofire.error", code: 404, userInfo: nil)
             return didCompletedBlock(nil, error)
@@ -37,24 +37,14 @@ import JSNetwork
         }
         let requestBody: Dictionary<String, Any>? = config.requestBody?() as? Dictionary
         
-//        var responseSerializer
-//        switch config.responseSerializerType?() {
-//        case .HTTP:
-//            responseSerializer = StringResponseSerializer()
-//            break
-//        case .xmlParser:
-//            break
-//        default:
-//            responseSerializer = JSONResponseSerializer()
-//            break
-//        }
-//        AF.request(url).response<Serializer: ResponseSerializer>(queue: JSNetworkConfig.shared().completionQueue, responseSerializer: JSONResponseSerializer()) { (AFDataResponse<ResponseSerializer>) in
+//        AF.request(url, method: method, parameters: nil, encoding: URLEncodedFormParameterEncoder.default as! ParameterEncoding, headers: nil, interceptor: nil, requestModifier: nil).response(queue: JSNetworkConfig.shared().completionQueue, responseSerializer: self.buildResponseSerializer<StringResponseSerializer>(with: config)) { (response: AFDataResponse) in
 //
 //        }
-   
-//        AF.request("https://httpbin.org/get")
+        //        AF.request(url).response(queue: JSNetworkConfig.shared().completionQueue, responseSerializer: self.buildResponseSerializer(with: config)) { (response: AFDataResponse<JSONResponseSerializer>) in
+        //
+        //        }
         
-
+        //        AF.request("https://httpbin.org/get")
     }
     
     open override func requestTask() -> URLSessionTask {
@@ -67,6 +57,22 @@ import JSNetwork
     
     deinit {
         
+    }
+    
+}
+
+extension AlamofireRequest1 {
+    
+    func buildResponseSerializer<Serializer: ResponseSerializer>(with config: JSNetworkRequestConfigProtocol) -> Serializer {
+        switch config.responseSerializerType?() {
+        case .HTTP:
+            return StringResponseSerializer() as! Serializer
+        case .xmlParser:
+            break
+        default:
+            return JSONResponseSerializer() as! Serializer
+        }
+        return JSONResponseSerializer() as! Serializer
     }
     
 }
