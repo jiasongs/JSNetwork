@@ -44,12 +44,24 @@ NSString *const JSNetworkRequestTaskPrefix = @"request_task";
 
 - (void)start {
     NSParameterAssert(self.requestTask);
-    [self.requestTask resume];
+    if (self.requestTask.state == NSURLSessionTaskStateSuspended) {
+        [self.requestTask resume];
+    } else {
+        JSNetworkLog(@"警告: requestTask已经在运行中!");
+    }
 }
 
 - (void)cancel {
     NSParameterAssert(self.requestTask);
-    [self.requestTask cancel];
+    // Resume to ensure metrics are gathered.
+    if (self.requestTask.state == NSURLSessionTaskStateSuspended) {
+        [self.requestTask resume];
+    }
+    if (self.requestTask.state == NSURLSessionTaskStateRunning) {
+        [self.requestTask cancel];
+    } else {
+        JSNetworkLog(@"警告: requestTask未在运行中, 不能取消!");
+    }
 }
 
 - (BOOL)isCancelled {

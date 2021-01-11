@@ -32,8 +32,8 @@
         JSNetworkConfig.sharedConfig.debugLogEnabled = true;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
         JSNetworkConfig.sharedConfig.buildNetworkRequest = ^__kindof NSOperation<JSNetworkRequestProtocol> *(id<JSNetworkInterfaceProtocol> interface) {
-            return [[AlamofireRequest1 alloc] init];
-//            return [[JSNetworkAFRequest alloc] init];
+//            return [[AlamofireRequest1 alloc] init];
+            return [[JSNetworkAFRequest alloc] init];
         };
         JSNetworkConfig.sharedConfig.buildNetworkResponse = ^id<JSNetworkResponseProtocol>(id<JSNetworkInterfaceProtocol> interface) {
             return [[NetworkResponse alloc] init];
@@ -84,7 +84,7 @@
         test();
     });
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//        test();
+        test();
     });
 }
 

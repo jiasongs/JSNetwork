@@ -11,6 +11,7 @@ import JSNetwork
 
 @objc open class AlamofireRequest1: JSNetworkRequest {
     
+    private var dataRequest: DataRequest!
     private var task: URLSessionTask!
     
     open override func buildTask(withConfig config: JSNetworkRequestConfigProtocol,
@@ -45,16 +46,20 @@ import JSNetwork
             self?.task = task
             didCreateTaskBlock(task)
         }
-        let session = Session(eventMonitors: [monitor])
-        let dataRequest = session.request(url)
+        let session = Session(startRequestsImmediately: false, eventMonitors: [monitor])
+        self.dataRequest = session.request(url)
     }
     
     open override func requestTask() -> URLSessionTask {
         return self.task
     }
     
+    override open func start() -> Void {
+        self.dataRequest.resume()
+    }
+    
     override open func cancel() -> Void {
-        
+        self.dataRequest.cancel()
     }
     
     deinit {
