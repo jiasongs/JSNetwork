@@ -47,7 +47,7 @@
         _interfaceRecord = [NSMutableDictionary dictionary];
         _lock = OS_UNFAIR_LOCK_INIT;
         _requestQueue = [[NSOperationQueue alloc] init];
-        _requestQueue.name = @"com.jsnetwork.agent.queue";
+        _requestQueue.name = @"com.jsnetwork.agent.operationqueue";
     }
     return self;
 }
@@ -56,7 +56,7 @@
 
 - (void)performRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
-    /// 首先添加interface, 防止释放
+    /// 首先需要添加interface
     [self performInterface:interface forTaskIdentifier:interface.taskIdentifier];
     /// 处理请求
     [self toggleWillStartWithInterface:interface];
