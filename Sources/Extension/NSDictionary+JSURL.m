@@ -11,7 +11,7 @@
 
 @implementation NSDictionary (JSURL)
 
-+ (NSDictionary *)js_URLQueryDictionaryWithURLString:(NSString *)URLString {
++ (NSDictionary<NSString *, NSString *> *)js_URLQueryDictionaryWithURLString:(NSString *)URLString {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     if (URLString && URLString.length > 0) {
         NSString *totalUrl = [URLString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];

@@ -18,6 +18,11 @@ Pod::Spec.new do |s|
     ss.source_files = "Sources/Main/*.{h,m}", "Sources/Extension/*.{h,m}", "Sources/Protocol/*.{h,m}", "Sources/Tool/*.{h,m}"
   end
 
+  s.subspec "ExtensionForSwift" do |ss|
+    ss.source_files = "Sources/Extension/Swift/*.{swift,h,m}"
+    ss.dependency "JSNetwork/Core"
+  end
+
   s.subspec "Request" do |ss|
     ss.source_files = "Sources/Request/*.{h,m}"
     ss.dependency "JSNetwork/Core"

@@ -9,3 +9,13 @@
 import UIKit
 import JSNetwork
 
+class SwfitViewController : UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        var zz: Dictionary<String, Any> = ["key": "value"]
+        
+        zz.jn.urlQueryString()
+    }
+    
+}
