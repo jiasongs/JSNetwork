@@ -10,33 +10,35 @@ import Foundation
 public extension NetworkWrapper where Base == String {
     
     func urlLastPath() -> String? {
-        let nsString = NSString(string: self.base)
-        return nsString.js_URLLastPath()
+        return self.nsString.js_URLLastPath()
     }
-
+    
     func urlByDeletingLastPath() -> String {
-        let nsString = NSString(string: self.base)
-        return nsString.js_URLByDeletingLastPath()
+        return self.nsString.js_URLByDeletingLastPath()
     }
-
+    
     func urlPaths() -> Array<String> {
-        let nsString = NSString(string: self.base)
-        return nsString.js_URLPaths()
+        return self.nsString.js_URLPaths()
     }
-
+    
     func urlStringByAppending(paths: Array<String> = [], parameters: Dictionary<String, Any> = [:]) -> String {
-        let nsString = NSString(string: self.base)
-        return nsString.js_URLStringByAppending(paths: paths, parameters: parameters)
+        return self.nsString.js_URLStringByAppending(paths: paths, parameters: parameters)
     }
     
     func urlStringEncode(usingEncoding encoding: String.Encoding = .utf8) -> String {
-        let nsString = NSString(string: self.base)
-        return nsString.js_URLStringEncode(usingEncoding: encoding.rawValue)
+        return self.nsString.js_URLStringEncode(usingEncoding: encoding.rawValue)
     }
     
     func urlStringDecode(usingEncoding encoding: String.Encoding = .utf8) -> String {
-        let nsString = NSString(string: self.base)
-        return nsString.js_URLStringDecode(usingEncoding: encoding.rawValue)
+        return self.nsString.js_URLStringDecode(usingEncoding: encoding.rawValue)
+    }
+    
+}
+
+fileprivate extension NetworkWrapper where Base == String {
+    
+    var nsString: NSString {
+        return self.base as NSString
     }
     
 }

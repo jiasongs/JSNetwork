@@ -10,13 +10,19 @@ import Foundation
 public extension NetworkWrapper where Base == Dictionary<String, Any> {
     
     static func urlQueryDictionary(with urlString: String) -> Dictionary<String, Any> {
-        let dictionary = NSDictionary.js_urlQueryDictionary(URLString: urlString)
-        return dictionary
+        return NSDictionary.js_urlQueryDictionary(URLString: urlString)
     }
     
     func urlQueryString() -> String {
-        let nsDictionary: NSDictionary = NSDictionary(dictionary: self.base)
-        return nsDictionary.js_URLQueryString()
+        return self.nsDictionary.js_URLQueryString()
+    }
+    
+}
+
+fileprivate extension NetworkWrapper where Base == Dictionary<String, Any> {
+    
+    var nsDictionary: NSDictionary {
+        return self.base as NSDictionary
     }
     
 }
