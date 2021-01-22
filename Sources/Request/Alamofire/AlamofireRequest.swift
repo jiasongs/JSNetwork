@@ -5,8 +5,7 @@
 //  Created by jiasong on 2021/1/9.
 //
 
-import UIKit
-import Alamofire
+import Foundation
 
 @objc open class AlamofireRequest: JSNetworkRequest {
     

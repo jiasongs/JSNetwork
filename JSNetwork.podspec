@@ -8,14 +8,13 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "10.0"
   s.swift_versions = ["4.2", "5.0"]
   s.source       = { :git => "https://github.com/jiasongs/JSNetwork.git", :tag => "#{s.version}" }
-  s.source_files = "Sources/*.{h,m}"
-  s.frameworks   = 'Foundation'
+  s.frameworks   = "Foundation"
   s.license      = "MIT"
   s.requires_arc = true
 
   s.default_subspec = "Core"
   s.subspec "Core" do |ss|
-    ss.source_files = "Sources/Main/*.{h,m}", "Sources/Extension/*.{h,m}", "Sources/Protocol/*.{h,m}", "Sources/Tool/*.{h,m}"
+    ss.source_files = ["Sources/*.{h,m}", "Sources/Main/*.{h,m}", "Sources/Extension/*.{h,m}", "Sources/Protocol/*.{h,m}", "Sources/Tool/*.{h,m}", "Sources/Cache/*.{h,m}"]
   end
 
   s.subspec "ExtensionForSwift" do |ss|
@@ -42,11 +41,6 @@ Pod::Spec.new do |s|
 
   s.subspec "Response" do |ss|
     ss.source_files = "Sources/Response/*.{h,m}"
-    ss.dependency "JSNetwork/Core"
-  end
-
-  s.subspec "Cache" do |ss|
-    ss.source_files = "Sources/Cache/*.{h,m}"
     ss.dependency "JSNetwork/Core"
   end
 

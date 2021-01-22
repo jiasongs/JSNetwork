@@ -1,21 +1,19 @@
-platform :ios, '10.0'
+platform :ios, "10.0"
 use_frameworks! :linkage => :static
 
-source 'https://github.com/CocoaPods/Specs.git'
+source "https://github.com/CocoaPods/Specs.git"
 
-target 'JSNetworkExample' do
+target "JSNetworkExample" do
   
   # 网络请求
-  pod 'JSNetwork', :path => '..'
-  pod 'JSNetwork/ExtensionForSwift', :path => '..'
-  pod 'JSNetwork/RequestForAFNetworking', :path => '..'
-  pod 'JSNetwork/RequestForAlamofire', :path => '..'
-  pod 'JSNetwork/Response', :path => '..'
-  pod 'JSNetwork/Cache', :path => '..'
-  pod 'JSNetwork/Plugins', :path => '..'
-  pod 'AFNetworking', '~> 4.0'
-  pod 'QMUIKit'
-  pod 'PromisesObjC'
-  pod 'MLeaksFinder'
+  pod "JSNetwork", :path => ".."
+  pod "JSNetwork/ExtensionForSwift", :path => ".."
+  pod "JSNetwork/RequestForAFNetworking", :path => ".."
+  pod "JSNetwork/RequestForAlamofire", :path => ".."
+  pod "JSNetwork/Response", :path => ".."
+  pod "JSNetwork/Plugins", :path => ".."
+  pod "QMUIKit"
+  pod "PromisesObjC"
+  pod "MLeaksFinder"
   
 end
