@@ -10,7 +10,6 @@ target "JSNetworkExample" do
   pod "JSNetwork/ExtensionForSwift", :path => ".."
   pod "JSNetwork/RequestForAFNetworking", :path => ".."
   pod "JSNetwork/RequestForAlamofire", :path => ".."
-  pod "JSNetwork/Response", :path => ".."
   pod "JSNetwork/Plugins", :path => ".."
   pod "QMUIKit"
   pod "PromisesObjC"

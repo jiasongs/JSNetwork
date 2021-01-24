@@ -14,7 +14,8 @@ Pod::Spec.new do |s|
 
   s.default_subspec = "Core"
   s.subspec "Core" do |ss|
-    ss.source_files = ["Sources/*.{h,m}", "Sources/Main/*.{h,m}", "Sources/Extension/*.{h,m}", "Sources/Protocol/*.{h,m}", "Sources/Tool/*.{h,m}", "Sources/Cache/*.{h,m}"]
+    ss.source_files = "Sources/**/*.{swift,h,m}"
+    ss.exclude_files = ["Sources/Extension/Swift", "Sources/Request/AFNetworking", "Sources/Request/Alamofire", "Sources/Plugins"]
   end
 
   s.subspec "ExtensionForSwift" do |ss|
@@ -22,31 +23,20 @@ Pod::Spec.new do |s|
     ss.dependency "JSNetwork/Core"
   end
 
-  s.subspec "Request" do |ss|
-    ss.source_files = "Sources/Request/*.{h,m}"
-    ss.dependency "JSNetwork/Core"
-  end
-
   s.subspec "RequestForAFNetworking" do |ss|
-    ss.source_files = "Sources/Request/AFNetworking/*.{h,m}"
-    ss.dependency "JSNetwork/Request"
+    ss.source_files = "Sources/Request/AFNetworking/*.{swift,h,m}"
+    ss.dependency "JSNetwork/Core"
     ss.dependency "AFNetworking", "~> 4.0"
   end
 
   s.subspec "RequestForAlamofire" do |ss|
     ss.source_files = "Sources/Request/Alamofire/*.{swift,h,m}"
-    ss.dependency "JSNetwork/Request"
+    ss.dependency "JSNetwork/Core"
     ss.dependency "Alamofire", "~> 5.0"
   end
 
-  s.subspec "Response" do |ss|
-    ss.source_files = "Sources/Response/*.{h,m}"
-    ss.dependency "JSNetwork/Core"
-  end
-
   s.subspec "Plugins" do |ss|
-    ss.source_files = "Sources/Plugins/*.{h,m}"
+    ss.source_files = "Sources/Plugins/*.{swift,h,m}"
     ss.dependency "JSNetwork/Core"
   end
-
 end
