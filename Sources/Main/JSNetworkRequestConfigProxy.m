@@ -63,7 +63,7 @@
             [plugins addObjectsFromArray:config.requestPlugins];
         }
         _finalPlugins = plugins;
-        if (config.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
+        if ([config respondsToSelector:@selector(cachePolicy)] && config.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
             /// 缓存的文件名
             if ([config respondsToSelector:@selector(cacheFileName)]) {
                 _finalCacheFileName = config.cacheFileName;
