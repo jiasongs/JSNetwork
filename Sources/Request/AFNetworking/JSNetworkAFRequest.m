@@ -31,12 +31,13 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
+        sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
     });
     /// JSNetwork处理线程
     sessionManager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     /// 构建request、task
     BOOL useFormData = NO;
-    AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
+    __kindof AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
     switch (config.requestSerializerType) {
         case JSRequestSerializerTypeHTTP:
         case JSRequestSerializerTypeBinaryData:
@@ -49,7 +50,7 @@
         default:
             break;
     }
-    AFHTTPResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializer];
+    __kindof AFHTTPResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializer];
     switch (config.responseSerializerType) {
         case JSResponseSerializerTypeHTTP:
             responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -66,9 +67,10 @@
     }
     requestSerializer.timeoutInterval = config.requestTimeoutInterval;
     responseSerializer.acceptableStatusCodes = config.responseAcceptableStatusCodes;
-    if (config.responseAcceptableContentTypes) {
+    NSSet<NSString *> *responseAcceptableContentTypes = config.responseAcceptableContentTypes;
+    if (responseAcceptableContentTypes) {
         NSMutableSet *contentTypes = [NSMutableSet setWithSet:responseSerializer.acceptableContentTypes];
-        [contentTypes unionSet:config.responseAcceptableContentTypes];
+        [contentTypes unionSet:responseAcceptableContentTypes];
         responseSerializer.acceptableContentTypes = contentTypes.copy;
     }
     NSString *method = @"";
@@ -115,14 +117,22 @@
         _requestTask = [sessionManager uploadTaskWithStreamedRequest:request
                                                             progress:uploadProgressBlock
                                                    completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-            didCompletedBlock(responseObject, error);
+            [self handleResponseWithSerializer:responseSerializer
+                                   URLResponse:response
+                                responseObject:responseObject
+                                         error:error
+                                  didCompleted:didCompletedBlock];
         }];
     } else {
         _requestTask = [sessionManager dataTaskWithRequest:request
                                             uploadProgress:uploadProgressBlock
                                           downloadProgress:downloadProgressBlock
                                          completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-            didCompletedBlock(responseObject, error);
+            [self handleResponseWithSerializer:responseSerializer
+                                   URLResponse:response
+                                responseObject:responseObject
+                                         error:error
+                                  didCompleted:didCompletedBlock];
         }];
     }
     /// Task创建完成时需要调用
@@ -131,6 +141,25 @@
 
 - (NSURLSessionTask *)requestTask {
     return _requestTask;
+}
+
+#pragma mark - Handle Response
+
+- (void)handleResponseWithSerializer:(__kindof AFHTTPResponseSerializer *)responseSerializer
+                         URLResponse:(NSURLResponse *)URLResponse
+                      responseObject:(id)responseObject
+                               error:(NSError *)error
+                        didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
+    id resultObject = nil;
+    NSError *resultError = nil;
+    NSError *serializationError = nil;
+    resultObject = [responseSerializer responseObjectForResponse:URLResponse data:responseObject error:&serializationError];
+    if (error) {
+        resultError = error;
+    } else if (serializationError) {
+        resultError = serializationError;
+    }
+    didCompletedBlock(resultObject, resultError);
 }
 
 @end
