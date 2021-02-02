@@ -6,11 +6,7 @@ source "https://github.com/CocoaPods/Specs.git"
 target "JSNetworkExample" do
   
   # 网络请求
-  pod "JSNetwork", :path => ".."
-  pod "JSNetwork/ExtensionForSwift", :path => ".."
-  pod "JSNetwork/RequestForAFNetworking", :path => ".."
-  pod "JSNetwork/RequestForAlamofire", :path => ".."
-  pod "JSNetwork/Plugins", :path => ".."
+  pod "JSNetwork", :path => "..", :subspecs => ['ExtensionForSwift', 'RequestForAFNetworking', 'RequestForAlamofire', 'Plugins']
   pod "QMUIKit"
   pod "PromisesObjC"
   pod "MLeaksFinder"
