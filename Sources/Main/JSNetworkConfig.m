@@ -10,7 +10,7 @@
 
 @interface JSNetworkConfig () {
     NSMutableArray *_plugins;
-    NSDictionary *_URLGlobalArguments;
+    NSDictionary *_URLParameters;
     NSDictionary *_HTTPHeaderFields;
 }
 
@@ -33,7 +33,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _URLGlobalArguments = @{};
+        _URLParameters = @{};
         _HTTPHeaderFields = @{};
         _plugins = [NSMutableArray array];
         _baseURL = @"";
@@ -47,18 +47,18 @@
     return self;
 }
 
-- (void)addURLGlobalArguments:(NSDictionary *)arguments {
-    NSParameterAssert(arguments);
+- (void)addURLParameters:(NSDictionary *)parameters {
+    NSParameterAssert(parameters);
     @synchronized (self) {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_URLGlobalArguments];
-        [dictionary addEntriesFromDictionary:arguments];
-        _URLGlobalArguments = dictionary;
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_URLParameters];
+        [dictionary addEntriesFromDictionary:parameters];
+        _URLParameters = dictionary;
     }
 }
 
-- (void)clearURLGlobalArguments {
+- (void)clearURLParameters {
     @synchronized (self) {
-        _URLGlobalArguments = @{};
+        _URLParameters = @{};
     }
 }
 
@@ -90,8 +90,8 @@
     }
 }
 
-- (NSDictionary *)URLGlobalArguments {
-    return _URLGlobalArguments;
+- (NSDictionary *)URLParameters {
+    return _URLParameters;
 }
 
 - (NSArray *)plugins {

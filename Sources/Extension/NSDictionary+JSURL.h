@@ -13,20 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSDictionary (JSURL)
 
 /**
- *  @brief  将url参数转换成NSDictionary
- *
- *  @param URLString url或者参数
- *
- *  @return NSDictionary
- */
-+ (NSDictionary<NSString *, NSString *> *)js_URLQueryDictionaryWithURLString:(NSString *)URLString NS_SWIFT_NAME(js_urlQueryDictionary(URLString:));
-
-/**
- *  @brief  将NSDictionary转换成url 参数字符串
+ *  @brief  将Dictionary转换成已编码的参数字符串
  *
  *  @return url 参数字符串
  */
-- (NSString *)js_URLQueryString;
+- (NSString *)js_URLParameterString;
 
 @end
 

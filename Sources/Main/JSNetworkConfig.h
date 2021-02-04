@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 全局URL参数的字典，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary *URLGlobalArguments;
+@property (nonatomic, strong, readonly) NSDictionary *URLParameters;
 /**
  *  @brief 全局超时时间
  */
@@ -80,13 +80,13 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 添加一个用于URL全局参数的字典
  *
- *  @param arguments 字典
+ *  @param parameters 字典
  */
-- (void)addURLGlobalArguments:(NSDictionary *)arguments;
+- (void)addURLParameters:(NSDictionary *)parameters;
 /**
  *  @brief 清除全部URL全局参数的字典
  */
-- (void)clearURLGlobalArguments;
+- (void)clearURLParameters;
 
 /**
  *  @brief 添加一个HTTPHeaderField

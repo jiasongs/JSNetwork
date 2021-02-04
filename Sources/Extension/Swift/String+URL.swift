@@ -21,6 +21,10 @@ public extension NetworkWrapper where Base == String {
         return self.nsString.js_URLPaths()
     }
     
+    func urlParameters() -> [String: String] {
+        return self.nsString.js_URLParameters()
+    }
+    
     func urlStringByAppending(paths: Array<String> = [], parameters: Dictionary<String, Any> = [:]) -> String {
         return self.nsString.js_URLStringByAppending(paths: paths, parameters: parameters)
     }

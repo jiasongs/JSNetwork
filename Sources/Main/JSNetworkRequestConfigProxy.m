@@ -14,7 +14,7 @@
 @interface _JSNetworkRequestConfigPrivate : NSObject <JSNetworkRequestConfigProtocol>
 
 @property (nonatomic, strong) NSString *finalURL;
-@property (nonatomic, strong) NSDictionary *finalArguments;
+@property (nonatomic, strong) NSDictionary *finalParameters;
 @property (nonatomic, strong) NSDictionary *finalHTTPHeaderFields;
 @property (nonatomic, strong) NSArray *finalPlugins;
 @property (nonatomic, strong) NSString *finalCacheFileName;
@@ -26,17 +26,17 @@
 - (instancetype)initWithConfig:(id<JSNetworkRequestConfigProtocol>)config {
     if (self = [super init]) {
         /// URL拼接参数
-        NSDictionary *URLGlobalArguments = JSNetworkConfig.sharedConfig.URLGlobalArguments ? : @{};
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:URLGlobalArguments];
-        if ([config respondsToSelector:@selector(ignoreGlobalArgumentForKeys)]) {
-            [config.ignoreGlobalArgumentForKeys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+        NSDictionary *URLParameters = JSNetworkConfig.sharedConfig.URLParameters ? : @{};
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:URLParameters];
+        if ([config respondsToSelector:@selector(ignoreGlobalParameterForKeys)]) {
+            [config.ignoreGlobalParameterForKeys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
                 if ([parameters.allKeys containsObject:key]) {
                     [parameters removeObjectForKey:key];
                 }
             }];
         }
-        if ([config respondsToSelector:@selector(requestArgument)]) {
-            [parameters addEntriesFromDictionary:config.requestArgument ? : @{}];
+        if ([config respondsToSelector:@selector(requestParameters)]) {
+            [parameters addEntriesFromDictionary:config.requestParameters ? : @{}];
         }
         NSString *baseUrl = [config respondsToSelector:@selector(baseUrl)] ? config.baseUrl : self.baseUrl;
         NSString *url = [NSString stringWithFormat:@"%@%@", baseUrl, config.requestUrl];
@@ -49,7 +49,7 @@
             finalURL = [config requestUrlFilterWithURLString:finalURL];
         }
         _finalURL = finalURL;
-        _finalArguments = [NSDictionary js_URLQueryDictionaryWithURLString:_finalURL];
+        _finalParameters = _finalURL.js_URLParameters;
         /// 拼接请求头
         NSDictionary *HTTPHeaderFields = JSNetworkConfig.sharedConfig.HTTPHeaderFields ? : @{};
         NSMutableDictionary *headers = [NSMutableDictionary dictionaryWithDictionary:HTTPHeaderFields];
@@ -90,8 +90,8 @@
     return nil;
 }
 
-- (nullable NSDictionary *)requestArgument {
-    return _finalArguments;
+- (nullable NSDictionary *)requestParameters {
+    return _finalParameters;
 }
 
 - (nullable id)requestBody {
@@ -170,7 +170,7 @@
     if (self) {
         _privateConfig = [[_JSNetworkRequestConfigPrivate alloc] initWithConfig:target];
         _ignoreForwardingSelectors = @[NSStringFromSelector(@selector(requestUrl)),
-                                       NSStringFromSelector(@selector(requestArgument)),
+                                       NSStringFromSelector(@selector(requestParameters)),
                                        NSStringFromSelector(@selector(requestHeaderFieldValueDictionary)),
                                        NSStringFromSelector(@selector(requestPlugins)),
                                        NSStringFromSelector(@selector(cacheFileName))];
@@ -206,11 +206,11 @@
 
 - (NSString *)description {
     JSRequestCachePolicy cachePolicy = (JSRequestCachePolicy)[self performSelector:@selector(cachePolicy)];
-    return [NSString stringWithFormat:@"%@: <%p>\n{\nURL: %@\nArguments: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
+    return [NSString stringWithFormat:@"%@: <%p>\n{\nURL: %@\nParameters: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
             NSStringFromClass([self.target class]),
             self.target,
             [self performSelector:@selector(requestUrl)],
-            [self performSelector:@selector(requestArgument)],
+            [self performSelector:@selector(requestParameters)],
             [self performSelector:@selector(requestBody)],
             [self performSelector:@selector(requestHeaderFieldValueDictionary)],
             @((JSRequestMethod)[self performSelector:@selector(requestMethod)]),

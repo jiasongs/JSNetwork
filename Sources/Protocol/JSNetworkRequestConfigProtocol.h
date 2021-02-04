@@ -65,12 +65,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief URL中需要拼接的参数, 注意：会拼接上全局的设置
  */
-- (nullable NSDictionary *)requestArgument;
+- (nullable NSDictionary *)requestParameters;
 
 /**
  *  @brief 需要忽略的全局设置的参数
  */
-- (nullable NSArray<NSString *> *)ignoreGlobalArgumentForKeys;
+- (nullable NSArray<NSString *> *)ignoreGlobalParameterForKeys;
 
 /**
  *  @brief request中的HTTPBody

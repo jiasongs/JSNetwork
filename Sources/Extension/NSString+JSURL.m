@@ -35,6 +35,22 @@
     return paths;
 }
 
+- (NSDictionary<NSString *, NSString *> *)js_URLParameters {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    if (self && self.length > 0) {
+        NSString *totalUrl = [self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSRange range = [totalUrl rangeOfString:@"^[a-zA-Z0-9]+?://" options:NSRegularExpressionSearch];
+        if (range.location == NSNotFound || range.location != 0) {
+            totalUrl = [@"https://host" stringByAppendingFormat:@"?%@", totalUrl];
+        }
+        NSURLComponents *components = [NSURLComponents componentsWithString:totalUrl];
+        [components.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem *queryItem, NSUInteger idx, BOOL *stop) {
+            [dict setObject:queryItem.value ? : @"" forKey:queryItem.name];
+        }];
+    }
+    return dict.copy;
+}
+
 #pragma mark - 拼接URL
 
 - (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters {
@@ -58,10 +74,10 @@
     }
     NSString *newPath = encodePaths.count > 0 ? [path stringByAppendingFormat:@"/%@", [encodePaths componentsJoinedByString:@"/"]] : path;
     NSString *newUrl = [NSString stringWithFormat:@"%@%@%@%@", scheme, host, port, newPath];
-    NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:[NSDictionary js_URLQueryDictionaryWithURLString:query]];
+    NSMutableDictionary *newParameters = [NSMutableDictionary dictionaryWithDictionary:query.js_URLParameters];
     [newParameters addEntriesFromDictionary:parameters ? : @{}];
     if (newParameters.count > 0) {
-        newUrl = [newUrl stringByAppendingFormat:@"?%@", newParameters.js_URLQueryString];
+        newUrl = [newUrl stringByAppendingFormat:@"?%@", newParameters.js_URLParameterString];
     }
     return newUrl;
 }

@@ -15,7 +15,7 @@ class SwfitViewController : UIViewController {
         super.viewDidLoad()
         var zz: Dictionary<String, Any> = ["key": "value"]
         
-        zz.jn.urlQueryString()
+        zz.jn.urlParameterString()
     }
     
 }

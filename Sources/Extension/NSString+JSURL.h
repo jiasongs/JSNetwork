@@ -33,6 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<NSString *> *)js_URLPaths;
 
 /**
+ *  @brief  获取URL的参数
+ *
+ *  @return NSDictionary 参数
+ */
+- (NSDictionary<NSString *, NSString *> *)js_URLParameters;
+
+/**
  *  @brief  将一段URL字符串拼接上参数
  *
  *  @return NSString 拼接后的字符串

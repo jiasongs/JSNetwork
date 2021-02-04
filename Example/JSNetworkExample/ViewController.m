@@ -41,8 +41,8 @@
         JSNetworkConfig.sharedConfig.buildNetworkDiskCache = ^id<JSNetworkDiskCacheProtocol>(id<JSNetworkInterfaceProtocol> interface) {
             return [[JSNetworkDiskCache alloc] init];
         };
-        [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"app": @"1.0.0", @"token": @"token"}];
-        [JSNetworkConfig.sharedConfig addURLGlobalArguments:@{@"other": @"other"}];
+        [JSNetworkConfig.sharedConfig addURLParameters:@{@"app": @"1.0.0", @"token": @"token"}];
+        [JSNetworkConfig.sharedConfig addURLParameters:@{@"other": @"other"}];
         [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
         [JSNetworkConfig.sharedConfig addPlugin:JSNetworkLoggerPlugin.new];
     });

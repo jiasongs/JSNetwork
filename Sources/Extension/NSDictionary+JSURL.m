@@ -11,25 +11,9 @@
 
 @implementation NSDictionary (JSURL)
 
-+ (NSDictionary<NSString *, NSString *> *)js_URLQueryDictionaryWithURLString:(NSString *)URLString {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if (URLString && URLString.length > 0) {
-        NSString *totalUrl = [URLString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        NSRange range = [totalUrl rangeOfString:@"^[a-zA-Z0-9]+?://" options:NSRegularExpressionSearch];
-        if (range.location == NSNotFound || range.location != 0) {
-            totalUrl = [@"https://host" stringByAppendingFormat:@"?%@", totalUrl];
-        }
-        NSURLComponents *components = [NSURLComponents componentsWithString:totalUrl];
-        [components.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem *queryItem, NSUInteger idx, BOOL *stop) {
-            [dict setObject:queryItem.value ? : @"" forKey:queryItem.name];
-        }];
-    }
-    return dict.copy;
-}
-
-- (NSString *)js_URLQueryString {
+- (NSString *)js_URLParameterString {
     NSMutableString *string = [NSMutableString string];
-    for (NSString *key in [self allKeys]) {
+    for (NSString *key in self.allKeys) {
         if (string.length > 0) {
             [string appendString:@"&"];
         }
