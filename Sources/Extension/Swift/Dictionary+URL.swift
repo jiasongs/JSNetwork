@@ -7,18 +7,21 @@
 
 import Foundation
 
-public extension NetworkWrapper where Base == Dictionary<String, Any> {
+public protocol DictionaryType {}
+extension Dictionary: DictionaryType {}
+
+public extension NetworkWrapper where Base : DictionaryType {
     
     func urlParameterString() -> String {
-        return self.nsDictionary.js_URLParameterString()
+        return self.nsDictionary?.js_URLParameterString() ?? ""
     }
     
 }
 
-fileprivate extension NetworkWrapper where Base == Dictionary<String, Any> {
+fileprivate extension NetworkWrapper where Base : DictionaryType {
     
-    var nsDictionary: NSDictionary {
-        return self.base as NSDictionary
+    var nsDictionary: NSDictionary? {
+        return self.base as? NSDictionary
     }
     
 }
