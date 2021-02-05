@@ -50,7 +50,7 @@
 - (void)addURLParameters:(NSDictionary<NSString *, id> *)parameters {
     NSParameterAssert(parameters);
     @synchronized (self) {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_URLParameters];
+        NSMutableDictionary<NSString *, id> *dictionary = [NSMutableDictionary dictionaryWithDictionary:_URLParameters];
         [dictionary addEntriesFromDictionary:parameters];
         _URLParameters = dictionary;
     }
@@ -78,7 +78,7 @@
 - (void)addHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields {
     NSParameterAssert(headerFields);
     @synchronized (self) {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_HTTPHeaderFields];
+        NSMutableDictionary<NSString *, NSString *> *dictionary = [NSMutableDictionary dictionaryWithDictionary:_HTTPHeaderFields];
         [dictionary addEntriesFromDictionary:headerFields];
         _HTTPHeaderFields = headerFields;
     }

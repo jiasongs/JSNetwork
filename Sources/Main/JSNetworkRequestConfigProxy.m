@@ -27,7 +27,7 @@
     if (self = [super init]) {
         /// URL拼接参数
         NSDictionary<NSString *, id> *URLParameters = JSNetworkConfig.sharedConfig.URLParameters ? : @{};
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:URLParameters];
+        NSMutableDictionary<NSString *, id> *parameters = [NSMutableDictionary dictionaryWithDictionary:URLParameters];
         if ([config respondsToSelector:@selector(ignoreGlobalParameterForKeys)]) {
             [config.ignoreGlobalParameterForKeys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
                 if ([parameters.allKeys containsObject:key]) {
@@ -52,7 +52,7 @@
         _finalParameters = _finalURL.js_URLParameters;
         /// 拼接请求头
         NSDictionary<NSString *, NSString *> *HTTPHeaderFields = JSNetworkConfig.sharedConfig.HTTPHeaderFields ? : @{};
-        NSMutableDictionary *headers = [NSMutableDictionary dictionaryWithDictionary:HTTPHeaderFields];
+        NSMutableDictionary<NSString *, NSString *> *headers = [NSMutableDictionary dictionaryWithDictionary:HTTPHeaderFields];
         if ([config respondsToSelector:@selector(requestHeaderFieldValueDictionary)]) {
             [headers addEntriesFromDictionary:config.requestHeaderFieldValueDictionary ? : @{}];
         }
