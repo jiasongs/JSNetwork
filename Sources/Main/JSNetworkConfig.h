@@ -36,11 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 全局请求头，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary *HTTPHeaderFields;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *HTTPHeaderFields;
 /**
  *  @brief 全局URL参数的字典，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary *URLParameters;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, id> *URLParameters;
 /**
  *  @brief 全局超时时间
  */
@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 全局的插件
  */
-@property (nonatomic, assign, readonly) NSArray *plugins;
+@property (nonatomic, assign, readonly) NSArray<id<JSNetworkPluginProtocol>> *plugins;
 
 /**
  *  @brief 单例
@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param parameters 字典
  */
-- (void)addURLParameters:(NSDictionary *)parameters;
+- (void)addURLParameters:(NSDictionary<NSString *, id> *)parameters;
 /**
  *  @brief 清除全部URL全局参数的字典
  */
@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param headerFields headerFields
  */
-- (void)addHTTPHeaderFields:(NSDictionary *)headerFields;
+- (void)addHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields;
 /**
  *  @brief 清除HTTPHeaderField
  */

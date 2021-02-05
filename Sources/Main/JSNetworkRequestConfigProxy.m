@@ -14,9 +14,9 @@
 @interface _JSNetworkRequestConfigPrivate : NSObject <JSNetworkRequestConfigProtocol>
 
 @property (nonatomic, strong) NSString *finalURL;
-@property (nonatomic, strong) NSDictionary *finalParameters;
-@property (nonatomic, strong) NSDictionary *finalHTTPHeaderFields;
-@property (nonatomic, strong) NSArray *finalPlugins;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *finalParameters;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *finalHTTPHeaderFields;
+@property (nonatomic, strong) NSArray<id<JSNetworkPluginProtocol>> *finalPlugins;
 @property (nonatomic, strong) NSString *finalCacheFileName;
 
 @end
@@ -26,7 +26,7 @@
 - (instancetype)initWithConfig:(id<JSNetworkRequestConfigProtocol>)config {
     if (self = [super init]) {
         /// URL拼接参数
-        NSDictionary *URLParameters = JSNetworkConfig.sharedConfig.URLParameters ? : @{};
+        NSDictionary<NSString *, id> *URLParameters = JSNetworkConfig.sharedConfig.URLParameters ? : @{};
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:URLParameters];
         if ([config respondsToSelector:@selector(ignoreGlobalParameterForKeys)]) {
             [config.ignoreGlobalParameterForKeys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -51,7 +51,7 @@
         _finalURL = finalURL;
         _finalParameters = _finalURL.js_URLParameters;
         /// 拼接请求头
-        NSDictionary *HTTPHeaderFields = JSNetworkConfig.sharedConfig.HTTPHeaderFields ? : @{};
+        NSDictionary<NSString *, NSString *> *HTTPHeaderFields = JSNetworkConfig.sharedConfig.HTTPHeaderFields ? : @{};
         NSMutableDictionary *headers = [NSMutableDictionary dictionaryWithDictionary:HTTPHeaderFields];
         if ([config respondsToSelector:@selector(requestHeaderFieldValueDictionary)]) {
             [headers addEntriesFromDictionary:config.requestHeaderFieldValueDictionary ? : @{}];
@@ -90,7 +90,7 @@
     return nil;
 }
 
-- (nullable NSDictionary *)requestParameters {
+- (nullable NSDictionary<NSString *, id> *)requestParameters {
     return _finalParameters;
 }
 

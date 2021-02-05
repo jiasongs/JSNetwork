@@ -79,7 +79,7 @@
     if (interface) {
         [self cancelRequestForInterface:interface];
     } else {
-        JSNetworkLog(@"检查 interface 是否被提前释放");
+        JSNetworkLog(@"检查 interface 是否已被释放");
     }
 }
 

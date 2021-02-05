@@ -10,8 +10,8 @@
 
 @interface JSNetworkConfig () {
     NSMutableArray *_plugins;
-    NSDictionary *_URLParameters;
-    NSDictionary *_HTTPHeaderFields;
+    NSDictionary<NSString *, id> *_URLParameters;
+    NSDictionary<NSString *, NSString *> *_HTTPHeaderFields;
 }
 
 @end
@@ -41,13 +41,13 @@
         _requestMaxConcurrentCount = -1;
         _processingQueue = dispatch_queue_create("com.jsnetwork.agent.processing", DISPATCH_QUEUE_CONCURRENT);
         _completionQueue = dispatch_get_main_queue();
-        NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSArray<NSString *> *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         _cacheDirectoryPath = [NSString stringWithFormat:@"%@/com.jsnetwork.cache", cachePaths.firstObject];
     }
     return self;
 }
 
-- (void)addURLParameters:(NSDictionary *)parameters {
+- (void)addURLParameters:(NSDictionary<NSString *, id> *)parameters {
     NSParameterAssert(parameters);
     @synchronized (self) {
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_URLParameters];
@@ -75,7 +75,7 @@
     }
 }
 
-- (void)addHTTPHeaderFields:(NSDictionary *)headerFields {
+- (void)addHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields {
     NSParameterAssert(headerFields);
     @synchronized (self) {
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:_HTTPHeaderFields];
@@ -90,15 +90,15 @@
     }
 }
 
-- (NSDictionary *)URLParameters {
+- (NSDictionary<NSString *, id> *)URLParameters {
     return _URLParameters;
 }
 
-- (NSArray *)plugins {
+- (NSArray<id<JSNetworkPluginProtocol>> *)plugins {
     return _plugins.copy;
 }
 
-- (NSDictionary *)HTTPHeaderFields {
+- (NSDictionary<NSString *, NSString *> *)HTTPHeaderFields {
     return _HTTPHeaderFields;
 }
 

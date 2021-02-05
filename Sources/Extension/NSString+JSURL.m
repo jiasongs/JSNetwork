@@ -53,7 +53,7 @@
 
 #pragma mark - 拼接URL
 
-- (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters {
+- (NSString *)js_URLStringByAppendingParameters:(NSDictionary<NSString *, id> *)parameters {
     return [self js_URLStringByAppendingPaths:@[] parameters:parameters];
 }
 
@@ -61,7 +61,7 @@
     return [self js_URLStringByAppendingPaths:paths parameters:@{}];
 }
 
-- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary *)parameters {
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary<NSString *, id> *)parameters {
     NSURLComponents *components = [NSURLComponents componentsWithString:[self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     NSString *scheme = components.scheme ? [NSString stringWithFormat:@"%@://", components.scheme] : @"";
     NSString *host = components.host ? : @"";

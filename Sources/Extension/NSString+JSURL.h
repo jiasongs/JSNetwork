@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return NSString 拼接后的字符串
  */
-- (NSString *)js_URLStringByAppendingParameters:(NSDictionary *)parameters NS_SWIFT_NAME(js_URLStringByAppending(parameters:));
+- (NSString *)js_URLStringByAppendingParameters:(NSDictionary<NSString *, id> *)parameters NS_SWIFT_NAME(js_URLStringByAppending(parameters:));
 
 /**
  *  @brief  将一段URL字符串拼接上路径
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return NSString 拼接后的字符串
  */
-- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary *)parameters NS_SWIFT_NAME(js_URLStringByAppending(paths:parameters:));
+- (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary<NSString *, id> *)parameters NS_SWIFT_NAME(js_URLStringByAppending(paths:parameters:));
 
 /**
  *  @brief  将一段字符串进行URL编码

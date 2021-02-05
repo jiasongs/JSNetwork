@@ -38,7 +38,7 @@
     return self.originalResponse.statusCode;
 }
 
-- (NSDictionary *)responseHeaders {
+- (NSDictionary<NSString *, NSString *> *)responseHeaders {
     return self.originalResponse.allHeaderFields;
 }
 

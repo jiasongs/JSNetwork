@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 响应头
  */
-- (nullable NSDictionary *)responseHeaders;
+- (nullable NSDictionary<NSString *, NSString *> *)responseHeaders;
 
 /**
  *  @brief 响应数据
