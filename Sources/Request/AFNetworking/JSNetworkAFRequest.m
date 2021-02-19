@@ -110,6 +110,9 @@
                                             parameters:requestBody
                                                  error:nil];
     }
+    if (!request) {
+        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:config.requestUrl]];
+    }
     /// URLRequest创建完成时需要调用
     didCreateURLRequestBlock(request);
     /// 构建task
