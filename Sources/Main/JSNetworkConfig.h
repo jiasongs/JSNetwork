@@ -32,15 +32,15 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 全局BaseURL
  */
-@property (nonatomic, strong) NSString *baseURL;
+@property (nonatomic, strong) NSString *baseURL NS_SWIFT_NAME(baseUrl);
 /**
  *  @brief 全局请求头，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *HTTPHeaderFields;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *HTTPHeaderFields NS_SWIFT_NAME(httpHeaderFields);
 /**
  *  @brief 全局URL参数的字典，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary<NSString *, id> *URLParameters;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, id> *URLParameters NS_SWIFT_NAME(urlParameters);
 /**
  *  @brief 全局超时时间
  */
@@ -82,22 +82,22 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param parameters 字典
  */
-- (void)addURLParameters:(NSDictionary<NSString *, id> *)parameters;
+- (void)addURLParameters:(NSDictionary<NSString *, id> *)parameters NS_SWIFT_NAME(addUrlParameters(_:));
 /**
  *  @brief 清除全部URL全局参数的字典
  */
-- (void)clearURLParameters;
+- (void)clearURLParameters NS_SWIFT_NAME(clearUrlParameters());
 
 /**
  *  @brief 添加一个HTTPHeaderField
  *
  *  @param headerFields headerFields
  */
-- (void)addHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields;
+- (void)addHTTPHeaderFields:(NSDictionary<NSString *, NSString *> *)headerFields NS_SWIFT_NAME(addHttpHeaderFields(_:));
 /**
  *  @brief 清除HTTPHeaderField
  */
-- (void)clearHTTPHeaderFields;
+- (void)clearHTTPHeaderFields NS_SWIFT_NAME(clearHttpHeaderFields());
 
 /**
  *  @brief 添加一个插件

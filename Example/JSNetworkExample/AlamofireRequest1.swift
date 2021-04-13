@@ -27,10 +27,10 @@ import JSNetwork
         }
         var method: HTTPMethod = .get
         switch config.requestMethod?() {
-        case .GET:
+        case .get:
             method = .get
             break
-        case .POST:
+        case .post:
             method = .post
             break
         default:
@@ -71,8 +71,8 @@ import JSNetwork
 extension AlamofireRequest1 {
     
     func buildResponseSerializer(with config: JSNetworkRequestConfigProtocol) -> Any {
-        let type: JSResponseSerializerType = config.responseSerializerType?() ?? .JSON
-        if type == .HTTP {
+        let type: JSResponseSerializerType = config.responseSerializerType?() ?? .json
+        if type == .http {
             return StringResponseSerializer()
         }
         return JSONResponseSerializer()

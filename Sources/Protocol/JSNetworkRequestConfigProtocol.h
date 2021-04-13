@@ -13,19 +13,19 @@
 @protocol JSNetworkDiskCacheProtocol;
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
-    JSRequestMethodGET,
-    JSRequestMethodPOST,
-    JSRequestMethodHEAD,
-    JSRequestMethodPUT,
-    JSRequestMethodDELETE,
-    JSRequestMethodPATCH,
+    JSRequestMethodGET     NS_SWIFT_NAME(get),
+    JSRequestMethodPOST    NS_SWIFT_NAME(post),
+    JSRequestMethodHEAD    NS_SWIFT_NAME(head),
+    JSRequestMethodPUT     NS_SWIFT_NAME(put),
+    JSRequestMethodDELETE  NS_SWIFT_NAME(delete),
+    JSRequestMethodPATCH   NS_SWIFT_NAME(patch),
 };
 
 typedef NS_ENUM(NSInteger, JSRequestSerializerType) {
-    JSRequestSerializerTypeJSON,        /// POST时Body转换为JSON字符串传输
-    JSRequestSerializerTypeHTTP,        /// POST时Body转换为自定义的字符串传输
-    JSRequestSerializerTypeFormData,    /// POST时Body转换为FormData传输
-    JSRequestSerializerTypeBinaryData,  /// POST时Body转换为二进制数据传输
+    JSRequestSerializerTypeJSON        NS_SWIFT_NAME(json),  /// POST时Body转换为JSON字符串传输
+    JSRequestSerializerTypeHTTP        NS_SWIFT_NAME(http),  /// POST时Body转换为自定义的字符串传输
+    JSRequestSerializerTypeFormData    NS_SWIFT_NAME(formData),  /// POST时Body转换为FormData传输
+    JSRequestSerializerTypeBinaryData  NS_SWIFT_NAME(binaryData),  /// POST时Body转换为二进制数据传输
 };
 
 typedef NS_ENUM(NSInteger, JSRequestCachePolicy) {
@@ -34,9 +34,9 @@ typedef NS_ENUM(NSInteger, JSRequestCachePolicy) {
 };
 
 typedef NS_ENUM(NSInteger, JSResponseSerializerType) {
-    JSResponseSerializerTypeJSON,
-    JSResponseSerializerTypeHTTP,
-    JSResponseSerializerTypeXMLParser,
+    JSResponseSerializerTypeJSON       NS_SWIFT_NAME(json),
+    JSResponseSerializerTypeHTTP       NS_SWIFT_NAME(http),
+    JSResponseSerializerTypeXMLParser  NS_SWIFT_NAME(xmlParser),
 };
 
 NS_ASSUME_NONNULL_BEGIN
@@ -109,7 +109,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 返回新的URL
  */
-- (NSString *)requestUrlFilterWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestUrlFilter(URLString:));
+- (NSString *)requestUrlFilterWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestUrlFilter(_:));
 
 /**
  *  @brief 拼接FormData

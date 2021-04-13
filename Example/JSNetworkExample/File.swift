@@ -20,7 +20,7 @@ class SwfitViewController : UIViewController {
         let str = "123"
         let par: [String: String] = str.jn.urlParameters()
         
-        (str as NSString).js_URLStringByAppending(parameters: zz)
+        (str as NSString).js_urlStringByAppending(parameters: zz)
     }
     
 }
