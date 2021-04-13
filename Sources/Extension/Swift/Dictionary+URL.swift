@@ -13,7 +13,7 @@ extension Dictionary: DictionaryType {}
 public extension NetworkWrapper where Base : DictionaryType {
     
     func urlParameterString() -> String {
-        return self.nsDictionary?.js_URLParameterString() ?? ""
+        return self.nsDictionary?.js_urlParameterString() ?? ""
     }
     
 }

@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return url 参数字符串
  */
-- (NSString *)js_URLParameterString;
+- (NSString *)js_URLParameterString NS_SWIFT_NAME(js_urlParameterString());
 
 @end
 
