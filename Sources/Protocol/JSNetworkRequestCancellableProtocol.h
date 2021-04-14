@@ -16,10 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 
 /**
- *  @brief 接口
- *  @warn  务必使用弱引用!
+ *  @brief 任务id
  */
-@property (nullable, nonatomic, weak, readonly) id<JSNetworkInterfaceProtocol> interface;
+@property (nonatomic, copy, readonly) NSString *taskIdentifier;
 /**
  *  @brief 请求是否已经取消
  */
@@ -28,9 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 初始化
  *
- *  @param interface JSNetworkInterfaceProtocol
+ *  @param taskIdentifier 任务id
  */
-- (instancetype)initWithInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(init(interface:));
+- (instancetype)initWithTaskIdentifier:(NSString *)taskIdentifier NS_SWIFT_NAME(init(taskIdentifier:));
 
 /**
  *  @brief 取消请求

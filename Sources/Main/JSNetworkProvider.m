@@ -154,7 +154,7 @@
         }
     }];
     /// 4、设置取消实例
-    JSNetworkRequestCancellable *cancellable = [[JSNetworkRequestCancellable alloc] initWithInterface:interface];
+    JSNetworkRequestCancellable *cancellable = [[JSNetworkRequestCancellable alloc] initWithTaskIdentifier:interface.taskIdentifier];
     /// 绑定任务id
     if (target) {
         @synchronized (self) {

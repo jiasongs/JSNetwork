@@ -11,31 +11,32 @@
 
 @interface JSNetworkRequestCancellable ()
 
-@property (nonatomic, weak, readwrite) id<JSNetworkInterfaceProtocol> interface;
+@property (nonatomic, copy, readwrite) NSString *taskIdentifier;
 
 @end
 
 @implementation JSNetworkRequestCancellable
-@synthesize interface = _interface;
+@synthesize taskIdentifier = _taskIdentifier;
 
-- (instancetype)initWithInterface:(nonnull id<JSNetworkInterfaceProtocol>)interface {
+- (instancetype)initWithTaskIdentifier:(NSString *)taskIdentifier {
     if (self = [super init]) {
-        NSParameterAssert(interface);
-        _interface = interface;
+        NSParameterAssert(taskIdentifier);
+        _taskIdentifier = taskIdentifier;
     }
     return self;
 }
 
 - (BOOL)isCancelled {
-    if (self.interface) {
-        return self.interface.request.isCancelled;
+    if (self.taskIdentifier.length > 0) {
+        id<JSNetworkInterfaceProtocol> interface = [JSNetworkAgent.sharedAgent interfaceForTaskIdentifier:self.taskIdentifier];
+        return interface.request.isCancelled;
     }
     return NO;
 }
 
 - (void)cancel {
-    if (self.interface && !self.isCancelled) {
-        [JSNetworkAgent.sharedAgent cancelRequestForTaskIdentifier:self.interface.taskIdentifier];
+    if (self.taskIdentifier.length > 0 && !self.isCancelled) {
+        [JSNetworkAgent.sharedAgent cancelRequestForTaskIdentifier:self.taskIdentifier];
     }
 }
 
