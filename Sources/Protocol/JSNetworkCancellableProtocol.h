@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 @protocol JSNetworkInterfaceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -16,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  @brief 接口
- *  @note  务必使用弱引用!
+ *  @warn  务必使用弱引用!
  */
 @property (nullable, nonatomic, weak, readonly) id<JSNetworkInterfaceProtocol> interface;
 /**

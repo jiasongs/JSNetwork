@@ -11,11 +11,11 @@
 
 @implementation UploadImageAPI
 
-- (NSString *)baseUrl {
+- (NSString *)baseURLString {
     return @"https://cnodejs.org/api/v1";
 }
 
-- (NSString *)requestUrl {
+- (NSString *)requestURLString {
   return @"/topics?test=1111&zzz={中文}";
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import "JSNetworkLoggerPlugin.h"
-#import <JSNetworkInterfaceProtocol.h>
+#import "JSNetworkInterfaceProtocol.h"
 
 @implementation JSNetworkLoggerPlugin
 

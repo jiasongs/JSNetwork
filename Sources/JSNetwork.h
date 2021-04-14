@@ -43,6 +43,10 @@
 #import <JSNetwork/JSNetworkDiskCacheMetadataProtocol.h>
 #endif
 
+#if __has_include(<JSNetwork/JSNetworkCancellableProtocol.h>)
+#import <JSNetwork/JSNetworkCancellableProtocol.h>
+#endif
+
 #if __has_include(<JSNetwork/JSNetworkProvider.h>)
 #import <JSNetwork/JSNetworkProvider.h>
 #endif
@@ -61,6 +65,10 @@
 
 #if __has_include(<JSNetwork/JSNetworkRequest.h>)
 #import <JSNetwork/JSNetworkRequest.h>
+#endif
+
+#if __has_include(<JSNetwork/JSNetworkCancellable.h>)
+#import <JSNetwork/JSNetworkCancellable.h>
 #endif
 
 #if __has_include(<JSNetwork/JSNetworkResponse.h>)
@@ -137,6 +145,10 @@
 #import "JSNetworkDiskCacheMetadataProtocol.h"
 #endif
 
+#if __has_include("JSNetworkCancellableProtocol.h")
+#import "JSNetworkCancellableProtocol.h"
+#endif
+
 #if __has_include("JSNetworkProvider.h")
 #import "JSNetworkProvider.h"
 #endif
@@ -155,6 +167,10 @@
 
 #if __has_include("JSNetworkRequest.h")
 #import "JSNetworkRequest.h"
+#endif
+
+#if __has_include("JSNetworkCancellable.h")
+#import "JSNetworkCancellable.h"
 #endif
 
 #if __has_include("JSNetworkResponse.h")

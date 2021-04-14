@@ -15,7 +15,7 @@
 
 @implementation BaseAPI
 
-- (NSString *)requestUrl {
+- (NSString *)requestURLString {
     return @"";
 }
 

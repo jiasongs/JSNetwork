@@ -38,15 +38,15 @@
         if ([config respondsToSelector:@selector(requestParameters)]) {
             [parameters addEntriesFromDictionary:config.requestParameters ? : @{}];
         }
-        NSString *baseUrl = [config respondsToSelector:@selector(baseUrl)] ? config.baseUrl : self.baseUrl;
-        NSString *url = [NSString stringWithFormat:@"%@%@", baseUrl, config.requestUrl];
+        NSString *baseUrl = [config respondsToSelector:@selector(baseURLString)] ? config.baseURLString : self.baseURLString;
+        NSString *url = [NSString stringWithFormat:@"%@%@", baseUrl, config.requestURLString];
         NSArray<NSString *> *paths = @[];
         if ([config respondsToSelector:@selector(requestPaths)]) {
             paths = config.requestPaths ? : @[];
         }
         NSString *finalURL = [url js_URLStringByAppendingPaths:paths parameters:parameters];
-        if ([config respondsToSelector:@selector(requestUrlFilterWithURLString:)]) {
-            finalURL = [config requestUrlFilterWithURLString:finalURL];
+        if ([config respondsToSelector:@selector(requestURLStringFilterWithURLString:)]) {
+            finalURL = [config requestURLStringFilterWithURLString:finalURL];
         }
         _finalURL = finalURL;
         _finalParameters = _finalURL.js_URLParameters;
@@ -78,12 +78,12 @@
 
 #pragma mark - JSNetworkRequestConfigProtocol
 
-- (NSString *)requestUrl {
+- (NSString *)requestURLString {
     return _finalURL;
 }
 
-- (NSString *)baseUrl {
-    return JSNetworkConfig.sharedConfig.baseURL;
+- (NSString *)baseURLString {
+    return JSNetworkConfig.sharedConfig.baseURLString;
 }
 
 - (nullable NSArray<NSString *> *)requestPaths {
@@ -169,7 +169,7 @@
     self = [super initWithTarget:target];
     if (self) {
         _privateConfig = [[_JSNetworkRequestConfigPrivate alloc] initWithConfig:target];
-        _ignoreForwardingSelectors = @[NSStringFromSelector(@selector(requestUrl)),
+        _ignoreForwardingSelectors = @[NSStringFromSelector(@selector(requestURLString)),
                                        NSStringFromSelector(@selector(requestParameters)),
                                        NSStringFromSelector(@selector(requestHeaderFieldValueDictionary)),
                                        NSStringFromSelector(@selector(requestPlugins)),
@@ -209,7 +209,7 @@
     return [NSString stringWithFormat:@"%@: <%p>\n{\nURL: %@\nParameters: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
             NSStringFromClass([self.target class]),
             self.target,
-            [self performSelector:@selector(requestUrl)],
+            [self performSelector:@selector(requestURLString)],
             [self performSelector:@selector(requestParameters)],
             [self performSelector:@selector(requestBody)],
             [self performSelector:@selector(requestHeaderFieldValueDictionary)],

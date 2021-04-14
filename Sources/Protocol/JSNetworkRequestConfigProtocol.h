@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 @protocol JSNetworkPluginProtocol;
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkResponseProtocol;
@@ -46,16 +47,16 @@ NS_ASSUME_NONNULL_BEGIN
 @required
 
 /**
- *  @brief URL
+ *  @brief URLString
  */
-- (NSString *)requestUrl;
+- (NSString *)requestURLString NS_SWIFT_NAME(requestUrlString());
 
 @optional
 
 /**
- *  @brief BaseURL
+ *  @brief BaseURLString
  */
-- (NSString *)baseUrl;
+- (NSString *)baseURLString NS_SWIFT_NAME(baseUrlString());
 
 /**
  *  @brief URL中需要拼接的路径
@@ -109,7 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return 返回新的URL
  */
-- (NSString *)requestUrlFilterWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestUrlFilter(_:));
+- (NSString *)requestURLStringFilterWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestUrlFilter(_:));
 
 /**
  *  @brief 拼接FormData

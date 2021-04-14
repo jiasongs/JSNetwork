@@ -23,7 +23,7 @@
     return api;
 }
 
-- (NSString *)baseUrl {
+- (NSString *)baseURLString {
     if (self.downloadURLType == DownloadURLTypeTypeCnblogs) {
         return @"https://files-cdn.cnblogs.com";
     }

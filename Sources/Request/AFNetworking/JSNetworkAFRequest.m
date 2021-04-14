@@ -100,18 +100,18 @@
     NSMutableURLRequest *request = nil;
     if (useFormData) {
         request = [requestSerializer multipartFormRequestWithMethod:method
-                                                          URLString:[[NSURL URLWithString:config.requestUrl] absoluteString]
+                                                          URLString:[[NSURL URLWithString:config.requestURLString] absoluteString]
                                                          parameters:requestBody
                                           constructingBodyWithBlock:multipartFormDataBlock
                                                               error:nil];
     } else {
         request = [requestSerializer requestWithMethod:method
-                                             URLString:[[NSURL URLWithString:config.requestUrl] absoluteString]
+                                             URLString:[[NSURL URLWithString:config.requestURLString] absoluteString]
                                             parameters:requestBody
                                                  error:nil];
     }
     if (!request) {
-        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:config.requestUrl]];
+        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:config.requestURLString]];
     }
     /// URLRequest创建完成时需要调用
     didCreateURLRequestBlock(request);

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkInterfaceProtocol;

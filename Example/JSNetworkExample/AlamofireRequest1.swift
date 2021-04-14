@@ -21,33 +21,33 @@ import JSNetwork
                                  didCreateURLRequest didCreateURLRequestBlock: @escaping (URLRequest) -> Void,
                                  didCreateTask didCreateTaskBlock: @escaping (URLSessionTask) -> Void,
                                  didCompleted didCompletedBlock: @escaping (Any?, Error?) -> Void) {
-        guard let url: URL = URL(string: config.requestUrl()) else {
-            let error: NSError = NSError(domain: "com.alamofire.error", code: 404, userInfo: nil)
-            return didCompletedBlock(nil, error)
-        }
-        var method: HTTPMethod = .get
-        switch config.requestMethod?() {
-        case .get:
-            method = .get
-            break
-        case .post:
-            method = .post
-            break
-        default:
-            break
-        }
-        let requestBody: Dictionary<String, Any>? = config.requestBody?() as? Dictionary
-        let responseSerializer = self.buildResponseSerializer(with: config)
-        let monitor = ClosureEventMonitor()
-        monitor.requestDidCreateURLRequest = { (requst: Request, urlRequest: URLRequest) in
-            didCreateURLRequestBlock(urlRequest)
-        }
-        monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
-            self?.task = task
-            didCreateTaskBlock(task)
-        }
-        let session = Session(startRequestsImmediately: false, eventMonitors: [monitor])
-        self.dataRequest = session.request(url)
+//        guard let url: URL = URL(string: config.requestUrlString()) else {
+//            let error: NSError = NSError(domain: "com.alamofire.error", code: 404, userInfo: nil)
+//            return didCompletedBlock(nil, error)
+//        }
+//        var method: HTTPMethod = .get
+//        switch config.requestMethod?() {
+//        case .get:
+//            method = .get
+//            break
+//        case .post:
+//            method = .post
+//            break
+//        default:
+//            break
+//        }
+//        let requestBody: Dictionary<String, Any>? = config.requestBody?() as? Dictionary
+//        let responseSerializer = self.buildResponseSerializer(with: config)
+//        let monitor = ClosureEventMonitor()
+//        monitor.requestDidCreateURLRequest = { (requst: Request, urlRequest: URLRequest) in
+//            didCreateURLRequestBlock(urlRequest)
+//        }
+//        monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
+//            self?.task = task
+//            didCreateTaskBlock(task)
+//        }
+//        let session = Session(startRequestsImmediately: false, eventMonitors: [monitor])
+//        self.dataRequest = session.request(url)
     }
     
     open override func requestTask() -> URLSessionTask {

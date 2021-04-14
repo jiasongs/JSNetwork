@@ -13,8 +13,6 @@
 #import "JSNetworkUtil.h"
 #import "JSNetworkMutexLock.h"
 
-NSString *const JSNetworkRequestTaskPrefix = @"request_task";
-
 @interface JSNetworkRequest ()
 
 @property (nonatomic, weak) id<JSNetworkInterfaceProtocol> privateInterfaceProxy;

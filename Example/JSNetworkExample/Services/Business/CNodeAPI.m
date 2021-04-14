@@ -12,11 +12,11 @@
 
 @implementation CNodeAPI
 
-- (NSString *)baseUrl {
+- (NSString *)baseURLString {
     return @"https://cnodejs.org/api";
 }
 
-- (NSString *)requestUrl {
+- (NSString *)requestURLString {
   return @"/v1?test=1111&zzz={中文}&xxxx=%E4%B8%AD%E6%96%87&yyyy=+86-186&mmm=@69875456";
 }
 

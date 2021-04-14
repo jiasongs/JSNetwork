@@ -141,29 +141,28 @@
                                      downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
                                             completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     NSParameterAssert(config);
-    /// 生成接口
+    /// 1、生成接口
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
-    /// 设置Progress
+    /// 2、设置Progress
     [interface requestUploadProgress:uploadProgress];
     [interface requestDownloadProgress:downloadProgress];
-    /// 设置回调
+    /// 3、设置回调
     __weak __typeof(target) weakTarget = target;
     [interface requestCompletedBlock:^(id<JSNetworkInterfaceProtocol> aInterface) {
         if (completed) {
             completed(weakTarget, aInterface);
         }
     }];
-    /// 处理接口
-    [JSNetworkAgent.sharedAgent performRequestForInterface:interface];
-    /// 取消
+    /// 4、设置取消实例
     JSNetworkCancellable *cancellable = [[JSNetworkCancellable alloc] initWithInterface:interface];
     /// 绑定任务id
     if (target) {
-        /// 务必保证线程安全
         @synchronized (self) {
             [target js_bindCancellable:cancellable];
         }
     }
+    /// 5、最终提交到网络处理中心
+    [JSNetworkAgent.sharedAgent performRequestForInterface:interface];
     return cancellable;
 }
 

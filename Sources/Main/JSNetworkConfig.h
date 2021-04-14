@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 @protocol JSNetworkPluginProtocol;
 @protocol JSNetworkResponseProtocol;
 @protocol JSNetworkRequestProtocol;
@@ -32,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 全局BaseURL
  */
-@property (nonatomic, strong) NSString *baseURL NS_SWIFT_NAME(baseUrl);
+@property (nonatomic, strong) NSString *baseURLString NS_SWIFT_NAME(baseUrlString);
 /**
  *  @brief 全局请求头，只读
  */

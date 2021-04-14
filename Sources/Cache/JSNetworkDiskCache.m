@@ -12,8 +12,6 @@
 #import "JSNetworkMutexLock.h"
 #import <os/lock.h>
 
-NSString *const JSNetworkDiskCacheTaskPrefix = @"cache_task";
-
 @interface JSNetworkDiskCache () {
     os_unfair_lock _lock;
 }
