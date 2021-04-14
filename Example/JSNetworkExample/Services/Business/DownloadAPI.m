@@ -30,7 +30,7 @@
     return @"http://cachefly.cachefly.net";
 }
 
-- (NSString *)requestUrl {
+- (NSString *)requestURLString {
     if (self.downloadURLType == DownloadURLTypeTypeCnblogs) {
         return @"/files/MolbyHome/%E6%83%B3%E6%B3%95.rar";
     }
@@ -49,7 +49,7 @@
 }
 
 - (JSRequestCachePolicy)cachePolicy {
-    return JSRequestCachePolicyUseCacheDataElseLoad;
+    return JSRequestCachePolicyIgnoringCacheData;
 }
 
 - (long long)cacheVersion {

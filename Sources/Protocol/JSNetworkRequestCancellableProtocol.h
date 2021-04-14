@@ -1,5 +1,5 @@
 //
-//  JSNetworkCancellableProtocol.h
+//  JSNetworkRequestCancellableProtocol.h
 //  JSNetwork
 //
 //  Created by jiasong on 2021/4/14.
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol JSNetworkCancellableProtocol <NSObject>
+@protocol JSNetworkRequestCancellableProtocol <NSObject>
 
 @required
 

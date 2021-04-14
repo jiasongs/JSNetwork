@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol JSNetworkRequestProtocol;
-@protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkInterfaceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN

@@ -1,21 +1,21 @@
 //
-//  JSNetworkCancellable.m
+//  JSNetworkRequestCancellable.m
 //  JSNetwork
 //
 //  Created by jiasong on 2021/4/14.
 //
 
-#import "JSNetworkCancellable.h"
+#import "JSNetworkRequestCancellable.h"
 #import "JSNetworkAgent.h"
 #import "JSNetworkInterfaceProtocol.h"
 
-@interface JSNetworkCancellable ()
+@interface JSNetworkRequestCancellable ()
 
 @property (nonatomic, weak, readwrite) id<JSNetworkInterfaceProtocol> interface;
 
 @end
 
-@implementation JSNetworkCancellable
+@implementation JSNetworkRequestCancellable
 @synthesize interface = _interface;
 
 - (instancetype)initWithInterface:(nonnull id<JSNetworkInterfaceProtocol>)interface {
