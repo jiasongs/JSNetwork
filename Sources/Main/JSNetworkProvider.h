@@ -10,6 +10,7 @@
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkInterfaceProtocol;
+@protocol JSNetworkCancellableProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,14 +22,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置项
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkInterfaceProtocol>的接口
+ *  @return 遵循<JSNetworkCancellableProtocol>
  */
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                            completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:completed:));
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:completed:));
 
 /**
  *  @brief requestConfig、uploadProgress、completed
@@ -37,16 +38,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param uploadProgress 上传进度
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkInterfaceProtocol>的接口
+ *  @return 遵循<JSNetworkCancellableProtocol>
  */
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                            completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:completed:));
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:uploadProgress:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:uploadProgress:completed:));
 
 /**
  *  @brief requestConfig、downloadProgress、completed
@@ -55,16 +56,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param downloadProgress 下载进度
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkInterfaceProtocol>的接口
+ *  @return 遵循<JSNetworkCancellableProtocol>
  */
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:downloadProgress:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                            completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:downloadProgress:completed:));
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:downloadProgress:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:downloadProgress:completed:));
 
 /**
  *  @brief requestConfig、uploadProgress、downloadProgress、completed
@@ -74,18 +75,18 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param downloadProgress 下载进度
  *  @param completed 请求完成的回调
  *
- *  @return 遵循<JSNetworkInterfaceProtocol>的接口
+ *  @return 遵循<JSNetworkCancellableProtocol>
  */
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:downloadProgress:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                            completed:(nullable void (^)(id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:uploadProgress:downloadProgress:completed:));
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:uploadProgress:downloadProgress:completed:));
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed NS_SWIFT_NAME(request(config:onTarget:uploadProgress:downloadProgress:completed:));
 
 
 @end

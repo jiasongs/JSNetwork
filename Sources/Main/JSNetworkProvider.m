@@ -11,30 +11,27 @@
 #import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkConfig.h"
+#import "JSNetworkCancellable.h"
 #import <objc/runtime.h>
 
 @interface JSNetworkProviderEntity : NSObject
 
-@property (nonatomic, copy) NSString *taskIdentifier;
+@property (nonatomic, strong) JSNetworkCancellable *cancellable;
 
 @end
 
 @implementation JSNetworkProviderEntity
 
-+ (instancetype)entityWithTaskIdentifier:(NSString *)taskIdentifier {
-    return [[self.class alloc] initWithTaskIdentifier:taskIdentifier];
-}
-
-- (instancetype)initWithTaskIdentifier:(NSString *)taskIdentifier {
+- (instancetype)initWithCancellable:(JSNetworkCancellable *)cancellable {
     if (self = [super init]) {
-        _taskIdentifier = taskIdentifier;
+        _cancellable = cancellable;
     }
     return self;
 }
 
 - (void)dealloc {
-    if (self.taskIdentifier && self.taskIdentifier.length > 0) {
-        [JSNetworkAgent.sharedAgent cancelRequestForTaskIdentifier:self.taskIdentifier];
+    if (_cancellable) {
+        [_cancellable cancel];
     }
 }
 
@@ -48,9 +45,8 @@
 
 @implementation NSObject (__JSNetworkProvider)
 
-- (void)js_bindTaskIdentifier:(NSString *)taskIdentifier {
-    NSParameterAssert(taskIdentifier);
-    [self.jsnet_providerEntitys addObject:[JSNetworkProviderEntity entityWithTaskIdentifier:taskIdentifier]];
+- (void)js_bindCancellable:(JSNetworkCancellable *)cancellable {
+    [self.jsnet_providerEntitys addObject:[[JSNetworkProviderEntity alloc] initWithCancellable:cancellable]];
 }
 
 - (NSMutableArray<JSNetworkProviderEntity *> *)jsnet_providerEntitys {
@@ -66,17 +62,17 @@
 
 @implementation JSNetworkProvider
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                            completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                     uploadProgress:nil
                   downloadProgress:nil
                          completed:completed];
 }
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     return [self requestWithConfig:config
                           onTarget:target
                     uploadProgress:nil
@@ -84,19 +80,19 @@
                          completed:completed];
 }
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                     uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                       uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
+                                            completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                     uploadProgress:uploadProgress
                   downloadProgress:nil
                          completed:completed];
 }
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                     uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                       uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     return [self requestWithConfig:config
                           onTarget:target
                     uploadProgress:uploadProgress
@@ -104,19 +100,19 @@
                          completed:completed];
 }
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                   downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                     downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
+                                            completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                     uploadProgress:nil
                   downloadProgress:downloadProgress
                          completed:completed];
 }
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                   downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                     downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     return [self requestWithConfig:config
                           onTarget:target
                     uploadProgress:nil
@@ -124,10 +120,10 @@
                          completed:completed];
 }
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                     uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                                   downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                                          completed:(nullable JSNetworkRequestCompletedBlock)completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                       uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
+                                     downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
+                                            completed:(nullable JSNetworkRequestCompletedBlock)completed {
     return [self requestWithConfig:config
                           onTarget:nil
                     uploadProgress:uploadProgress
@@ -139,11 +135,11 @@
     }];
 }
 
-+ (id<JSNetworkInterfaceProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-                                           onTarget:(nullable __kindof NSObject *)target
-                                     uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
-                                   downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
-                                          completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
++ (id<JSNetworkCancellableProtocol>)requestWithConfig:(id<JSNetworkRequestConfigProtocol>)config
+                                             onTarget:(nullable __kindof NSObject *)target
+                                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                            completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     NSParameterAssert(config);
     /// 生成接口
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config];
@@ -159,14 +155,16 @@
     }];
     /// 处理接口
     [JSNetworkAgent.sharedAgent performRequestForInterface:interface];
+    /// 取消
+    JSNetworkCancellable *cancellable = [[JSNetworkCancellable alloc] initWithInterface:interface];
     /// 绑定任务id
     if (target) {
         /// 务必保证线程安全
         @synchronized (self) {
-            [target js_bindTaskIdentifier:interface.taskIdentifier];
+            [target js_bindCancellable:cancellable];
         }
     }
-    return interface;
+    return cancellable;
 }
 
 @end
