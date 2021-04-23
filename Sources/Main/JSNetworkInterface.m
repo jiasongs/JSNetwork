@@ -35,7 +35,10 @@
 @synthesize downloadProgress = _downloadProgress;
 @synthesize completionBlocks = _completionBlocks;
 
-- (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
+- (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+                       uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
+                     downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
+                       completedBlock:(nullable JSNetworkRequestCompletedBlock)completionBlock {
     NSParameterAssert(config);
     if (self = [super init]) {
         /// 持有一下config, 防止提前释放
@@ -67,6 +70,10 @@
             NSAssert(_diskCache, @"请设置diskCache");
         }
         _completionBlocks = [NSMutableArray array];
+        /// 回调函数
+        [self requestUploadProgress:uploadProgress];
+        [self requestDownloadProgress:downloadProgress];
+        [self requestCompletedBlock:completionBlock];
         /// 生成任务ID
         static NSUInteger jsNetworkRequestTaskIdentifier = 0;
         [JSNetworkMutexLock execute:^{

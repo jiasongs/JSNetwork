@@ -55,8 +55,14 @@ typedef void(^JSNetworkRequestCompletedBlock)(id<JSNetworkInterfaceProtocol> aIn
  *  @brief 根据config初始化一个Interface
  *
  *  @param config JSNetworkRequestConfigProtocol
+ *  @param uploadProgress 上传进度
+ *  @param downloadProgress 下载进度
+ *  @param completionBlock 完成前的回调
  */
-- (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config NS_SWIFT_NAME(init(requestConfig:));
+- (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
+                       uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
+                     downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
+                       completedBlock:(nullable JSNetworkRequestCompletedBlock)completionBlock;
 
 /**
  *  @brief 设置上传进度的回调
