@@ -1,25 +1,25 @@
 //
-//  JSNetworkMutexLock.m
+//  JSNetworkSpinLock.m
 //  JSNetworkExample
 //
 //  Created by jiasong on 2020/7/31.
 //  Copyright © 2020 jiasong. All rights reserved.
 //
 
-#import "JSNetworkMutexLock.h"
+#import "JSNetworkSpinLock.h"
 #import <os/lock.h>
 
-@interface JSNetworkMutexLock () {
+@interface JSNetworkSpinLock () {
     os_unfair_lock _lock;
 }
 
 @end
 
-@implementation JSNetworkMutexLock
+@implementation JSNetworkSpinLock
 
 + (instancetype)sharedLock {
     static dispatch_once_t onceToken;
-    static JSNetworkMutexLock *instance = nil;
+    static JSNetworkSpinLock *instance = nil;
     dispatch_once(&onceToken,^{
         instance = [[super allocWithZone:NULL] init];
     });

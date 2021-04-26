@@ -11,7 +11,7 @@
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkUtil.h"
-#import "JSNetworkMutexLock.h"
+#import "JSNetworkSpinLock.h"
 
 @interface JSNetworkRequest ()
 

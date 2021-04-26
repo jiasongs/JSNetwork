@@ -15,7 +15,7 @@
 #import "JSNetworkRequestConfigProxy.h"
 #import "JSNetworkProxy.h"
 #import "JSNetworkRequestProtocol.h"
-#import "JSNetworkMutexLock.h"
+#import "JSNetworkSpinLock.h"
 
 @interface JSNetworkInterface () {
     id<JSNetworkRequestConfigProtocol> _config;
@@ -76,7 +76,7 @@
         [self requestCompletedBlock:completionBlock];
         /// 生成任务ID
         static NSUInteger jsNetworkRequestTaskIdentifier = 0;
-        [JSNetworkMutexLock execute:^{
+        [JSNetworkSpinLock execute:^{
             jsNetworkRequestTaskIdentifier = jsNetworkRequestTaskIdentifier + 1;
             _taskIdentifier = [NSString stringWithFormat:@"%@_%@", @"task", @(jsNetworkRequestTaskIdentifier)];
         }];
@@ -105,7 +105,7 @@
 }
 
 - (NSString *)taskIdentifier {
-    return [JSNetworkMutexLock executeWithReturnValue:^id{
+    return [JSNetworkSpinLock executeWithReturnValue:^id{
         return _taskIdentifier;
     }];
 }

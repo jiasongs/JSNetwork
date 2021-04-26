@@ -9,7 +9,7 @@
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkDiskCacheMetadata.h"
 #import "JSNetworkUtil.h"
-#import "JSNetworkMutexLock.h"
+#import "JSNetworkSpinLock.h"
 #import <os/lock.h>
 
 @interface JSNetworkDiskCache () {
