@@ -50,6 +50,10 @@
     return _error;
 }
 
+- (BOOL)abnormalNetworking {
+    return self.error.code == -1009 || self.error.code == -1001;
+}
+
 - (NSString *)description {
     return [NSString stringWithFormat:@"%@: <%p>", NSStringFromClass(self.class), self];
 }

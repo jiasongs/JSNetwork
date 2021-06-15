@@ -51,6 +51,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable NSError *)error;
 
+/**
+ *  @brief 网络连接是否异常
+ */
+- (BOOL)abnormalNetworking;
+
 @end
 
 NS_ASSUME_NONNULL_END
