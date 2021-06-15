@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 网络连接是否异常
  */
-- (BOOL)abnormalNetworking;
+- (BOOL)networkingAbnormal;
 
 @end
 

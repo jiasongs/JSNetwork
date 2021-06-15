@@ -50,7 +50,7 @@
     return _error;
 }
 
-- (BOOL)abnormalNetworking {
+- (BOOL)networkingAbnormal {
     return self.error.code == -1009 || self.error.code == -1001;
 }
 
