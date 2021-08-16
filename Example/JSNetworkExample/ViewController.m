@@ -58,7 +58,6 @@
     //    NSArray *paths = [test js_URLPaths];
     //    long long size = [JSNetworkUtil directorySizeAtPath:JSNetworkConfig.sharedConfig.cacheDirectoryPath];
     //    NSString *countString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
-    NSLog(@"");
 }
 
 - (IBAction)onPressNext:(id)sender {

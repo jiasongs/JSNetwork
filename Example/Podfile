@@ -10,5 +10,6 @@ target "JSNetworkExample" do
   pod "QMUIKit"
   pod "PromisesObjC"
   pod "MLeaksFinder"
-  
+  pod "FBRetainCycleDetector", :git => "https://github.com/jiasongs/FBRetainCycleDetector.git", :configurations => ["Debug"]
+
 end
