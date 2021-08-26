@@ -9,15 +9,10 @@
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkDiskCacheMetadata.h"
 #import "JSNetworkUtil.h"
-#import "JSNetworkSpinLock.h"
-#import <os/lock.h>
 
-@interface JSNetworkDiskCache () {
-    os_unfair_lock _lock;
-}
+@interface JSNetworkDiskCache ()
 
 @property (nonatomic, strong) NSString *taskIdentifier;
-@property (nonatomic, strong) dispatch_queue_t processingQueue;
 @property (nonatomic, strong) dispatch_queue_t ioQueue;
 
 @end
@@ -26,9 +21,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _processingQueue = dispatch_queue_create("com.jsnetwork.cache.queue", DISPATCH_QUEUE_CONCURRENT);
         _ioQueue = dispatch_queue_create("com.jsnetwork.cache.io.queue", DISPATCH_QUEUE_SERIAL);
-        _lock = OS_UNFAIR_LOCK_INIT;
     }
     return self;
 }
@@ -62,38 +55,33 @@
 
 - (void)cacheForRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
                     completed:(nullable JSNetworkDiskCacheCompleted)completed {
-    dispatch_async(_processingQueue, ^{
-        [self addLock];
-        __block JSNetworkDiskCacheMetadata *metadata = nil;
-        dispatch_sync(self.ioQueue, ^{
-            NSString *filePath = [self cacheFilePathWithRequestConfig:config];
-            if ([NSFileManager.defaultManager fileExistsAtPath:filePath]) {
-                if (@available(iOS 11.0, *)) {
-                    NSData *data = [NSData dataWithContentsOfFile:filePath];
-                    metadata = [NSKeyedUnarchiver unarchivedObjectOfClass:JSNetworkDiskCacheMetadata.class
-                                                                 fromData:data
-                                                                    error:NULL];
-                } else {
-                    @try {
-                        metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-                    } @catch (NSException *exception) {
-                        NSLog(@"NSKeyedUnarchiver unarchive failed with exception: %@", exception);
-                    }
+    dispatch_async(self.ioQueue, ^{
+        JSNetworkDiskCacheMetadata *metadata = nil;
+        NSString *filePath = [self cacheFilePathWithRequestConfig:config];
+        if ([NSFileManager.defaultManager fileExistsAtPath:filePath]) {
+            if (@available(iOS 11.0, *)) {
+                NSData *data = [NSData dataWithContentsOfFile:filePath];
+                metadata = [NSKeyedUnarchiver unarchivedObjectOfClass:JSNetworkDiskCacheMetadata.class
+                                                             fromData:data
+                                                                error:NULL];
+            } else {
+                @try {
+                    metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+                } @catch (NSException *exception) {
+                    NSLog(@"NSKeyedUnarchiver unarchive failed with exception: %@", exception);
                 }
             }
-        });
+        }
         if (completed) {
             completed(metadata);
         }
-        [self unLock];
     });
 }
 
 - (void)setCacheData:(id)cacheData
     forRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
            completed:(nullable JSNetworkDiskCacheCompleted)completed {
-    dispatch_async(_processingQueue, ^{
-        [self addLock];
+    dispatch_async(self.ioQueue, ^{
         BOOL success = [self createCacheDirectoryWithRequestConfig:config];
         if (success) {
             JSNetworkDiskCacheMetadata *metadata = [[JSNetworkDiskCacheMetadata alloc] init];
@@ -101,19 +89,17 @@
             metadata.creationDate = NSDate.date;
             metadata.appVersionString = [JSNetworkUtil appVersionString];
             metadata.cacheData = [JSNetworkUtil dataFromObject:cacheData];
-            dispatch_sync(self.ioQueue, ^{
-                NSString *filePath = [self cacheFilePathWithRequestConfig:config];
-                if (@available(iOS 11.0, *)) {
-                    NSData *newData = [NSKeyedArchiver archivedDataWithRootObject:metadata requiringSecureCoding:YES error:NULL];
-                    [newData writeToFile:filePath atomically:YES];
-                } else {
-                    @try {
-                        [NSKeyedArchiver archiveRootObject:metadata toFile:filePath];
-                    } @catch (NSException *exception) {
-                        NSLog(@"NSKeyedArchiver archive failed with exception: %@", exception);
-                    }
+            NSString *filePath = [self cacheFilePathWithRequestConfig:config];
+            if (@available(iOS 11.0, *)) {
+                NSData *newData = [NSKeyedArchiver archivedDataWithRootObject:metadata requiringSecureCoding:YES error:NULL];
+                [newData writeToFile:filePath atomically:YES];
+            } else {
+                @try {
+                    [NSKeyedArchiver archiveRootObject:metadata toFile:filePath];
+                } @catch (NSException *exception) {
+                    NSLog(@"NSKeyedArchiver archive failed with exception: %@", exception);
                 }
-            });
+            }
             if (completed) {
                 completed(metadata);
             }
@@ -122,7 +108,6 @@
                 completed(nil);
             }
         }
-        [self unLock];
     });
 }
 
@@ -132,23 +117,13 @@
 
 - (BOOL)createCacheDirectoryWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
     NSString *cacheDirectoryPath = config.cacheDirectoryPath;
-    __block NSError *error = nil;
-    __block BOOL result = YES;
-    dispatch_sync(self.ioQueue, ^{
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        if (![fileManager fileExistsAtPath:cacheDirectoryPath]) {
-            result = [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
-        }
-    });
+    NSError *error = nil;
+    BOOL result = YES;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:cacheDirectoryPath]) {
+        result = [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
+    }
     return result && !error;
-}
-
-- (void)addLock {
-    os_unfair_lock_lock(&_lock);
-}
-
-- (void)unLock {
-    os_unfair_lock_unlock(&_lock);
 }
 
 - (void)dealloc {
