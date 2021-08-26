@@ -29,7 +29,7 @@
 }
 
 - (JSRequestCachePolicy)cachePolicy {
-    return JSRequestCachePolicyIgnoringCacheData;
+    return JSRequestCachePolicyUseCacheDataElseLoad;
 }
 
 - (long long)cacheVersion {

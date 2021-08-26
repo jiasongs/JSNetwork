@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) NSString *taskIdentifier;
 @property (nonatomic, strong) dispatch_queue_t processingQueue;
+@property (nonatomic, strong) dispatch_queue_t ioQueue;
 
 @end
 
@@ -26,6 +27,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         _processingQueue = dispatch_queue_create("com.jsnetwork.cache.queue", DISPATCH_QUEUE_CONCURRENT);
+        _ioQueue = dispatch_queue_create("com.jsnetwork.cache.io.queue", DISPATCH_QUEUE_SERIAL);
         _lock = OS_UNFAIR_LOCK_INIT;
     }
     return self;
@@ -62,10 +64,10 @@
                     completed:(nullable JSNetworkDiskCacheCompleted)completed {
     dispatch_async(_processingQueue, ^{
         [self addLock];
-        @autoreleasepool {
+        __block JSNetworkDiskCacheMetadata *metadata = nil;
+        dispatch_sync(self.ioQueue, ^{
             NSString *filePath = [self cacheFilePathWithRequestConfig:config];
             if ([NSFileManager.defaultManager fileExistsAtPath:filePath]) {
-                JSNetworkDiskCacheMetadata *metadata = nil;
                 if (@available(iOS 11.0, *)) {
                     NSData *data = [NSData dataWithContentsOfFile:filePath];
                     metadata = [NSKeyedUnarchiver unarchivedObjectOfClass:JSNetworkDiskCacheMetadata.class
@@ -78,14 +80,10 @@
                         NSLog(@"NSKeyedUnarchiver unarchive failed with exception: %@", exception);
                     }
                 }
-                if (completed) {
-                    completed(metadata);
-                }
-            } else {
-                if (completed) {
-                    completed(nil);
-                }
             }
+        });
+        if (completed) {
+            completed(metadata);
         }
         [self unLock];
     });
@@ -96,14 +94,14 @@
            completed:(nullable JSNetworkDiskCacheCompleted)completed {
     dispatch_async(_processingQueue, ^{
         [self addLock];
-        @autoreleasepool {
-            BOOL success = [self createCacheDirectoryWithRequestConfig:config];
-            if (success) {
-                JSNetworkDiskCacheMetadata *metadata = [[JSNetworkDiskCacheMetadata alloc] init];
-                metadata.version = config.cacheVersion;
-                metadata.creationDate = NSDate.date;
-                metadata.appVersionString = [JSNetworkUtil appVersionString];
-                metadata.cacheData = [JSNetworkUtil dataFromObject:cacheData];
+        BOOL success = [self createCacheDirectoryWithRequestConfig:config];
+        if (success) {
+            JSNetworkDiskCacheMetadata *metadata = [[JSNetworkDiskCacheMetadata alloc] init];
+            metadata.version = config.cacheVersion;
+            metadata.creationDate = NSDate.date;
+            metadata.appVersionString = [JSNetworkUtil appVersionString];
+            metadata.cacheData = [JSNetworkUtil dataFromObject:cacheData];
+            dispatch_sync(self.ioQueue, ^{
                 NSString *filePath = [self cacheFilePathWithRequestConfig:config];
                 if (@available(iOS 11.0, *)) {
                     NSData *newData = [NSKeyedArchiver archivedDataWithRootObject:metadata requiringSecureCoding:YES error:NULL];
@@ -115,13 +113,13 @@
                         NSLog(@"NSKeyedArchiver archive failed with exception: %@", exception);
                     }
                 }
-                if (completed) {
-                    completed(metadata);
-                }
-            } else {
-                if (completed) {
-                    completed(nil);
-                }
+            });
+            if (completed) {
+                completed(metadata);
+            }
+        } else {
+            if (completed) {
+                completed(nil);
             }
         }
         [self unLock];
@@ -133,13 +131,15 @@
 }
 
 - (BOOL)createCacheDirectoryWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *cacheDirectoryPath = config.cacheDirectoryPath;
-    NSError *error = nil;
-    BOOL result = YES;
-    if (![fileManager fileExistsAtPath:cacheDirectoryPath]) {
-        result = [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
-    }
+    __block NSError *error = nil;
+    __block BOOL result = YES;
+    dispatch_sync(self.ioQueue, ^{
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if (![fileManager fileExistsAtPath:cacheDirectoryPath]) {
+            result = [fileManager createDirectoryAtPath:cacheDirectoryPath withIntermediateDirectories:NO attributes:@{} error:&error];
+        }
+    });
     return result && !error;
 }
 
