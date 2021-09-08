@@ -12,6 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSString (JSURL)
 
 /**
+ *  @brief  NSURLComponents
+ *
+ *  @return NSURLComponents
+ */
+- (NSURLComponents *)js_URLComponents NS_SWIFT_NAME(js_urlComponents());
+
+/**
  *  @brief  获取URL最后一条路径
  *
  *  @return NSString 最后一条路径
@@ -31,6 +38,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return NSArray 路径的数组
  */
 - (NSArray<NSString *> *)js_URLPaths NS_SWIFT_NAME(js_urlPaths());
+
+/**
+ *  @brief  删除URL的参数
+ *
+ *  @return NSString 删除后的URL字符串
+ */
+- (NSString *)js_URLByDeletingParameter NS_SWIFT_NAME(js_urlByDeletingParameter());
 
 /**
  *  @brief  获取URL的参数

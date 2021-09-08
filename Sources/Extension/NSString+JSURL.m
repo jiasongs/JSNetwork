@@ -12,6 +12,10 @@
 
 #pragma mark - 工具
 
+- (NSURLComponents *)js_URLComponents {
+    return [NSURLComponents componentsWithString:[self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+}
+
 - (nullable NSString *)js_URLLastPath {
     return self.js_URLPaths.lastObject;
 }
@@ -21,12 +25,13 @@
         NSMutableArray *array = [NSMutableArray arrayWithArray:[self componentsSeparatedByString:@"/"]];
         [array removeLastObject];
         return [array componentsJoinedByString:@"/"];
+    } else {
+        return self;
     }
-    return self;
 }
 
 - (NSArray<NSString *> *)js_URLPaths {
-    NSURLComponents *components = [NSURLComponents componentsWithString:[self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+    NSURLComponents *components = self.js_URLComponents;
     NSString *path = components.path ? : @"";
     NSMutableArray<NSString *> *paths = [NSMutableArray arrayWithArray:[path componentsSeparatedByString:@"/"]];
     if (paths.count > 0 && paths.firstObject.length == 0) {
@@ -35,15 +40,24 @@
     return paths;
 }
 
+- (NSString *)js_URLByDeletingParameter {
+    NSURLComponents *components = self.js_URLComponents;
+    if ([components.string containsString:@"?"]) {
+        return [components.string componentsSeparatedByString:@"?"].firstObject;
+    } else {
+        return self;
+    }
+}
+
 - (NSDictionary<NSString *, NSString *> *)js_URLParameters {
     NSMutableDictionary<NSString *, NSString *> *dict = [NSMutableDictionary dictionary];
     if (self.length > 0) {
-        NSString *totalUrl = [self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-        NSRange range = [totalUrl rangeOfString:@"^[a-zA-Z0-9]+?://" options:NSRegularExpressionSearch];
+        NSString *fullUrl = [NSString stringWithString:self];
+        NSRange range = [fullUrl rangeOfString:@"^[a-zA-Z0-9]+?://" options:NSRegularExpressionSearch];
         if (range.location == NSNotFound || range.location != 0) {
-            totalUrl = [@"https://host" stringByAppendingFormat:@"?%@", totalUrl];
+            fullUrl = [@"https://host" stringByAppendingFormat:@"?%@", fullUrl];
         }
-        NSURLComponents *components = [NSURLComponents componentsWithString:totalUrl];
+        NSURLComponents *components = fullUrl.js_URLComponents;
         [components.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem *queryItem, NSUInteger idx, BOOL *stop) {
             [dict setObject:queryItem.value ? : @"" forKey:queryItem.name];
         }];
@@ -62,7 +76,7 @@
 }
 
 - (NSString *)js_URLStringByAppendingPaths:(NSArray<NSString *> *)paths parameters:(NSDictionary<NSString *, id> *)parameters {
-    NSURLComponents *components = [NSURLComponents componentsWithString:[self stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+    NSURLComponents *components = self.js_URLComponents;
     NSString *scheme = components.scheme ? [NSString stringWithFormat:@"%@://", components.scheme] : @"";
     NSString *host = components.host ? : @"";
     NSString *port = components.port ? [NSString stringWithFormat:@":%@", components.port] : @"";

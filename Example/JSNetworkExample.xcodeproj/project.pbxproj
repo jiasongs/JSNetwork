@@ -21,8 +21,27 @@
 		7A36CCE825AA0CF60094224C /* AlamofireRequest1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A36CCE725AA0CF60094224C /* AlamofireRequest1.swift */; };
 		7A98C863246FDD5800123894 /* DownloadAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C862246FDD5800123894 /* DownloadAPI.m */; };
 		7A98C869246FFD1500123894 /* UploadImageAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C868246FFD1500123894 /* UploadImageAPI.m */; };
+		7AFE30BF26E8BCF300354384 /* JSNetworkExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE30BE26E8BCF300354384 /* JSNetworkExampleUITests.swift */; };
+		7AFE30CD26E8BD3E00354384 /* JSNetworkExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE30CC26E8BD3E00354384 /* JSNetworkExampleTests.swift */; };
 		98BE71BF735857902847A1ED /* Pods_JSNetworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7AFE30C126E8BCF300354384 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A2684C7244E7700004A7C82 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A2684CE244E7700004A7C82;
+			remoteInfo = JSNetworkExample;
+		};
+		7AFE30CF26E8BD3E00354384 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A2684C7244E7700004A7C82 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A2684CE244E7700004A7C82;
+			remoteInfo = JSNetworkExample;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JSNetworkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +72,12 @@
 		7A98C862246FDD5800123894 /* DownloadAPI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadAPI.m; sourceTree = "<group>"; };
 		7A98C867246FFD1500123894 /* UploadImageAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UploadImageAPI.h; sourceTree = "<group>"; };
 		7A98C868246FFD1500123894 /* UploadImageAPI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadImageAPI.m; sourceTree = "<group>"; };
+		7AFE30BC26E8BCF300354384 /* JSNetworkExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSNetworkExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AFE30BE26E8BCF300354384 /* JSNetworkExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSNetworkExampleUITests.swift; sourceTree = "<group>"; };
+		7AFE30C026E8BCF300354384 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AFE30CA26E8BD3E00354384 /* JSNetworkExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSNetworkExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AFE30CC26E8BD3E00354384 /* JSNetworkExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSNetworkExampleTests.swift; sourceTree = "<group>"; };
+		7AFE30CE26E8BD3E00354384 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BD48473650C390EFD4AEA50C /* Pods-JSNetworkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExample.release.xcconfig"; path = "Target Support Files/Pods-JSNetworkExample/Pods-JSNetworkExample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +87,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				98BE71BF735857902847A1ED /* Pods_JSNetworkExample.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFE30B926E8BCF300354384 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFE30C726E8BD3E00354384 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +128,8 @@
 			isa = PBXGroup;
 			children = (
 				7A2684D1244E7700004A7C82 /* JSNetworkExample */,
+				7AFE30BD26E8BCF300354384 /* JSNetworkExampleUITests */,
+				7AFE30CB26E8BD3E00354384 /* JSNetworkExampleTests */,
 				7A2684D0244E7700004A7C82 /* Products */,
 				52CDB40F32C0752A80904AF9 /* Pods */,
 				53E0ADECE6834B41DB6F3D52 /* Frameworks */,
@@ -99,6 +140,8 @@
 			isa = PBXGroup;
 			children = (
 				7A2684CF244E7700004A7C82 /* JSNetworkExample.app */,
+				7AFE30BC26E8BCF300354384 /* JSNetworkExampleUITests.xctest */,
+				7AFE30CA26E8BD3E00354384 /* JSNetworkExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -167,6 +210,24 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
+		7AFE30BD26E8BCF300354384 /* JSNetworkExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7AFE30BE26E8BCF300354384 /* JSNetworkExampleUITests.swift */,
+				7AFE30C026E8BCF300354384 /* Info.plist */,
+			);
+			path = JSNetworkExampleUITests;
+			sourceTree = "<group>";
+		};
+		7AFE30CB26E8BD3E00354384 /* JSNetworkExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				7AFE30CC26E8BD3E00354384 /* JSNetworkExampleTests.swift */,
+				7AFE30CE26E8BD3E00354384 /* Info.plist */,
+			);
+			path = JSNetworkExampleTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -189,18 +250,63 @@
 			productReference = 7A2684CF244E7700004A7C82 /* JSNetworkExample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		7AFE30BB26E8BCF300354384 /* JSNetworkExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AFE30C526E8BCF300354384 /* Build configuration list for PBXNativeTarget "JSNetworkExampleUITests" */;
+			buildPhases = (
+				7AFE30B826E8BCF300354384 /* Sources */,
+				7AFE30B926E8BCF300354384 /* Frameworks */,
+				7AFE30BA26E8BCF300354384 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7AFE30C226E8BCF300354384 /* PBXTargetDependency */,
+			);
+			name = JSNetworkExampleUITests;
+			productName = JSNetworkExampleUITests;
+			productReference = 7AFE30BC26E8BCF300354384 /* JSNetworkExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		7AFE30C926E8BD3E00354384 /* JSNetworkExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AFE30D126E8BD3E00354384 /* Build configuration list for PBXNativeTarget "JSNetworkExampleTests" */;
+			buildPhases = (
+				7AFE30C626E8BD3E00354384 /* Sources */,
+				7AFE30C726E8BD3E00354384 /* Frameworks */,
+				7AFE30C826E8BD3E00354384 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7AFE30D026E8BD3E00354384 /* PBXTargetDependency */,
+			);
+			name = JSNetworkExampleTests;
+			productName = JSNetworkExampleTests;
+			productReference = 7AFE30CA26E8BD3E00354384 /* JSNetworkExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		7A2684C7244E7700004A7C82 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = jiasong;
 				TargetAttributes = {
 					7A2684CE244E7700004A7C82 = {
 						CreatedOnToolsVersion = 11.4.1;
 						LastSwiftMigration = 1220;
+					};
+					7AFE30BB26E8BCF300354384 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 7A2684CE244E7700004A7C82;
+					};
+					7AFE30C926E8BD3E00354384 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 7A2684CE244E7700004A7C82;
 					};
 				};
 			};
@@ -218,6 +324,8 @@
 			projectRoot = "";
 			targets = (
 				7A2684CE244E7700004A7C82 /* JSNetworkExample */,
+				7AFE30BB26E8BCF300354384 /* JSNetworkExampleUITests */,
+				7AFE30C926E8BD3E00354384 /* JSNetworkExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -230,6 +338,20 @@
 				7A2684E2244E7701004A7C82 /* LaunchScreen.storyboard in Resources */,
 				7A2684DF244E7701004A7C82 /* Assets.xcassets in Resources */,
 				7A2684DD244E7700004A7C82 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFE30BA26E8BCF300354384 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFE30C826E8BD3E00354384 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,7 +418,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7AFE30B826E8BCF300354384 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AFE30BF26E8BCF300354384 /* JSNetworkExampleUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFE30C626E8BD3E00354384 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AFE30CD26E8BD3E00354384 /* JSNetworkExampleTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7AFE30C226E8BCF300354384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A2684CE244E7700004A7C82 /* JSNetworkExample */;
+			targetProxy = 7AFE30C126E8BCF300354384 /* PBXContainerItemProxy */;
+		};
+		7AFE30D026E8BD3E00354384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A2684CE244E7700004A7C82 /* JSNetworkExample */;
+			targetProxy = 7AFE30CF26E8BD3E00354384 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7A2684DB244E7700004A7C82 /* Main.storyboard */ = {
@@ -477,6 +628,96 @@
 			};
 			name = Release;
 		};
+		7AFE30C326E8BCF300354384 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = JSNetworkExampleUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-11.JSNetworkExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = JSNetworkExample;
+			};
+			name = Debug;
+		};
+		7AFE30C426E8BCF300354384 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = JSNetworkExampleUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-11.JSNetworkExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = JSNetworkExample;
+			};
+			name = Release;
+		};
+		7AFE30D226E8BD3E00354384 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = JSNetworkExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-11.JSNetworkExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JSNetworkExample.app/JSNetworkExample";
+			};
+			name = Debug;
+		};
+		7AFE30D326E8BD3E00354384 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = JSNetworkExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "-11.JSNetworkExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JSNetworkExample.app/JSNetworkExample";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -494,6 +735,24 @@
 			buildConfigurations = (
 				7A2684E9244E7701004A7C82 /* Debug */,
 				7A2684EA244E7701004A7C82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7AFE30C526E8BCF300354384 /* Build configuration list for PBXNativeTarget "JSNetworkExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AFE30C326E8BCF300354384 /* Debug */,
+				7AFE30C426E8BCF300354384 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7AFE30D126E8BD3E00354384 /* Build configuration list for PBXNativeTarget "JSNetworkExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AFE30D226E8BD3E00354384 /* Debug */,
+				7AFE30D326E8BD3E00354384 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7AFE30BB26E8BCF300354384"
+               BuildableName = "JSNetworkExampleUITests.xctest"
+               BlueprintName = "JSNetworkExampleUITests"
+               ReferencedContainer = "container:JSNetworkExample.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7AFE30C926E8BD3E00354384"
+               BuildableName = "JSNetworkExampleTests.xctest"
+               BlueprintName = "JSNetworkExampleTests"
+               ReferencedContainer = "container:JSNetworkExample.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
