@@ -32,7 +32,7 @@
         JSNetworkConfig.sharedConfig.debugLogEnabled = true;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
         JSNetworkConfig.sharedConfig.buildNetworkRequest = ^__kindof NSOperation<JSNetworkRequestProtocol> *(id<JSNetworkInterfaceProtocol> interface) {
-//            return [[AlamofireRequest1 alloc] init];
+            //            return [[AlamofireRequest1 alloc] init];
             return [[JSNetworkAFRequest alloc] init];
         };
         JSNetworkConfig.sharedConfig.buildNetworkResponse = ^id<JSNetworkResponseProtocol>(id<JSNetworkInterfaceProtocol> interface) {
@@ -46,18 +46,6 @@
         [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];
         [JSNetworkConfig.sharedConfig addPlugin:JSNetworkLoggerPlugin.new];
     });
-    /// test
-    //    NSString *test = @"http://www.ruanmei.com/#/123456?test=%E4%B8%AD%E6%96%87";
-    //    NSString *url0 = [test js_URLStringByAppendingPaths:@[@"content", @"我是"]];
-    //    NSString *url1 = [test js_URLStringByAppendingPaths:@[]];
-    //    NSString *url2 = [test js_URLStringByAppendingParameters:@{@"a": @"bbbbbbb"}];
-    //    NSString *url3 = [test js_URLStringByAppendingPaths:@[@"post", @"1"] parameters:@{@"a": @"bbbbbbb"}];
-    //    NSString *url4 = [test js_URLStringByAppendingPaths:@[] parameters:@{}];
-    //    NSString *lastPath = [test js_URLLastPath];
-    //    NSString *deletingLastPath = [test js_URLByDeletingLastPath];
-    //    NSArray *paths = [test js_URLPaths];
-    //    long long size = [JSNetworkUtil directorySizeAtPath:JSNetworkConfig.sharedConfig.cacheDirectoryPath];
-    //    NSString *countString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
 }
 
 - (IBAction)onPressNext:(id)sender {

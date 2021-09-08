@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import JSNetwork
 
 class JSNetworkExampleTests: XCTestCase {
 
@@ -21,6 +22,9 @@ class JSNetworkExampleTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        let parameters = "https://www.baidu.com?zz=123&dfffff=你好吗&zzzzz=%E8%BF%98%E8%A1%8C".jn.urlParameters()
+        XCTAssert(parameters["zzzzz"] == "%E8%BF%98%E8%A1%8C", "")
     }
 
     func testPerformanceExample() throws {

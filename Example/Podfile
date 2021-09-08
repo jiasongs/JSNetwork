@@ -3,13 +3,23 @@ use_frameworks! :linkage => :static
 
 source "https://github.com/CocoaPods/Specs.git"
 
-target "JSNetworkExample" do
-  
-  # 网络请求
+def pod_JSNetwork
   pod "JSNetwork", :path => "..", :subspecs => ['ExtensionForSwift', 'RequestForAFNetworking', 'RequestForAlamofire', 'Plugins']
+end
+
+target "JSNetworkExample" do
+  # 网络请求
+  pod_JSNetwork
   pod "QMUIKit"
   pod "PromisesObjC"
   pod "MLeaksFinder"
   pod "FBRetainCycleDetector", :git => "https://github.com/jiasongs/FBRetainCycleDetector.git", :configurations => ["Debug"]
+end
 
+target "JSNetworkExampleTests" do
+  pod_JSNetwork
+end
+
+target "JSNetworkExampleUITests" do
+  pod_JSNetwork
 end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4785A3F500556FF7A1B3B8B2 /* Pods_JSNetworkExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEE85DB23407D3EF34D908FC /* Pods_JSNetworkExampleTests.framework */; };
 		7A23BEB3258CE06D00A4063B /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A23BEB2258CE06D00A4063B /* File.swift */; };
 		7A2684D4244E7700004A7C82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684D3244E7700004A7C82 /* AppDelegate.m */; };
 		7A2684DA244E7700004A7C82 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684D9244E7700004A7C82 /* ViewController.m */; };
@@ -19,6 +20,7 @@
 		7A2684FD244E8263004A7C82 /* NetworkResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684F7244E8262004A7C82 /* NetworkResponse.m */; };
 		7A2684FF244E8263004A7C82 /* NetworkToastPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A2684FC244E8263004A7C82 /* NetworkToastPlugin.m */; };
 		7A36CCE825AA0CF60094224C /* AlamofireRequest1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A36CCE725AA0CF60094224C /* AlamofireRequest1.swift */; };
+		7A3968CC48DB5C07666C3259 /* Pods_JSNetworkExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A09027640755F8E1CE2621AE /* Pods_JSNetworkExampleUITests.framework */; };
 		7A98C863246FDD5800123894 /* DownloadAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C862246FDD5800123894 /* DownloadAPI.m */; };
 		7A98C869246FFD1500123894 /* UploadImageAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C868246FFD1500123894 /* UploadImageAPI.m */; };
 		7AFE30BF26E8BCF300354384 /* JSNetworkExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE30BE26E8BCF300354384 /* JSNetworkExampleUITests.swift */; };
@@ -44,8 +46,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E47FA125FBFCDD8D60C424B /* Pods-JSNetworkExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExampleUITests.debug.xcconfig"; path = "Target Support Files/Pods-JSNetworkExampleUITests/Pods-JSNetworkExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JSNetworkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E3820DB0C49A8567FC2B569 /* Pods-JSNetworkExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExampleUITests.release.xcconfig"; path = "Target Support Files/Pods-JSNetworkExampleUITests/Pods-JSNetworkExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		415F8A3331005085C610FDAD /* Pods-JSNetworkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExample.debug.xcconfig"; path = "Target Support Files/Pods-JSNetworkExample/Pods-JSNetworkExample.debug.xcconfig"; sourceTree = "<group>"; };
+		5ABF2FC68F9361DCCC3CB299 /* Pods-JSNetworkExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-JSNetworkExampleTests/Pods-JSNetworkExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7A23BEB1258CE06D00A4063B /* JSNetworkExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JSNetworkExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		7A23BEB2258CE06D00A4063B /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		7A2684CF244E7700004A7C82 /* JSNetworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSNetworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,7 +83,10 @@
 		7AFE30CA26E8BD3E00354384 /* JSNetworkExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSNetworkExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AFE30CC26E8BD3E00354384 /* JSNetworkExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSNetworkExampleTests.swift; sourceTree = "<group>"; };
 		7AFE30CE26E8BD3E00354384 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A09027640755F8E1CE2621AE /* Pods_JSNetworkExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JSNetworkExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD48473650C390EFD4AEA50C /* Pods-JSNetworkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExample.release.xcconfig"; path = "Target Support Files/Pods-JSNetworkExample/Pods-JSNetworkExample.release.xcconfig"; sourceTree = "<group>"; };
+		EEE85DB23407D3EF34D908FC /* Pods_JSNetworkExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JSNetworkExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB33551568B81B4DC762237D /* Pods-JSNetworkExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSNetworkExampleTests.release.xcconfig"; path = "Target Support Files/Pods-JSNetworkExampleTests/Pods-JSNetworkExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A3968CC48DB5C07666C3259 /* Pods_JSNetworkExampleUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4785A3F500556FF7A1B3B8B2 /* Pods_JSNetworkExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +122,10 @@
 			children = (
 				415F8A3331005085C610FDAD /* Pods-JSNetworkExample.debug.xcconfig */,
 				BD48473650C390EFD4AEA50C /* Pods-JSNetworkExample.release.xcconfig */,
+				5ABF2FC68F9361DCCC3CB299 /* Pods-JSNetworkExampleTests.debug.xcconfig */,
+				FB33551568B81B4DC762237D /* Pods-JSNetworkExampleTests.release.xcconfig */,
+				1E47FA125FBFCDD8D60C424B /* Pods-JSNetworkExampleUITests.debug.xcconfig */,
+				2E3820DB0C49A8567FC2B569 /* Pods-JSNetworkExampleUITests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -120,6 +134,8 @@
 			isa = PBXGroup;
 			children = (
 				2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */,
+				EEE85DB23407D3EF34D908FC /* Pods_JSNetworkExampleTests.framework */,
+				A09027640755F8E1CE2621AE /* Pods_JSNetworkExampleUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -254,6 +270,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AFE30C526E8BCF300354384 /* Build configuration list for PBXNativeTarget "JSNetworkExampleUITests" */;
 			buildPhases = (
+				483903631CB196CCB0373E72 /* [CP] Check Pods Manifest.lock */,
 				7AFE30B826E8BCF300354384 /* Sources */,
 				7AFE30B926E8BCF300354384 /* Frameworks */,
 				7AFE30BA26E8BCF300354384 /* Resources */,
@@ -272,6 +289,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AFE30D126E8BD3E00354384 /* Build configuration list for PBXNativeTarget "JSNetworkExampleTests" */;
 			buildPhases = (
+				EF983D9AF78DFF1609A67396 /* [CP] Check Pods Manifest.lock */,
 				7AFE30C626E8BD3E00354384 /* Sources */,
 				7AFE30C726E8BD3E00354384 /* Frameworks */,
 				7AFE30C826E8BD3E00354384 /* Resources */,
@@ -358,6 +376,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		483903631CB196CCB0373E72 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JSNetworkExampleUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		4B8AE3192DA96DC96E30F9D6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -395,6 +435,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JSNetworkExample/Pods-JSNetworkExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EF983D9AF78DFF1609A67396 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JSNetworkExampleTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -630,11 +692,13 @@
 		};
 		7AFE30C326E8BCF300354384 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E47FA125FBFCDD8D60C424B /* Pods-JSNetworkExampleUITests.debug.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KJ6AEY5JEH;
 				INFOPLIST_FILE = JSNetworkExampleUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -652,11 +716,13 @@
 		};
 		7AFE30C426E8BCF300354384 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2E3820DB0C49A8567FC2B569 /* Pods-JSNetworkExampleUITests.release.xcconfig */;
 			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KJ6AEY5JEH;
 				INFOPLIST_FILE = JSNetworkExampleUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -674,12 +740,14 @@
 		};
 		7AFE30D226E8BD3E00354384 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5ABF2FC68F9361DCCC3CB299 /* Pods-JSNetworkExampleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KJ6AEY5JEH;
 				INFOPLIST_FILE = JSNetworkExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -697,12 +765,14 @@
 		};
 		7AFE30D326E8BD3E00354384 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FB33551568B81B4DC762237D /* Pods-JSNetworkExampleTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KJ6AEY5JEH;
 				INFOPLIST_FILE = JSNetworkExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
