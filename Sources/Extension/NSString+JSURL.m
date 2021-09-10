@@ -42,11 +42,11 @@
 
 - (NSString *)js_URLByDeletingParameter {
     NSURLComponents *components = self.js_URLComponents;
-    if ([components.string containsString:@"?"]) {
-        return [components.string componentsSeparatedByString:@"?"].firstObject;
-    } else {
-        return self;
+    NSString *urlString = components.string;
+    if ([urlString containsString:@"?"]) {
+        urlString = [urlString componentsSeparatedByString:@"?"].firstObject;
     }
+    return urlString.js_URLStringDecode;
 }
 
 - (NSDictionary<NSString *, NSString *> *)js_URLParameters {

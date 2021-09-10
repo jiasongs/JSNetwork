@@ -21,7 +21,7 @@ public extension NetworkWrapper where Base == String {
         return self.nsString.js_urlPaths()
     }
     
-    func urlByDeletingLastParameter() -> String {
+    func urlByDeletingParameter() -> String {
         return self.nsString.js_urlByDeletingParameter()
     }
     
