@@ -30,24 +30,32 @@
     _responseObject = responseObject;
 }
 
-- (NSHTTPURLResponse *)originalResponse {
-    return (NSHTTPURLResponse *)_requestTask.response;
+- (nullable NSString *)responseURLString {
+    return self.originalResponse.URL.absoluteString;
+}
+
+- (nullable NSDictionary<NSString *, NSString *> *)responseHeaders {
+    return self.originalResponse.allHeaderFields;
 }
 
 - (NSInteger)responseStatusCode {
     return self.originalResponse.statusCode;
 }
 
-- (NSDictionary<NSString *, NSString *> *)responseHeaders {
-    return self.originalResponse.allHeaderFields;
-}
-
-- (id)responseObject  {
+- (nullable id)responseObject  {
     return _responseObject;
 }
 
-- (NSError *)error  {
+- (nullable NSError *)error  {
     return _error;
+}
+
+- (nullable NSHTTPURLResponse *)originalResponse {
+    if ([_requestTask.response isKindOfClass:NSHTTPURLResponse.class]) {
+        return (NSHTTPURLResponse *)_requestTask.response;
+    } else {
+        return nil;
+    }
 }
 
 - (BOOL)networkingAbnormal {

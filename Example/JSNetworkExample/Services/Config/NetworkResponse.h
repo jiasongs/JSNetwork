@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  返回处理后的数据
  */
-@property (nonatomic, copy) id contentData;
+@property (nonatomic, strong) id contentData;
 
 @end
 
