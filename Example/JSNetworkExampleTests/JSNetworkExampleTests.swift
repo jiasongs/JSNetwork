@@ -54,7 +54,8 @@ class JSNetworkExampleTests: XCTestCase {
         url = "hostlist?zz=123&dfffff=你好吗".jn.urlByDeletingParameter()
         XCTAssert(url == "hostlist", "\(url)")
         
-        
+        url = "https://zz.api.com/m/nn?userhash=888888".jn.urlStringByAppending(parameters: ["userhash": "77777"])
+        XCTAssert(url == "https://zz.api.com/m/nn?userhash=77777", "\(url)")
     }
     
     func testPerformanceExample() throws {
