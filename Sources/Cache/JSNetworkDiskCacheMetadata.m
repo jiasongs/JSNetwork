@@ -24,10 +24,10 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
-        _version = [[aDecoder decodeObjectOfClass:[NSNumber class] forKey:NSStringFromSelector(@selector(version))] integerValue];
-        _creationDate = [aDecoder decodeObjectOfClass:[NSDate class] forKey:NSStringFromSelector(@selector(creationDate))];
-        _appVersionString = [aDecoder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(appVersionString))];
-        _cacheData = [aDecoder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(cacheData))];
+        _version = [[aDecoder decodeObjectOfClass:NSNumber.class forKey:NSStringFromSelector(@selector(version))] integerValue];
+        _creationDate = [aDecoder decodeObjectOfClass:NSDate.class forKey:NSStringFromSelector(@selector(creationDate))];
+        _appVersionString = [aDecoder decodeObjectOfClass:NSString.class forKey:NSStringFromSelector(@selector(appVersionString))];
+        _cacheData = [aDecoder decodeObjectOfClass:NSData.class forKey:NSStringFromSelector(@selector(cacheData))];
     }
     return self;
 }
