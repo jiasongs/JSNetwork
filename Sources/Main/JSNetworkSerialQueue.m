@@ -31,7 +31,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _queue = dispatch_queue_create([[NSString stringWithFormat:@"com.jsnetwork.%@", NSStringFromClass(self.class)] UTF8String], NULL);
+        _queue = dispatch_queue_create([[NSString stringWithFormat:@"com.jsnetwork.%@", NSStringFromClass(self.class)] UTF8String], DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
