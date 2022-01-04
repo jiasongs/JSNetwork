@@ -1,5 +1,5 @@
 //
-//  JSNetworkSpinLock.h
+//  JSNetworkSerialQueue.h
 //  JSNetworkExample
 //
 //  Created by jiasong on 2020/7/31.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JSNetworkSpinLock : NSObject
+@interface JSNetworkSerialQueue : NSObject
 
 + (void)execute:(void (NS_NOESCAPE ^)(void))block;
 + (id)executeWithReturnValue:(id (NS_NOESCAPE ^)(void))block;
