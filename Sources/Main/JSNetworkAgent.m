@@ -40,10 +40,11 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _interfaceRecord = [NSMutableDictionary dictionary];
         _lock = OS_UNFAIR_LOCK_INIT;
-        _requestQueue = [[NSOperationQueue alloc] init];
-        _requestQueue.name = @"com.jsnetwork.agent.operationqueue";
+        
+        self.interfaceRecord = [NSMutableDictionary dictionary];
+        self.requestQueue = [[NSOperationQueue alloc] init];
+        self.requestQueue.name = @"com.jsnetwork.agent.operationqueue";
     }
     return self;
 }
@@ -75,7 +76,7 @@
     if (interface) {
         [self cancelRequestForInterface:interface];
     } else {
-        JSNetworkLog(@"检查 interface 是否已被释放");
+        JSNetworkLog(@"interface已经被释放");
     }
 }
 
@@ -83,7 +84,7 @@
 - (nullable id<JSNetworkInterfaceProtocol>)interfaceForTaskIdentifier:(NSString *)taskIdentifier {
     NSParameterAssert(taskIdentifier);
     [self addLock];
-    id<JSNetworkInterfaceProtocol> interface = [_interfaceRecord objectForKey:taskIdentifier];
+    id<JSNetworkInterfaceProtocol> interface = [self.interfaceRecord objectForKey:taskIdentifier];
     [self unLock];
     return interface;
 }
@@ -243,10 +244,12 @@
 - (void)performInterface:(id<JSNetworkInterfaceProtocol>)interface forTaskIdentifier:(NSString *)taskIdentifier {
     NSParameterAssert(interface && taskIdentifier);
     [self addLock];
-    if ([_interfaceRecord objectForKey:taskIdentifier]) {
-        JSNetworkLog(@"警告 - interface即将被覆盖, 请检查是否添加了相同的taskIdentifier!!!");
+#ifdef DEBUG
+    if ([self.interfaceRecord.allKeys containsObject:taskIdentifier]) {
+        NSAssert(NO, @"警告 - interface即将被覆盖, 请检查是否添加了相同的taskIdentifier!!!");
     }
-    [_interfaceRecord setObject:interface forKey:taskIdentifier];
+#endif
+    [self.interfaceRecord setObject:interface forKey:taskIdentifier];
     [self unLock];
 }
 
@@ -254,7 +257,7 @@
 - (void)removeInterfaceForTaskIdentifier:(NSString *)taskIdentifier {
     NSParameterAssert(taskIdentifier);
     [self addLock];
-    [_interfaceRecord removeObjectForKey:taskIdentifier];
+    [self.interfaceRecord removeObjectForKey:taskIdentifier];
     [self unLock];
 }
 
