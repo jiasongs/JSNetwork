@@ -28,7 +28,7 @@
 
 - (BOOL)isCancelled {
     if (self.taskIdentifier.length > 0) {
-        id<JSNetworkInterfaceProtocol> interface = [JSNetworkAgent.sharedAgent interfaceForTaskIdentifier:self.taskIdentifier];
+        id<JSNetworkInterfaceProtocol> interface = [JSNetworkAgent.defaultAgent interfaceForTaskIdentifier:self.taskIdentifier];
         return interface.request.isCancelled;
     }
     return NO;
@@ -36,7 +36,7 @@
 
 - (void)cancel {
     if (self.taskIdentifier.length > 0 && !self.isCancelled) {
-        [JSNetworkAgent.sharedAgent cancelRequestForTaskIdentifier:self.taskIdentifier];
+        [JSNetworkAgent.defaultAgent cancelRequestForTaskIdentifier:self.taskIdentifier];
     }
 }
 

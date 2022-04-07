@@ -142,7 +142,6 @@
                                                    completed:(nullable void (^)(__kindof NSObject *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface))completed {
     NSParameterAssert(config);
     __weak __typeof(target) weakTarget = target;
-    /// 1、生成接口
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequestConfig:config
                                                                        uploadProgress:uploadProgress
                                                                      downloadProgress:downloadProgress
@@ -151,16 +150,12 @@
             completed(weakTarget, aInterface);
         }
     }];
-    /// 2、设置取消实例
+    [JSNetworkAgent.defaultAgent performRequestForInterface:interface];
+    
     JSNetworkRequestCancellable *cancellable = [[JSNetworkRequestCancellable alloc] initWithTaskIdentifier:interface.taskIdentifier];
-    /// 绑定任务id
-    if (target) {
-        @synchronized (self) {
-            [target js_bindCancellable:cancellable];
-        }
+    @synchronized (self) {
+        [target js_bindCancellable:cancellable];
     }
-    /// 3、最终提交到网络处理中心
-    [JSNetworkAgent.sharedAgent performRequestForInterface:interface];
     return cancellable;
 }
 

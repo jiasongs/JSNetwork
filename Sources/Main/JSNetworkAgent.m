@@ -29,17 +29,13 @@
 
 @implementation JSNetworkAgent
 
-+ (instancetype)sharedAgent {
++ (instancetype)defaultAgent {
     static dispatch_once_t onceToken;
     static JSNetworkAgent *instance = nil;
     dispatch_once(&onceToken,^{
         instance = [[super allocWithZone:NULL] init];
     });
     return instance;
-}
-
-+ (id)allocWithZone:(struct _NSZone *)zone {
-    return [self sharedAgent];
 }
 
 - (instancetype)init {
@@ -81,6 +77,15 @@
     } else {
         JSNetworkLog(@"检查 interface 是否已被释放");
     }
+}
+
+/// 获得一个接口
+- (nullable id<JSNetworkInterfaceProtocol>)interfaceForTaskIdentifier:(NSString *)taskIdentifier {
+    NSParameterAssert(taskIdentifier);
+    [self addLock];
+    id<JSNetworkInterfaceProtocol> interface = [_interfaceRecord objectForKey:taskIdentifier];
+    [self unLock];
+    return interface;
 }
 
 #pragma mark - Private
@@ -251,15 +256,6 @@
     [self addLock];
     [_interfaceRecord removeObjectForKey:taskIdentifier];
     [self unLock];
-}
-
-/// 获得一个接口
-- (nullable id<JSNetworkInterfaceProtocol>)interfaceForTaskIdentifier:(NSString *)taskIdentifier {
-    NSParameterAssert(taskIdentifier);
-    [self addLock];
-    id<JSNetworkInterfaceProtocol> interface = [_interfaceRecord objectForKey:taskIdentifier];
-    [self unLock];
-    return interface;
 }
 
 #pragma mark - 锁

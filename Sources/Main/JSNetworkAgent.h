@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 单例
  */
-+ (instancetype)sharedAgent;
++ (instancetype)defaultAgent;
 
 /**
  *  @brief 添加一个请求
