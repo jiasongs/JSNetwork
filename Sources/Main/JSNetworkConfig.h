@@ -25,23 +25,23 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 全局的任务处理所在的队列
  */
-@property (nonatomic, strong) dispatch_queue_t processingQueue;
+@property (nonatomic) dispatch_queue_t processingQueue;
 /**
  *  @brief 全局的回调处理所在的队列，默认主队列
  */
-@property (nonatomic, strong) dispatch_queue_t completionQueue;
+@property (nonatomic) dispatch_queue_t completionQueue;
 /**
  *  @brief 全局BaseURL
  */
-@property (nonatomic, strong) NSString *baseURLString NS_SWIFT_NAME(baseUrlString);
+@property (nonatomic, copy) NSString *baseURLString NS_SWIFT_NAME(baseUrlString);
 /**
  *  @brief 全局请求头，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *HTTPHeaderFields NS_SWIFT_NAME(httpHeaderFields);
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *HTTPHeaderFields NS_SWIFT_NAME(httpHeaderFields);
 /**
  *  @brief 全局URL参数的字典，只读
  */
-@property (nonatomic, strong, readonly) NSDictionary<NSString *, id> *URLParameters NS_SWIFT_NAME(urlParameters);
+@property (nonatomic, readonly) NSDictionary<NSString *, id> *URLParameters NS_SWIFT_NAME(urlParameters);
 /**
  *  @brief 全局超时时间
  */
@@ -55,23 +55,23 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 全局的请求类, 继承于NSOperation
  */
-@property (nonatomic, copy) __kindof NSOperation<JSNetworkRequestProtocol> *(^buildNetworkRequest)(id<JSNetworkInterfaceProtocol> interface);
+@property (nullable, nonatomic, copy) __kindof NSOperation<JSNetworkRequestProtocol> *(^buildNetworkRequest)(id<JSNetworkInterfaceProtocol> interface);
 /**
  *  @brief 全局的响应类
  */
-@property (nonatomic, copy) id<JSNetworkResponseProtocol>(^buildNetworkResponse)(id<JSNetworkInterfaceProtocol> interface);
+@property (nullable, nonatomic, copy) id<JSNetworkResponseProtocol>(^buildNetworkResponse)(id<JSNetworkInterfaceProtocol> interface);
 /**
  *  @brief 磁盘缓存的类
  */
-@property (nonatomic, copy) id<JSNetworkDiskCacheProtocol>(^buildNetworkDiskCache)(id<JSNetworkInterfaceProtocol> interface);
+@property (nullable, nonatomic, copy) id<JSNetworkDiskCacheProtocol>(^buildNetworkDiskCache)(id<JSNetworkInterfaceProtocol> interface);
 /**
  *  @brief 磁盘缓存的文件夹路径
  */
-@property (nonatomic, strong) NSString *cacheDirectoryPath;
+@property (nonatomic, copy) NSString *cacheDirectoryPath;
 /**
  *  @brief 全局的插件
  */
-@property (nonatomic, assign, readonly) NSArray<id<JSNetworkPluginProtocol>> *plugins;
+@property (nonatomic, readonly) NSArray<id<JSNetworkPluginProtocol>> *plugins;
 
 /**
  *  @brief 单例

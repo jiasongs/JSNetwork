@@ -15,7 +15,6 @@
 @interface JSNetworkRequest ()
 
 @property (nonatomic, weak) id<JSNetworkInterfaceProtocol> privateInterfaceProxy;
-@property (nonatomic, strong) NSString *taskIdentifier;
 
 @end
 

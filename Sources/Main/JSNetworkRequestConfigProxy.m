@@ -13,11 +13,11 @@
 
 @interface _JSNetworkRequestConfigPrivate : NSObject <JSNetworkRequestConfigProtocol>
 
-@property (nonatomic, strong) NSString *finalURL;
-@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *finalParameters;
-@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *finalHTTPHeaderFields;
-@property (nonatomic, strong) NSArray<id<JSNetworkPluginProtocol>> *finalPlugins;
-@property (nonatomic, strong) NSString *finalCacheFileName;
+@property (nonatomic, copy) NSString *finalURL;
+@property (nonatomic, copy) NSDictionary<NSString *, NSString *> *finalParameters;
+@property (nonatomic, copy) NSDictionary<NSString *, NSString *> *finalHTTPHeaderFields;
+@property (nonatomic, copy) NSArray<id<JSNetworkPluginProtocol>> *finalPlugins;
+@property (nonatomic, copy) NSString *finalCacheFileName;
 
 @end
 
@@ -160,7 +160,7 @@
 @interface JSNetworkRequestConfigProxy ()
 
 @property (nonatomic, strong) _JSNetworkRequestConfigPrivate *privateConfig;
-@property (nonatomic, strong) NSArray<NSString *> *ignoreForwardingSelectors; /// 忽略转发的方法名
+@property (nonatomic, copy) NSArray<NSString *> *ignoreForwardingSelectors; /// 忽略转发的方法名
 
 @end
 

@@ -19,11 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 缓存的创建时间
  */
-@property (nonatomic, strong) NSDate *creationDate;
+@property (nonatomic, copy) NSDate *creationDate;
 /**
  *  @brief 缓存的APP版本
  */
-@property (nonatomic, strong) NSString *appVersionString;
+@property (nonatomic, copy) NSString *appVersionString;
 /**
  *  @brief 缓存的数据
  */

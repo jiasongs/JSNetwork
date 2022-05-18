@@ -26,7 +26,6 @@
 @end
 
 @implementation JSNetworkInterface
-
 @synthesize processedConfig = _processedConfig;
 @synthesize response = _response;
 @synthesize request = _request;
@@ -45,6 +44,7 @@
         _config = config;
         /// 处理过的请求配置实例
         _processedConfig = (id<JSNetworkRequestConfigProtocol>)[JSNetworkRequestConfigProxy proxyWithTarget:config];
+        
         JSNetworkConfig *sharedConfig = JSNetworkConfig.sharedConfig;
         /// 请求实例
         if ([config respondsToSelector:@selector(request)]) {
@@ -53,6 +53,7 @@
             _request = sharedConfig.buildNetworkRequest(self);
         }
         NSAssert(_request, @"请设置request");
+        
         /// 响应实例
         if ([config respondsToSelector:@selector(response)]) {
             _response = config.response;
@@ -60,6 +61,7 @@
             _response = sharedConfig.buildNetworkResponse(self);
         }
         NSAssert(_response, @"请设置response");
+        
         /// 磁盘缓存的实例
         if (_processedConfig.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
             if ([config respondsToSelector:@selector(diskCache)]) {
@@ -69,11 +71,13 @@
             }
             NSAssert(_diskCache, @"请设置diskCache");
         }
-        _completionBlocks = [NSMutableArray array];
+        
         /// 回调函数
+        _completionBlocks = [NSMutableArray array];
         [self requestUploadProgress:uploadProgress];
         [self requestDownloadProgress:downloadProgress];
         [self requestCompletedBlock:completionBlock];
+        
         /// 生成任务ID
         static NSUInteger jsNetworkRequestTaskIdentifier = 0;
         [JSNetworkSerialQueue execute:^{
@@ -105,7 +109,7 @@
 }
 
 - (NSString *)taskIdentifier {
-    return [JSNetworkSerialQueue executeWithReturnValue:^id{
+    return [JSNetworkSerialQueue executeWithReturnValue:^id {
         return _taskIdentifier;
     }];
 }
@@ -117,7 +121,7 @@
             _processedConfig,
             _request,
             _response
-            ];
+    ];
 }
 
 - (void)dealloc {

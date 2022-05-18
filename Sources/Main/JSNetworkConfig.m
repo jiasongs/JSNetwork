@@ -91,7 +91,7 @@
 }
 
 - (NSDictionary<NSString *, id> *)URLParameters {
-    return _URLParameters;
+    return _URLParameters.copy;
 }
 
 - (NSArray<id<JSNetworkPluginProtocol>> *)plugins {
@@ -99,7 +99,7 @@
 }
 
 - (NSDictionary<NSString *, NSString *> *)HTTPHeaderFields {
-    return _HTTPHeaderFields;
+    return _HTTPHeaderFields.copy;
 }
 
 @end

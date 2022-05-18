@@ -49,7 +49,7 @@ typedef void(^JSNetworkRequestCompletedBlock)(id<JSNetworkInterfaceProtocol> aIn
 /**
  *  @brief 返回已经完成的回调
  */
-@property (nonatomic, strong, readonly) NSArray<JSNetworkRequestCompletedBlock> *completionBlocks;
+@property (nonatomic, copy, readonly) NSArray<JSNetworkRequestCompletedBlock> *completionBlocks;
 
 /**
  *  @brief 根据config初始化一个Interface

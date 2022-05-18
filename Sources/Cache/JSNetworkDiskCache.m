@@ -12,8 +12,7 @@
 
 @interface JSNetworkDiskCache ()
 
-@property (nonatomic, strong) NSString *taskIdentifier;
-@property (nonatomic, strong) dispatch_queue_t ioQueue;
+@property (nonatomic) dispatch_queue_t ioQueue;
 
 @end
 
