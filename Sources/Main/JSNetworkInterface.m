@@ -15,7 +15,16 @@
 #import "JSNetworkRequestConfigProxy.h"
 #import "JSNetworkProxy.h"
 #import "JSNetworkRequestProtocol.h"
-#import "JSNetworkSerialQueue.h"
+
+FOUNDATION_STATIC_INLINE dispatch_queue_t
+JSNetworkTaskIdentifierQueue() {
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("com.jsnetwork.task.identifier.queue", DISPATCH_QUEUE_SERIAL);
+    });
+    return queue;
+}
 
 @interface JSNetworkInterface () {
     id<JSNetworkRequestConfigProtocol> _config;
@@ -80,10 +89,10 @@
         
         /// 生成任务ID
         static NSUInteger jsNetworkRequestTaskIdentifier = 0;
-        [JSNetworkSerialQueue execute:^{
+        dispatch_sync(JSNetworkTaskIdentifierQueue(), ^{
             jsNetworkRequestTaskIdentifier = jsNetworkRequestTaskIdentifier + 1;
             _taskIdentifier = [NSString stringWithFormat:@"%@_%@", @"task", @(jsNetworkRequestTaskIdentifier)];
-        }];
+        });
     }
     return self;
 }
@@ -109,9 +118,11 @@
 }
 
 - (NSString *)taskIdentifier {
-    return [JSNetworkSerialQueue executeWithReturnValue:^id {
-        return _taskIdentifier;
-    }];
+    __block NSString *taskIdentifier;
+    dispatch_sync(JSNetworkTaskIdentifierQueue(), ^{
+        taskIdentifier = _taskIdentifier;
+    });
+    return taskIdentifier;
 }
 
 - (NSString *)description {
