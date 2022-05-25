@@ -42,11 +42,11 @@
     return self.originalResponse.statusCode;
 }
 
-- (nullable id)responseObject  {
+- (nullable id)responseObject {
     return _responseObject;
 }
 
-- (nullable NSError *)error  {
+- (nullable NSError *)error {
     return _error;
 }
 
