@@ -29,7 +29,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         /// 全局配置
-        JSNetworkConfig.sharedConfig.debugLogEnabled = true;
+        JSNetworkConfig.sharedConfig.debugLogEnabled = NO;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
         JSNetworkConfig.sharedConfig.buildNetworkRequest = ^__kindof NSOperation<JSNetworkRequestProtocol> *(id<JSNetworkInterfaceProtocol> interface) {
             //            return [[AlamofireRequest1 alloc] init];
@@ -63,7 +63,7 @@
                                     onTarget:self
                                    completed:^(ViewController *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface) {
             /// 注意此Block会持有外部变量, 所以若内部引入了target, 必须使用weak, 否则自动释放机制会失效
-            NSLog(@"%@ %@ %@", weakSelf, target, aInterface);
+            NSLog(@"%@", aInterface);
         }];
     };
     /// 测试

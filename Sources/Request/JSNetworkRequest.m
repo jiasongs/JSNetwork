@@ -79,10 +79,6 @@
     return YES;
 }
 
-- (NSString *)description {
-    return [NSString stringWithFormat:@"%@: <%p>", NSStringFromClass(self.class), self];
-}
-
 - (void)dealloc {
     JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([self class]));
 }

@@ -126,13 +126,23 @@ JSNetworkTaskIdentifierQueue() {
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"\n{\n%@: <%p>\n----------------\n%@\n----------------\n%@\n----------------\n%@\n}",
-            NSStringFromClass(self.class),
-            self,
-            _processedConfig,
-            _request,
-            _response
-    ];
+#ifdef DEBUG
+    NSDictionary *config = [NSJSONSerialization JSONObjectWithData:[JSNetworkUtil dataFromObject:self.processedConfig.description] options:NSJSONReadingMutableContainers error:nil];
+    NSDictionary *value = @{
+        @"request": [config isKindOfClass:NSDictionary.class] ? config : @{},
+        @"response": @{
+            @"statusCode": @(self.response.responseStatusCode),
+            @"error": self.response.error ? : @""
+        },
+    };
+    NSDictionary *result = [NSDictionary dictionaryWithObject:value forKey:[super description]];
+    NSData *resultData = [NSJSONSerialization dataWithJSONObject:result options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *resultString = [[NSString alloc] initWithData:resultData encoding:NSUTF8StringEncoding];
+    resultString = [resultString stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
+    return resultString;
+#else
+    return [super description];
+#endif
 }
 
 - (void)dealloc {

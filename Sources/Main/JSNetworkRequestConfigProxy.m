@@ -206,21 +206,24 @@
 }
 
 - (NSString *)description {
+#ifdef DEBUG
     JSRequestCachePolicy cachePolicy = (JSRequestCachePolicy)[self performSelector:@selector(cachePolicy)];
-    return [NSString stringWithFormat:@"%@: <%p>\n{\nURL: %@\nParameters: %@\nBody: %@\nHeader: %@\nMethod: %@\nCacheFilePath: %@\n}",
-            NSStringFromClass([self.target class]),
-            self.target,
-            [self performSelector:@selector(requestURLString)],
-            [self performSelector:@selector(requestParameters)],
-            [self performSelector:@selector(requestBody)],
-            [self performSelector:@selector(requestHeaderFieldValueDictionary)],
-            @((JSRequestMethod)[self performSelector:@selector(requestMethod)]),
-            cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad ? [NSString stringWithFormat:@"%@/%@.metadata", [self performSelector:@selector(cacheDirectoryPath)], [self performSelector:@selector(cacheFileName)]] : @""
-            ];
-}
-
-- (void)dealloc {
-    
+    NSDictionary *value = @{
+        @"url": [self performSelector:@selector(requestURLString)] ? : @"",
+        @"header": [self performSelector:@selector(requestHeaderFieldValueDictionary)] ? : @"",
+        @"parameters": [self performSelector:@selector(requestParameters)] ? : @"",
+        @"body": [self performSelector:@selector(requestBody)] ? : @"",
+        @"method": @((JSRequestMethod)[self performSelector:@selector(requestMethod)]),
+        @"cacheFilePath": cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad ? [NSString stringWithFormat:@"%@/%@.metadata", [self performSelector:@selector(cacheDirectoryPath)], [self performSelector:@selector(cacheFileName)]] : @""
+    };
+    NSDictionary *result = [NSDictionary dictionaryWithObject:value forKey:[super description]];
+    NSData *resultData = [NSJSONSerialization dataWithJSONObject:result options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *resultString = [[NSString alloc] initWithData:resultData encoding:NSUTF8StringEncoding];
+    resultString = [resultString stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
+    return resultString;
+#else
+    return [super description];
+#endif
 }
 
 @end

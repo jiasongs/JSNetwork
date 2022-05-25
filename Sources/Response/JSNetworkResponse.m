@@ -62,10 +62,6 @@
     return self.error.code == -1009 || self.error.code == -1001;
 }
 
-- (NSString *)description {
-    return [NSString stringWithFormat:@"%@: <%p>", NSStringFromClass(self.class), self];
-}
-
 - (void)dealloc {
     JSNetworkLog(@"%@ - 已经释放", NSStringFromClass([self class]));
 }
