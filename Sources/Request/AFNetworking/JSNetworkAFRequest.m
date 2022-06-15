@@ -111,7 +111,9 @@
                                                  error:nil];
     }
     if (!request) {
-        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:config.requestURLString]];
+        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:config.requestURLString]
+                                          cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                      timeoutInterval:config.requestTimeoutInterval];
     }
     /// URLRequest创建完成时需要调用
     didCreateURLRequestBlock(request);
