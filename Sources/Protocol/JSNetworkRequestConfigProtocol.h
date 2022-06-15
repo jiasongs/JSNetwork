@@ -23,10 +23,10 @@ typedef NS_ENUM(NSInteger, JSRequestMethod) {
 };
 
 typedef NS_ENUM(NSInteger, JSRequestSerializerType) {
-    JSRequestSerializerTypeJSON        NS_SWIFT_NAME(json),  /// POST时Body转换为JSON字符串传输
-    JSRequestSerializerTypeHTTP        NS_SWIFT_NAME(http),  /// POST时Body转换为自定义的字符串传输
-    JSRequestSerializerTypeFormData    NS_SWIFT_NAME(formData),  /// POST时Body转换为FormData传输
-    JSRequestSerializerTypeBinaryData  NS_SWIFT_NAME(binaryData),  /// POST时Body转换为二进制数据传输
+    JSRequestSerializerTypeJSON        NS_SWIFT_NAME(json),         /// POST时Body转换为JSON字符串传输
+    JSRequestSerializerTypeHTTP        NS_SWIFT_NAME(http),         /// POST时Body转换为自定义的字符串传输
+    JSRequestSerializerTypeFormData    NS_SWIFT_NAME(formData),     /// POST时Body转换为FormData传输
+    JSRequestSerializerTypeBinaryData  NS_SWIFT_NAME(binaryData),   /// POST时Body转换为二进制数据传输
 };
 
 typedef NS_ENUM(NSInteger, JSRequestCachePolicy) {

@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
           multipartFormData:(void(^)(id formData))multipartFormDataBlock
              uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
-        didCreateURLRequest:(void(^)(__kindof NSURLRequest *urlRequest))didCreateURLRequestBlock
+        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
               didCreateTask:(void(^)(__kindof NSURLSessionTask *task))didCreateTaskBlock
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock;
 
