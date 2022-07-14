@@ -6,7 +6,6 @@
 //
 
 #import "JSNetworkAFRequest.h"
-#import "JSNetworkInterface.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkConfig.h"
