@@ -7,14 +7,11 @@
 //
 
 #import "JSNetworkRequest.h"
-#import "JSNetworkInterfaceProtocol.h"
 #import "JSNetworkRequestProtocol.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkUtil.h"
 
 @interface JSNetworkRequest ()
-
-@property (nonatomic, weak) id<JSNetworkInterfaceProtocol> privateInterfaceProxy;
 
 @end
 

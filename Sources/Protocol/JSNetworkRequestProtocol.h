@@ -9,9 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @protocol JSNetworkRequestConfigProtocol;
-@protocol JSNetworkResponseProtocol;
-@protocol JSNetworkRequestProtocol;
-@protocol JSNetworkInterfaceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 

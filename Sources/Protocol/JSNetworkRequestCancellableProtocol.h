@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol JSNetworkInterfaceProtocol;
-
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol JSNetworkRequestCancellableProtocol <NSObject>

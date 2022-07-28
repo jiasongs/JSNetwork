@@ -8,8 +8,6 @@
 
 #import "JSNetworkResponse.h"
 #import "JSNetworkResponseProtocol.h"
-#import "JSNetworkRequestConfigProtocol.h"
-#import "JSNetworkRequestProtocol.h"
 #import "JSNetworkUtil.h"
 
 @interface JSNetworkResponse () {
