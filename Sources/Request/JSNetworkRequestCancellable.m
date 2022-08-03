@@ -9,26 +9,13 @@
 #import "JSNetworkAgent.h"
 #import "JSNetworkInterfaceProtocol.h"
 
-@interface JSNetworkRequestCancellable ()
-
-@property (nonatomic, copy, readwrite) NSString *taskIdentifier;
-
-@end
-
 @implementation JSNetworkRequestCancellable
+@synthesize agent = _agent;
 @synthesize taskIdentifier = _taskIdentifier;
-
-- (instancetype)initWithTaskIdentifier:(NSString *)taskIdentifier {
-    if (self = [super init]) {
-        NSParameterAssert(taskIdentifier);
-        _taskIdentifier = taskIdentifier;
-    }
-    return self;
-}
 
 - (BOOL)isCancelled {
     if (self.taskIdentifier.length > 0) {
-        id<JSNetworkInterfaceProtocol> interface = [JSNetworkAgent.defaultAgent interfaceForTaskIdentifier:self.taskIdentifier];
+        id<JSNetworkInterfaceProtocol> interface = [self.agent interfaceForTaskIdentifier:self.taskIdentifier];
         return interface.request.isCancelled;
     }
     return NO;
@@ -36,7 +23,7 @@
 
 - (void)cancel {
     if (self.taskIdentifier.length > 0 && !self.isCancelled) {
-        [JSNetworkAgent.defaultAgent cancelRequestForTaskIdentifier:self.taskIdentifier];
+        [self.agent cancelRequestForTaskIdentifier:self.taskIdentifier];
     }
 }
 

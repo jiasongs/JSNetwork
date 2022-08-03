@@ -12,6 +12,7 @@
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkResponseProtocol;
 @protocol JSNetworkDiskCacheProtocol;
+@protocol JSNetworkRequestCancellableProtocol;
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
     JSRequestMethodGET     NS_SWIFT_NAME(get),
@@ -142,12 +143,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (__kindof NSOperation<JSNetworkRequestProtocol> *)request;
 
 /**
- *  @brief 响应类, 默认全局设置的response
+ *  @brief 请求取消类
+ */
+- (id<JSNetworkRequestCancellableProtocol>)requestCancellable;
+
+/**
+ *  @brief 响应类
  */
 - (id<JSNetworkResponseProtocol>)response;
 
 /**
- *  @brief 磁盘缓存类, 默认全局设置的diskCache
+ *  @brief 磁盘缓存类
  */
 - (id<JSNetworkDiskCacheProtocol>)diskCache;
 

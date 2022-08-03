@@ -53,18 +53,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) NSInteger requestMaxConcurrentCount;
 /**
- *  @brief 全局的请求类, 继承于NSOperation
- */
-@property (nullable, nonatomic, copy) __kindof NSOperation<JSNetworkRequestProtocol> *(^buildNetworkRequest)(id<JSNetworkInterfaceProtocol> interface);
-/**
- *  @brief 全局的响应类
- */
-@property (nullable, nonatomic, copy) id<JSNetworkResponseProtocol>(^buildNetworkResponse)(id<JSNetworkInterfaceProtocol> interface);
-/**
- *  @brief 磁盘缓存的类
- */
-@property (nullable, nonatomic, copy) id<JSNetworkDiskCacheProtocol>(^buildNetworkDiskCache)(id<JSNetworkInterfaceProtocol> interface);
-/**
  *  @brief 磁盘缓存的文件夹路径
  */
 @property (nonatomic, copy) NSString *cacheDirectoryPath;
@@ -72,6 +60,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 全局的插件
  */
 @property (nonatomic, readonly) NSArray<id<JSNetworkPluginProtocol>> *plugins;
+/**
+ *  @brief JSNetworkInterface的响应类
+ */
+@property (nullable, nonatomic, copy) id<JSNetworkInterfaceProtocol>(^networkInterface)(void);
 
 /**
  *  @brief 单例

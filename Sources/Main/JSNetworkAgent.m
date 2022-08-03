@@ -57,7 +57,7 @@
     [self performInterface:interface forTaskIdentifier:interface.taskIdentifier];
     /// 处理请求
     [self toggleWillStartWithInterface:interface];
-    if (interface.processedConfig.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
+    if (interface.config.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
         [self processingDiskCacheForInterface:interface];
     } else {
         [self processingRequestForInterface:interface];
@@ -96,10 +96,10 @@
     NSParameterAssert(interface);
     __weak typeof(self) weakSelf = self;
     __weak typeof(interface) weakInterface = interface;
-    [interface.request buildTaskWithConfig:interface.processedConfig
+    [interface.request buildTaskWithConfig:interface.config
                          multipartFormData:^(id formData) {
-        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartFormData:)]) {
-            [weakInterface.processedConfig constructingMultipartFormData:formData];
+        if ([weakInterface.config respondsToSelector:@selector(constructingMultipartFormData:)]) {
+            [weakInterface.config constructingMultipartFormData:formData];
         }
     } uploadProgress:^(NSProgress *uploadProgress) {
         if (weakInterface.uploadProgress) {
@@ -115,16 +115,16 @@
             return;
         }
         /// 二进制的数据
-        if (weakInterface.processedConfig.requestSerializerType == JSRequestSerializerTypeBinaryData) {
-            id body = weakInterface.processedConfig.requestBody;
+        if (weakInterface.config.requestSerializerType == JSRequestSerializerTypeBinaryData) {
+            id body = weakInterface.config.requestBody;
             if ([body isKindOfClass:NSData.class]) {
                 [urlRequest setHTTPBody:body];
             } else {
                 NSAssert(NO, @"必须为 NSData类型");
             }
         }
-        if ([weakInterface.processedConfig respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
-            [weakInterface.processedConfig constructingMultipartURLRequest:urlRequest];
+        if ([weakInterface.config respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
+            [weakInterface.config constructingMultipartURLRequest:urlRequest];
         }
     } didCreateTask:^(__kindof NSURLSessionTask *task) {
         [weakSelf performRequestOperation:weakInterface.request];
@@ -140,12 +140,12 @@
 
 /// 处理缓存
 - (void)processingDiskCacheForInterface:(id<JSNetworkInterfaceProtocol>)interface {
-    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    NSParameterAssert(processedConfig.cacheTimeInSeconds > 0 || processedConfig.cacheVersion > 0);
+    id<JSNetworkRequestConfigProtocol> config = interface.config;
+    NSParameterAssert(config.cacheTimeInSeconds > 0 || config.cacheVersion > 0);
     __weak typeof(self) weakSelf = self;
     __weak typeof(interface) weakInterface = interface;
     /// 缓存处理
-    [interface.diskCache buildTaskWithConfig:processedConfig
+    [interface.diskCache buildTaskWithConfig:config
                                 didCompleted:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
         @autoreleasepool {
             if (metadata) {
@@ -183,10 +183,10 @@
             dispatch_async(completionQueue, ^{
                 @autoreleasepool {
                     [weakSelf toggleWillStopWithInterface:weakInterface];
-                    for (JSNetworkRequestCompletedBlock block in weakInterface.completionBlocks) {
-                        block(weakInterface);
-                    }
-                    [weakInterface clearAllCallBack];
+                    weakInterface.completionHandler(weakInterface);
+                    weakInterface.completionHandler = nil;
+                    weakInterface.uploadProgress = nil;
+                    weakInterface.downloadProgress = nil;
                     [weakSelf toggleDidStopWithInterface:weakInterface];
                     if (weakInterface.request.requestTask) {
                         [weakSelf removeRequestOperation:weakInterface.request];
@@ -195,15 +195,15 @@
                 }
             });
         };
-        id<JSNetworkRequestConfigProtocol> processedConfig = weakInterface.processedConfig;
+        id<JSNetworkRequestConfigProtocol> config = weakInterface.config;
         BOOL isSaveCache = NO;
-        if (setCacheDataIfNeeded && processedConfig.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad && !error) {
-            isSaveCache = [processedConfig cacheIsSavedWithResponse:weakInterface.response];
+        if (setCacheDataIfNeeded && config.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad && !error) {
+            isSaveCache = [config cacheIsSavedWithResponse:weakInterface.response];
         }
         if (isSaveCache) {
             /// 设置缓存
             [weakInterface.diskCache setCacheData:responseObject
-                                 forRequestConfig:processedConfig
+                                 forRequestConfig:config
                                         completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
                 completionBlock();
             }];
@@ -279,8 +279,8 @@
 
 - (void)toggleWillStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
-    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    for (id<JSNetworkPluginProtocol> plugin in processedConfig.requestPlugins) {
+    id<JSNetworkRequestConfigProtocol> config = interface.config;
+    for (id<JSNetworkPluginProtocol> plugin in config.requestPlugins) {
         if ([plugin respondsToSelector:@selector(requestWillStart:)]) {
             [plugin requestWillStart:interface];
         }
@@ -289,8 +289,8 @@
 
 - (void)toggleDidStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
-    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    for (id<JSNetworkPluginProtocol> plugin in processedConfig.requestPlugins) {
+    id<JSNetworkRequestConfigProtocol> config = interface.config;
+    for (id<JSNetworkPluginProtocol> plugin in config.requestPlugins) {
         if ([plugin respondsToSelector:@selector(requestDidStart:)]) {
             [plugin requestDidStart:interface];
         }
@@ -299,8 +299,8 @@
 
 - (void)toggleWillStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
-    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    for (id<JSNetworkPluginProtocol> plugin in processedConfig.requestPlugins) {
+    id<JSNetworkRequestConfigProtocol> config = interface.config;
+    for (id<JSNetworkPluginProtocol> plugin in config.requestPlugins) {
         if ([plugin respondsToSelector:@selector(requestWillStop:)]) {
             [plugin requestWillStop:interface];
         }
@@ -309,8 +309,8 @@
 
 - (void)toggleDidStopWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);
-    id<JSNetworkRequestConfigProtocol> processedConfig = interface.processedConfig;
-    for (id<JSNetworkPluginProtocol> plugin in processedConfig.requestPlugins) {
+    id<JSNetworkRequestConfigProtocol> config = interface.config;
+    for (id<JSNetworkPluginProtocol> plugin in config.requestPlugins) {
         if ([plugin respondsToSelector:@selector(requestDidStop:)]) {
             [plugin requestDidStop:interface];
         }

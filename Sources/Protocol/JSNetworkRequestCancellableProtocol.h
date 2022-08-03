@@ -7,27 +7,25 @@
 
 #import <Foundation/Foundation.h>
 
+@class JSNetworkAgent;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol JSNetworkRequestCancellableProtocol <NSObject>
 
 @required
-
+/**
+ *  @brief 请求代理类
+ */
+@property (nonatomic, weak) JSNetworkAgent *agent;
 /**
  *  @brief 任务id
  */
-@property (nonatomic, copy, readonly) NSString *taskIdentifier;
+@property (nonatomic, copy) NSString *taskIdentifier;
 /**
  *  @brief 请求是否已经取消
  */
 @property (nonatomic, readonly) BOOL isCancelled;
-
-/**
- *  @brief 初始化
- *
- *  @param taskIdentifier 任务id
- */
-- (instancetype)initWithTaskIdentifier:(NSString *)taskIdentifier NS_SWIFT_NAME(init(taskIdentifier:));
 
 /**
  *  @brief 取消请求

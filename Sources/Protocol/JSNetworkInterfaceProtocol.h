@@ -11,13 +11,15 @@
 @protocol JSNetworkInterfaceProtocol;
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkResponseProtocol;
-@protocol JSNetworkRequestProtocol;
+@protocol JSNetworkRequestCancellableProtocol;
 @protocol JSNetworkDiskCacheProtocol;
+@protocol JSNetworkDiskCacheProtocol;
+@protocol JSNetworkRequestProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^JSNetworkProgressBlock)(NSProgress *progress);
-typedef void(^JSNetworkRequestCompletedBlock)(id<JSNetworkInterfaceProtocol> aInterface);
+typedef void(^JSNetworkRequestCompletionHandler)(id<JSNetworkInterfaceProtocol> aInterface);
 
 @protocol JSNetworkInterfaceProtocol <NSObject>
 
@@ -25,84 +27,41 @@ typedef void(^JSNetworkRequestCompletedBlock)(id<JSNetworkInterfaceProtocol> aIn
 /**
  *  @brief 已经处理好的请求配置类
  */
-@property (nonatomic, strong, readonly) id<JSNetworkRequestConfigProtocol> processedConfig;
+@property (nonatomic, strong) id<JSNetworkRequestConfigProtocol> config;
 /**
  *  @brief 请求类
  */
-@property (nonatomic, strong, readonly) __kindof NSOperation<JSNetworkRequestProtocol> *request;
+@property (nonatomic, strong) __kindof NSOperation<JSNetworkRequestProtocol> *request;
+/**
+ *  @brief 请求取消类
+ */
+@property (nonatomic, strong) id<JSNetworkRequestCancellableProtocol> requestCancellable;
 /**
  *  @brief 响应类
  */
-@property (nonatomic, strong, readonly) id<JSNetworkResponseProtocol> response;
+@property (nonatomic, strong) id<JSNetworkResponseProtocol> response;
 /**
- *  @brief 缓存类的实例
+ *  @brief 缓存类
  */
-@property (nullable, nonatomic, strong, readonly) id<JSNetworkDiskCacheProtocol> diskCache;
+@property (nullable, nonatomic, strong) id<JSNetworkDiskCacheProtocol> diskCache;
 /**
  *  @brief 上传进度的回调
  */
-@property (nullable, nonatomic, copy, readonly) JSNetworkProgressBlock uploadProgress;
+@property (nullable, nonatomic, copy) JSNetworkProgressBlock uploadProgress;
 /**
  *  @brief 下载进度的回调
  */
-@property (nullable, nonatomic, copy, readonly) JSNetworkProgressBlock downloadProgress;
+@property (nullable, nonatomic, copy) JSNetworkProgressBlock downloadProgress;
 /**
  *  @brief 返回已经完成的回调
  */
-@property (nonatomic, copy, readonly) NSArray<JSNetworkRequestCompletedBlock> *completionBlocks;
-
+@property (nullable, nonatomic, copy) JSNetworkRequestCompletionHandler completionHandler;
 /**
- *  @brief 根据config初始化一个Interface
- *
- *  @param config JSNetworkRequestConfigProtocol
- *  @param uploadProgress 上传进度
- *  @param downloadProgress 下载进度
- *  @param completionBlock 完成前的回调
- */
-- (instancetype)initWithRequestConfig:(id<JSNetworkRequestConfigProtocol>)config
-                       uploadProgress:(nullable JSNetworkProgressBlock)uploadProgress
-                     downloadProgress:(nullable JSNetworkProgressBlock)downloadProgress
-                       completedBlock:(nullable JSNetworkRequestCompletedBlock)completionBlock;
-
-/**
- *  @brief 设置上传进度的回调
- *
- *  @param uploadProgress 上传进度
- *
- *  @use 实现此方法时需要持有uploadProgress
- */
-- (void)requestUploadProgress:(nullable JSNetworkProgressBlock)uploadProgress;
-
-/**
- *  @brief 设置下载进度的回调
- *
- *  @param downloadProgress 下载进度
- *
- *  @use 实现此方法时需要持有downloadProgress
- */
-- (void)requestDownloadProgress:(nullable JSNetworkProgressBlock)downloadProgress;
-
-/**
- *  @brief 设置请求完成的回调，此时响应已经被处理
- *
- *  @param completionBlock 完成前的回调
- *
- *  @use 实现此方法时需要用一个数组持有completionBlock，因为外部会设置多个回调
- *  @see JSNetworkRequest.m
- */
-- (void)requestCompletedBlock:(nullable JSNetworkRequestCompletedBlock)completionBlock;
-
-/**
- *  @brief 清空所有回调
- */
-- (void)clearAllCallBack;
-
-/**
- *  @brief 任务ID, 保证唯一, 注意线程安全
+ *  @brief 任务ID, 保证全局唯一
  *
  * @return NSString
  */
-- (NSString *)taskIdentifier;
+@property (nonatomic, copy) NSString *taskIdentifier;
 
 @end
 
