@@ -32,7 +32,7 @@
         AFHTTPSessionManager *temporaryManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
         return temporaryManager;
     };
-    if (self.isUniqueSessionManager) {
+    if (self.isUseUniqueSessionManager) {
         static AFHTTPSessionManager *uniqueSessionManager = nil;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
@@ -176,7 +176,7 @@
     }
     didCompletedBlock(resultObject, resultError);
     
-    if (!self.isUniqueSessionManager) {
+    if (!self.isUseUniqueSessionManager) {
         if (self.sessionManager.tasks.count == 0) {
             [self.sessionManager invalidateSessionCancelingTasks:NO resetSession:YES];
         } else {

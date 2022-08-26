@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JSNetworkAFRequest : JSNetworkRequest
 
-@property (nonatomic, assign) BOOL isUniqueSessionManager;
+@property (nonatomic, assign) BOOL isUseUniqueSessionManager;
 
 @end
 
