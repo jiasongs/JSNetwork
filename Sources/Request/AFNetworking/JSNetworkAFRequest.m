@@ -15,6 +15,8 @@
     NSURLSessionTask *_requestTask;
 }
 
+@property (nullable, nonatomic, strong) AFHTTPSessionManager *sessionManager;
+
 @end
 
 @implementation JSNetworkAFRequest
@@ -26,14 +28,24 @@
         didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
               didCreateTask:(void(^)(__kindof NSURLSessionTask *task))didCreateTaskBlock
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
-    static AFHTTPSessionManager *sessionManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
-        sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    });
+    AFHTTPSessionManager *(^createSessionManager)(void) = ^AFHTTPSessionManager *{
+        AFHTTPSessionManager *temporaryManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
+        temporaryManager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        return temporaryManager;
+    };
+    if (self.isUniqueSessionManager) {
+        static AFHTTPSessionManager *uniqueSessionManager = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            uniqueSessionManager = createSessionManager();
+        });
+        self.sessionManager = uniqueSessionManager;
+    } else {
+        self.sessionManager = createSessionManager();
+    }
+    
     /// JSNetwork处理线程
-    sessionManager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
+    self.sessionManager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     /// 构建request、task
     BOOL useFormData = NO;
     __kindof AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
@@ -118,25 +130,25 @@
     didCreateURLRequestBlock(request);
     /// 构建task
     if (config.requestSerializerType == JSRequestSerializerTypeFormData) {
-        _requestTask = [sessionManager uploadTaskWithStreamedRequest:request
-                                                            progress:uploadProgressBlock
-                                                   completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-            [self handleResponseWithSerializer:responseSerializer
-                                   URLResponse:response
-                                responseObject:responseObject
-                                         error:error
-                                  didCompleted:didCompletedBlock];
+        _requestTask = [self.sessionManager uploadTaskWithStreamedRequest:request
+                                                                 progress:uploadProgressBlock
+                                                        completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+            [self handleResultWithSerializer:responseSerializer
+                                 URLResponse:response
+                              responseObject:responseObject
+                                       error:error
+                                didCompleted:didCompletedBlock];
         }];
     } else {
-        _requestTask = [sessionManager dataTaskWithRequest:request
-                                            uploadProgress:uploadProgressBlock
-                                          downloadProgress:downloadProgressBlock
-                                         completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-            [self handleResponseWithSerializer:responseSerializer
-                                   URLResponse:response
-                                responseObject:responseObject
-                                         error:error
-                                  didCompleted:didCompletedBlock];
+        _requestTask = [self.sessionManager dataTaskWithRequest:request
+                                                 uploadProgress:uploadProgressBlock
+                                               downloadProgress:downloadProgressBlock
+                                              completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+            [self handleResultWithSerializer:responseSerializer
+                                 URLResponse:response
+                              responseObject:responseObject
+                                       error:error
+                                didCompleted:didCompletedBlock];
         }];
     }
     /// Task创建完成时需要调用
@@ -149,11 +161,11 @@
 
 #pragma mark - Handle Response
 
-- (void)handleResponseWithSerializer:(__kindof AFHTTPResponseSerializer *)responseSerializer
-                         URLResponse:(NSURLResponse *)URLResponse
-                      responseObject:(id)responseObject
-                               error:(NSError *)error
-                        didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
+- (void)handleResultWithSerializer:(__kindof AFHTTPResponseSerializer *)responseSerializer
+                       URLResponse:(NSURLResponse *)URLResponse
+                    responseObject:(id)responseObject
+                             error:(NSError *)error
+                      didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
     id resultObject = nil;
     NSError *resultError = nil;
     NSError *serializationError = nil;
@@ -164,6 +176,15 @@
         resultError = serializationError;
     }
     didCompletedBlock(resultObject, resultError);
+    
+    if (!self.isUniqueSessionManager) {
+        if (self.sessionManager.tasks.count == 0) {
+            [self.sessionManager invalidateSessionCancelingTasks:NO resetSession:YES];
+        } else {
+            NSAssert(NO, @"同一个session下有多个任务不得重置session, 请按照堆栈检查代码");
+        }
+    }
+    self.sessionManager = nil;
 }
 
 @end
