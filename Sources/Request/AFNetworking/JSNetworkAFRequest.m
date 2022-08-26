@@ -30,7 +30,6 @@
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
     AFHTTPSessionManager *(^createSessionManager)(void) = ^AFHTTPSessionManager *{
         AFHTTPSessionManager *temporaryManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
-        temporaryManager.requestSerializer = [AFHTTPRequestSerializer serializer];
         temporaryManager.responseSerializer = [AFHTTPResponseSerializer serializer];
         return temporaryManager;
     };
@@ -49,8 +48,11 @@
     self.sessionManager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     /// 构建request、task
     BOOL useFormData = NO;
-    __kindof AFHTTPRequestSerializer *requestSerializer = [AFJSONRequestSerializer serializer];
+    __kindof AFHTTPRequestSerializer *requestSerializer = nil;
     switch (config.requestSerializerType) {
+        case JSRequestSerializerTypeJSON:
+            requestSerializer = [AFJSONRequestSerializer serializer];
+            break;
         case JSRequestSerializerTypeHTTP:
         case JSRequestSerializerTypeBinaryData:
             requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -62,8 +64,11 @@
         default:
             break;
     }
-    __kindof AFHTTPResponseSerializer *responseSerializer = [AFJSONResponseSerializer serializer];
+    __kindof AFHTTPResponseSerializer *responseSerializer = nil;
     switch (config.responseSerializerType) {
+        case JSResponseSerializerTypeJSON:
+            responseSerializer = [AFJSONResponseSerializer serializer];
+            break;
         case JSResponseSerializerTypeHTTP:
             responseSerializer = [AFHTTPResponseSerializer serializer];
             break;
