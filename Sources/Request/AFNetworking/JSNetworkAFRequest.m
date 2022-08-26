@@ -30,6 +30,8 @@
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
     AFHTTPSessionManager *(^createSessionManager)(void) = ^AFHTTPSessionManager *{
         AFHTTPSessionManager *temporaryManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
+        temporaryManager.requestSerializer = [AFHTTPRequestSerializer serializer];
+        temporaryManager.responseSerializer = [AFHTTPResponseSerializer serializer];
         return temporaryManager;
     };
     if (self.isUseUniqueSessionManager) {
