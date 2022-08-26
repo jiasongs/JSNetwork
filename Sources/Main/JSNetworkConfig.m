@@ -39,7 +39,7 @@
         _baseURLString = @"";
         _timeoutInterval = 20;
         _requestMaxConcurrentCount = -1;
-        _processingQueue = dispatch_queue_create("com.jsnetwork.agent.processing", DISPATCH_QUEUE_CONCURRENT);
+        _processingQueue = dispatch_queue_create("com.jsnetwork.config.processing", DISPATCH_QUEUE_CONCURRENT);
         _completionQueue = dispatch_get_main_queue();
         NSArray<NSString *> *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         _cacheDirectoryPath = [NSString stringWithFormat:@"%@/com.jsnetwork.cache", cachePaths.firstObject];

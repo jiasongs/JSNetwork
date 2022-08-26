@@ -31,15 +31,12 @@
         /// 全局配置
         JSNetworkConfig.sharedConfig.debugLogEnabled = NO;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
-        JSNetworkConfig.sharedConfig.buildNetworkRequest = ^__kindof NSOperation<JSNetworkRequestProtocol> *(id<JSNetworkInterfaceProtocol> interface) {
-            //            return [[AlamofireRequest1 alloc] init];
-            return [[JSNetworkAFRequest alloc] init];
-        };
-        JSNetworkConfig.sharedConfig.buildNetworkResponse = ^id<JSNetworkResponseProtocol>(id<JSNetworkInterfaceProtocol> interface) {
-            return [[NetworkResponse alloc] init];
-        };
-        JSNetworkConfig.sharedConfig.buildNetworkDiskCache = ^id<JSNetworkDiskCacheProtocol>(id<JSNetworkInterfaceProtocol> interface) {
-            return [[JSNetworkDiskCache alloc] init];
+        JSNetworkConfig.sharedConfig.networkInterface = ^id<JSNetworkInterfaceProtocol>(id<JSNetworkRequestConfigProtocol> config) {
+//            JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequest:[[JSNetworkAFRequest alloc] init] /// [[AlamofireRequest1 alloc] init]
+//                                                                            cancellable:[[JSNetworkRequestCancellable alloc] init]
+//                                                                               response:[[NetworkResponse alloc] init]
+//                                                                              diskCache:[[JSNetworkDiskCache alloc] init]];
+            return nil;
         };
         [JSNetworkConfig.sharedConfig addURLParameters:@{@"app": @"1.0.0", @"token": @"token"}];
         [JSNetworkConfig.sharedConfig addURLParameters:@{@"other": @"other"}];
@@ -58,12 +55,16 @@
     void (^test)(void) = ^(void) {
         CNodeAPI *api = [[CNodeAPI alloc] init];
         /// 生成接口
-        __weak __typeof(self) weakSelf = self;
         [JSNetworkProvider requestWithConfig:api
                                     onTarget:self
                                    completed:^(ViewController *_Nullable target, id<JSNetworkInterfaceProtocol> aInterface) {
             /// 注意此Block会持有外部变量, 所以若内部引入了target, 必须使用weak, 否则自动释放机制会失效
-            NSLog(@"%@", aInterface);
+            NetworkResponse *response = (NetworkResponse *)aInterface.response;
+            if (response.successful) {
+                NSLog(@"%@", @"请求成功");
+            } else {
+                NSLog(@"%@", response.error);
+            }
         }];
     };
     /// 测试

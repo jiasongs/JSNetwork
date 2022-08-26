@@ -6,16 +6,16 @@
 //
 
 #import "JSNetworkRequestCancellable.h"
-#import "JSNetworkAgent.h"
+#import "JSNetworkManager.h"
 #import "JSNetworkInterfaceProtocol.h"
 
 @implementation JSNetworkRequestCancellable
-@synthesize agent = _agent;
+@synthesize networkManager = _networkManager;
 @synthesize taskIdentifier = _taskIdentifier;
 
 - (BOOL)isCancelled {
     if (self.taskIdentifier.length > 0) {
-        id<JSNetworkInterfaceProtocol> interface = [self.agent interfaceForTaskIdentifier:self.taskIdentifier];
+        id<JSNetworkInterfaceProtocol> interface = [self.networkManager interfaceForTaskIdentifier:self.taskIdentifier];
         return interface.request.isCancelled;
     }
     return NO;
@@ -23,7 +23,7 @@
 
 - (void)cancel {
     if (self.taskIdentifier.length > 0 && !self.isCancelled) {
-        [self.agent cancelRequestForTaskIdentifier:self.taskIdentifier];
+        [self.networkManager cancelRequestForTaskIdentifier:self.taskIdentifier];
     }
 }
 

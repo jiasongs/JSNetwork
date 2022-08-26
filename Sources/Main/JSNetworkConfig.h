@@ -13,6 +13,7 @@
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkDiskCacheProtocol;
 @protocol JSNetworkInterfaceProtocol;
+@protocol JSNetworkRequestConfigProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -63,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief JSNetworkInterface的响应类
  */
-@property (nullable, nonatomic, copy) id<JSNetworkInterfaceProtocol>(^networkInterface)(void);
+@property (nonatomic, copy) id<JSNetworkInterfaceProtocol>(^networkInterface)(id<JSNetworkRequestConfigProtocol> config);
 
 /**
  *  @brief 单例

@@ -1,12 +1,12 @@
 //
-//  JSNetworkAgent.m
+//  JSNetworkManager.m
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/17.
 //  Copyright © 2020 jiasong. All rights reserved.
 //
 
-#import "JSNetworkAgent.h"
+#import "JSNetworkManager.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkResponseProtocol.h"
 #import "JSNetworkPluginProtocol.h"
@@ -18,7 +18,7 @@
 #import "JSNetworkConfig.h"
 #import <os/lock.h>
 
-@interface JSNetworkAgent () {
+@interface JSNetworkManager () {
     os_unfair_lock _lock;
 }
 
@@ -27,11 +27,11 @@
 
 @end
 
-@implementation JSNetworkAgent
+@implementation JSNetworkManager
 
-+ (instancetype)defaultAgent {
++ (instancetype)defaultManager {
     static dispatch_once_t onceToken;
-    static JSNetworkAgent *instance = nil;
+    static JSNetworkManager *instance = nil;
     dispatch_once(&onceToken,^{
         instance = [[super allocWithZone:NULL] init];
     });
@@ -44,7 +44,7 @@
         
         self.interfaceRecord = [NSMutableDictionary dictionary];
         self.requestQueue = [[NSOperationQueue alloc] init];
-        self.requestQueue.name = @"com.jsnetwork.agent.operationqueue";
+        self.requestQueue.name = @"com.jsnetwork.manager.operationqueue";
     }
     return self;
 }
@@ -52,7 +52,10 @@
 #pragma mark - Pubilc
 
 - (void)performRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
-    NSParameterAssert(interface);
+    if (![self validateInterface:interface]) {
+        return;
+    }
+    
     /// 首先需要添加interface
     [self performInterface:interface forTaskIdentifier:interface.taskIdentifier];
     /// 处理请求
@@ -66,6 +69,10 @@
 }
 
 - (void)cancelRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    if (![self validateInterface:interface]) {
+        return;
+    }
+    
     if (interface.request.requestTask) {
         [interface.request cancel];
     }
@@ -83,6 +90,7 @@
 /// 获得一个接口
 - (nullable id<JSNetworkInterfaceProtocol>)interfaceForTaskIdentifier:(NSString *)taskIdentifier {
     NSParameterAssert(taskIdentifier);
+    
     [self addLock];
     id<JSNetworkInterfaceProtocol> interface = [self.interfaceRecord objectForKey:taskIdentifier];
     [self unLock];
@@ -93,48 +101,55 @@
 
 /// 处理请求
 - (void)processingRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
-    NSParameterAssert(interface);
+    if (![self validateInterface:interface]) {
+        return;
+    }
+    
     __weak typeof(self) weakSelf = self;
-    __weak typeof(interface) weakInterface = interface;
+    NSString *taskIdentifier = interface.taskIdentifier;
     [interface.request buildTaskWithConfig:interface.config
                          multipartFormData:^(id formData) {
-        if ([weakInterface.config respondsToSelector:@selector(constructingMultipartFormData:)]) {
-            [weakInterface.config constructingMultipartFormData:formData];
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
+        if ([taskInterface.config respondsToSelector:@selector(constructingMultipartFormData:)]) {
+            [taskInterface.config constructingMultipartFormData:formData];
         }
     } uploadProgress:^(NSProgress *uploadProgress) {
-        if (weakInterface.uploadProgress) {
-            weakInterface.uploadProgress(uploadProgress);
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
+        if (taskInterface.uploadProgress) {
+            taskInterface.uploadProgress(uploadProgress);
         }
     } downloadProgress:^(NSProgress *downloadProgress) {
-        if (weakInterface.downloadProgress) {
-            weakInterface.downloadProgress(downloadProgress);
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
+        if (taskInterface.downloadProgress) {
+            taskInterface.downloadProgress(downloadProgress);
         }
     } didCreateURLRequest:^(NSMutableURLRequest *urlRequest) {
         if (![urlRequest isKindOfClass:NSMutableURLRequest.class]) {
             NSAssert(NO, @"必须为 NSMutableURLRequest类型");
             return;
         }
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         /// 二进制的数据
-        if (weakInterface.config.requestSerializerType == JSRequestSerializerTypeBinaryData) {
-            id body = weakInterface.config.requestBody;
+        if (taskInterface && taskInterface.config.requestSerializerType == JSRequestSerializerTypeBinaryData) {
+            id body = taskInterface.config.requestBody;
             if ([body isKindOfClass:NSData.class]) {
                 [urlRequest setHTTPBody:body];
             } else {
                 NSAssert(NO, @"必须为 NSData类型");
             }
         }
-        if ([weakInterface.config respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
-            [weakInterface.config constructingMultipartURLRequest:urlRequest];
+        if ([taskInterface.config respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
+            [taskInterface.config constructingMultipartURLRequest:urlRequest];
         }
     } didCreateTask:^(__kindof NSURLSessionTask *task) {
-        [weakSelf performRequestOperation:weakInterface.request];
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
+        [weakSelf performRequestOperation:taskInterface.request];
     } didCompleted:^(id responseObject, NSError *error) {
-        @autoreleasepool {
-            [weakSelf processingResponseForInterface:weakInterface
-                                  withResponseObject:responseObject
-                                setCacheDataIfNeeded:YES
-                                               error:error];
-        }
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
+        [weakSelf processingResponseForInterface:taskInterface
+                              withResponseObject:responseObject
+                            setCacheDataIfNeeded:YES
+                                           error:error];
     }];
 }
 
@@ -142,22 +157,22 @@
 - (void)processingDiskCacheForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     id<JSNetworkRequestConfigProtocol> config = interface.config;
     NSParameterAssert(config.cacheTimeInSeconds > 0 || config.cacheVersion > 0);
+    
     __weak typeof(self) weakSelf = self;
-    __weak typeof(interface) weakInterface = interface;
+    NSString *taskIdentifier = interface.taskIdentifier;
     /// 缓存处理
     [interface.diskCache buildTaskWithConfig:config
                                 didCompleted:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
-        @autoreleasepool {
-            if (metadata) {
-                /// 存在缓存时
-                [weakSelf processingResponseForInterface:weakInterface
-                                      withResponseObject:metadata.cacheData
-                                    setCacheDataIfNeeded:NO
-                                                   error:nil];
-            } else {
-                /// 处理网络请求
-                [weakSelf processingRequestForInterface:weakInterface];
-            }
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
+        if (metadata) {
+            /// 存在缓存时
+            [weakSelf processingResponseForInterface:taskInterface
+                                  withResponseObject:metadata.cacheData
+                                setCacheDataIfNeeded:NO
+                                               error:nil];
+        } else {
+            /// 处理网络请求
+            [weakSelf processingRequestForInterface:taskInterface];
         }
     }];
 }
@@ -167,44 +182,42 @@
                     withResponseObject:(nullable id)responseObject
                   setCacheDataIfNeeded:(BOOL)setCacheDataIfNeeded
                                  error:(nullable NSError *)error {
-    NSParameterAssert(interface);
-    __weak typeof(self) weakSelf = self;
-    __weak typeof(interface) weakInterface = interface;
+    if (![self validateInterface:interface]) {
+        return;
+    }
+    
     dispatch_queue_t processingQueue = JSNetworkConfig.sharedConfig.processingQueue;
     dispatch_queue_t completionQueue = JSNetworkConfig.sharedConfig.completionQueue;
     dispatch_async(processingQueue, ^{
         /// 处理响应
-        @autoreleasepool {
-            [weakInterface.response processingTask:weakInterface.request.requestTask
-                                    responseObject:responseObject
-                                             error:error];
-        }
+        [interface.response processingTask:interface.request.requestTask
+                            responseObject:responseObject
+                                     error:error];
+        __weak typeof(self) weakSelf = self;
         void(^completionBlock)(void) = ^(void) {
             dispatch_async(completionQueue, ^{
-                @autoreleasepool {
-                    [weakSelf toggleWillStopWithInterface:weakInterface];
-                    weakInterface.completionHandler(weakInterface);
-                    weakInterface.completionHandler = nil;
-                    weakInterface.uploadProgress = nil;
-                    weakInterface.downloadProgress = nil;
-                    [weakSelf toggleDidStopWithInterface:weakInterface];
-                    if (weakInterface.request.requestTask) {
-                        [weakSelf removeRequestOperation:weakInterface.request];
-                    }
-                    [weakSelf removeInterfaceForTaskIdentifier:weakInterface.taskIdentifier];
+                [weakSelf toggleWillStopWithInterface:interface];
+                interface.completionHandler(interface);
+                interface.completionHandler = nil;
+                interface.uploadProgress = nil;
+                interface.downloadProgress = nil;
+                [weakSelf toggleDidStopWithInterface:interface];
+                if (interface.request.requestTask) {
+                    [weakSelf removeRequestOperation:interface.request];
                 }
+                [weakSelf removeInterfaceForTaskIdentifier:interface.taskIdentifier];
             });
         };
-        id<JSNetworkRequestConfigProtocol> config = weakInterface.config;
+        id<JSNetworkRequestConfigProtocol> config = interface.config;
         BOOL isSaveCache = NO;
         if (setCacheDataIfNeeded && config.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad && !error) {
-            isSaveCache = [config cacheIsSavedWithResponse:weakInterface.response];
+            isSaveCache = [config cacheIsSavedWithResponse:interface.response];
         }
         if (isSaveCache) {
             /// 设置缓存
-            [weakInterface.diskCache setCacheData:responseObject
-                                 forRequestConfig:config
-                                        completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
+            [interface.diskCache setCacheData:responseObject
+                             forRequestConfig:config
+                                    completed:^(id<JSNetworkDiskCacheMetadataProtocol> metadata) {
                 completionBlock();
             }];
         } else {
@@ -215,7 +228,11 @@
 
 /// 添加请求
 - (void)performRequestOperation:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
-    NSParameterAssert(request.requestTask);
+    if (!request.requestTask) {
+        NSAssert(NO, @"requestTask无效，请按照堆栈检查此问题出现的原因");
+        return;
+    }
+    
     [self addLock];
     /// 设置下最大并发数
     NSInteger maxConcurrentCount = JSNetworkConfig.sharedConfig.requestMaxConcurrentCount;
@@ -229,7 +246,6 @@
 
 /// 移除请求
 - (void)removeRequestOperation:(__kindof NSOperation<JSNetworkRequestProtocol> *)request {
-    NSParameterAssert(request.requestTask);
     [self addLock];
     [self postExecutingAndFinishedKVOWithRequest:request];
     [self unLock];
@@ -244,7 +260,6 @@
 
 /// 添加接口
 - (void)performInterface:(id<JSNetworkInterfaceProtocol>)interface forTaskIdentifier:(NSString *)taskIdentifier {
-    NSParameterAssert(interface && taskIdentifier);
     [self addLock];
 #ifdef DEBUG
     if ([self.interfaceRecord.allKeys containsObject:taskIdentifier]) {
@@ -263,6 +278,16 @@
     [self unLock];
 }
 
+/// 检查interface
+- (BOOL)validateInterface:(id<JSNetworkInterfaceProtocol>)interface {
+    if (!interface || !interface.taskIdentifier || !interface.config || !interface.request || !interface.response) {
+        NSAssert(NO, @"interface无效，请按照堆栈检查此问题出现的原因");
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
 #pragma mark - 锁
 
 - (void)addLock {
@@ -275,7 +300,7 @@
 
 @end
 
-@implementation JSNetworkAgent (Plugin)
+@implementation JSNetworkManager (Plugin)
 
 - (void)toggleWillStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface {
     NSParameterAssert(interface);

@@ -161,7 +161,6 @@
 @interface JSNetworkRequestConfigProxy ()
 
 @property (nonatomic, strong) _JSNetworkRequestConfigPrivate *privateConfig;
-@property (nonatomic, copy) NSArray<NSString *> *ignoreForwardingSelectors; /// 忽略转发的方法名
 
 @end
 
@@ -171,11 +170,6 @@
     self = [super initWithTarget:target];
     if (self) {
         _privateConfig = [[_JSNetworkRequestConfigPrivate alloc] initWithConfig:target];
-        _ignoreForwardingSelectors = @[NSStringFromSelector(@selector(requestURLString)),
-                                       NSStringFromSelector(@selector(requestParameters)),
-                                       NSStringFromSelector(@selector(requestHeaderFieldValueDictionary)),
-                                       NSStringFromSelector(@selector(requestPlugins)),
-                                       NSStringFromSelector(@selector(cacheFileName))];
     }
     return self;
 }
@@ -203,7 +197,16 @@
 }
 
 - (BOOL)__needForwardingPrivateConfigForSelector:(SEL)aSelector {
-    return [_ignoreForwardingSelectors containsObject:NSStringFromSelector(aSelector)];
+    static NSArray *ignoreSelectors = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ignoreSelectors = @[NSStringFromSelector(@selector(requestURLString)),
+                            NSStringFromSelector(@selector(requestParameters)),
+                            NSStringFromSelector(@selector(requestHeaderFieldValueDictionary)),
+                            NSStringFromSelector(@selector(requestPlugins)),
+                            NSStringFromSelector(@selector(cacheFileName))];
+    });
+    return [ignoreSelectors containsObject:NSStringFromSelector(aSelector)];
 }
 
 - (NSString *)description {

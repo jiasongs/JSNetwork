@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class JSNetworkAgent;
+@class JSNetworkManager;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief 请求代理类
  */
-@property (nonatomic, weak) JSNetworkAgent *agent;
+@property (nullable, nonatomic, weak) JSNetworkManager *networkManager;
 /**
  *  @brief 任务id
  */

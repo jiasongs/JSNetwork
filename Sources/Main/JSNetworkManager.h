@@ -1,5 +1,5 @@
 //
-//  JSNetworkAgent.h
+//  JSNetworkManager.h
 //  JSNetwork
 //
 //  Created by jiasong on 2020/4/17.
@@ -12,12 +12,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JSNetworkAgent : NSObject
+@interface JSNetworkManager : NSObject
 
 /**
  *  @brief 单例
  */
-+ (instancetype)defaultAgent;
++ (instancetype)defaultManager;
 
 /**
  *  @brief 添加一个请求
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface JSNetworkAgent (Plugin)
+@interface JSNetworkManager (Plugin)
 
 - (void)toggleWillStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(toggleWillStart(interface:));
 - (void)toggleDidStartWithInterface:(id<JSNetworkInterfaceProtocol>)interface NS_SWIFT_NAME(toggleDidStart(interface:));

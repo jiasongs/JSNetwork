@@ -7,12 +7,12 @@
 //
 
 #import "JSNetworkProvider.h"
-#import "JSNetworkAgent.h"
-#import "JSNetworkInterface.h"
+#import "JSNetworkManager.h"
 #import "JSNetworkConfig.h"
 #import "JSNetworkRequestConfigProxy.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkRequestCancellableProtocol.h"
+#import "JSNetworkInterfaceProtocol.h"
 #import <objc/runtime.h>
 
 @interface JSNetworkProviderEntity : NSObject
@@ -47,7 +47,9 @@
 @implementation NSObject (__JSNetworkProvider)
 
 - (void)js_bindCancellable:(id<JSNetworkRequestCancellableProtocol>)cancellable {
-    [self.jsnet_providerEntitys addObject:[[JSNetworkProviderEntity alloc] initWithCancellable:cancellable]];
+    @synchronized (self) {
+        [self.jsnet_providerEntitys addObject:[[JSNetworkProviderEntity alloc] initWithCancellable:cancellable]];
+    }
 }
 
 - (NSMutableArray<JSNetworkProviderEntity *> *)jsnet_providerEntitys {
@@ -144,7 +146,8 @@
     NSParameterAssert(config);
 
     JSNetworkConfig *sharedConfig = JSNetworkConfig.sharedConfig;
-    id<JSNetworkInterfaceProtocol> interface = sharedConfig.networkInterface ? sharedConfig.networkInterface() : [[JSNetworkInterface alloc] init];
+    id<JSNetworkInterfaceProtocol> interface = sharedConfig.networkInterface(config);
+    NSAssert(interface, @"请设置interface");
     
     interface.config = (id<JSNetworkRequestConfigProtocol>)[JSNetworkRequestConfigProxy proxyWithTarget:config];
 
@@ -193,15 +196,13 @@
     });
     interface.taskIdentifier = [NSString stringWithFormat:@"%@_%@", @"task", @(jsNetworkRequestTaskIdentifier)];
 
-    JSNetworkAgent *defaultAgent = JSNetworkAgent.defaultAgent;
-    [defaultAgent performRequestForInterface:interface];
+    JSNetworkManager *defaultManager = JSNetworkManager.defaultManager;
+    [defaultManager performRequestForInterface:interface];
     
-    interface.requestCancellable.agent = defaultAgent;
+    interface.requestCancellable.networkManager = defaultManager;
     interface.requestCancellable.taskIdentifier = interface.taskIdentifier;
    
-    @synchronized (self) {
-        [target js_bindCancellable:interface.requestCancellable];
-    }
+    [target js_bindCancellable:interface.requestCancellable];
     return interface.requestCancellable;
 }
 

@@ -11,10 +11,6 @@
 
 #if __has_include(<JSNetwork/JSNetwork.h>)
 
-#if __has_include(<JSNetwork/JSNetworkMacroVariable.h>)
-#import <JSNetwork/JSNetworkMacroVariable.h>
-#endif
-
 #if __has_include(<JSNetwork/JSNetworkRequestProtocol.h>)
 #import <JSNetwork/JSNetworkRequestProtocol.h>
 #endif
@@ -51,8 +47,8 @@
 #import <JSNetwork/JSNetworkProvider.h>
 #endif
 
-#if __has_include(<JSNetwork/JSNetworkAgent.h>)
-#import <JSNetwork/JSNetworkAgent.h>
+#if __has_include(<JSNetwork/JSNetworkManager.h>)
+#import <JSNetwork/JSNetworkManager.h>
 #endif
 
 #if __has_include(<JSNetwork/JSNetworkInterface.h>)
@@ -113,10 +109,6 @@
 
 #else
 
-#if __has_include("JSNetworkMacroVariable.h")
-#import "JSNetworkMacroVariable.h"
-#endif
-
 #if __has_include("JSNetworkRequestProtocol.h")
 #import "JSNetworkRequestProtocol.h"
 #endif
@@ -153,8 +145,8 @@
 #import "JSNetworkProvider.h"
 #endif
 
-#if __has_include("JSNetworkAgent.h")
-#import "JSNetworkAgent.h"
+#if __has_include("JSNetworkManager.h")
+#import "JSNetworkManager.h"
 #endif
 
 #if __has_include("JSNetworkInterface.h")
