@@ -41,13 +41,6 @@
     return JSResponseSerializerTypeHTTP;
 }
 
-- (nullable NSSet<NSString *> *)responseAcceptableContentTypes {
-    if (self.downloadURLType == DownloadURLTypeTypeCnblogs) {
-        return [NSSet setWithObjects:@"application/x-rar-compressed", nil];
-    }
-    return [NSSet setWithObjects:@"application/octet-stream", nil];
-}
-
 - (JSRequestCachePolicy)cachePolicy {
     return JSRequestCachePolicyIgnoringCacheData;
 }

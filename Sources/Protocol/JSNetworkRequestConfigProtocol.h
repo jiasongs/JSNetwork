@@ -85,11 +85,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (JSRequestSerializerType)requestSerializerType;
 
 /**
- *  @brief 响应的数据解析方式，默认为JSResponseSerializerTypeJSON
- */
-- (JSResponseSerializerType)responseSerializerType;
-
-/**
  *  @brief 请求超时时间, 默认是全局设置的超时时间
  */
 - (NSTimeInterval)requestTimeoutInterval;
@@ -143,12 +138,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSURLRequest *)requestFinallyURLRequestWithURLRequest:(NSURLRequest *)URLRequest;
 
 /**
- *  @brief 内容类型
+ *  @brief 响应的数据解析方式，默认为JSResponseSerializerTypeJSON
+ */
+- (JSResponseSerializerType)responseSerializerType;
+
+/**
+ *  @brief 响应的内容类型
  */
 - (nullable NSSet<NSString *> *)responseAcceptableContentTypes;
 
 /**
- *  @brief 状态码，默认是100 - 500
+ *  @brief 响应的状态码，默认是100 - 500
  */
 - (NSIndexSet *)responseAcceptableStatusCodes;
 
