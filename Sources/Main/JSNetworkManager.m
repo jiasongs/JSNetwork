@@ -108,12 +108,7 @@
     __weak typeof(self) weakSelf = self;
     NSString *taskIdentifier = interface.taskIdentifier;
     [interface.request buildTaskWithConfig:interface.config
-                         multipartFormData:^(id formData) {
-        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
-        if ([taskInterface.config respondsToSelector:@selector(constructingMultipartFormData:)]) {
-            [taskInterface.config constructingMultipartFormData:formData];
-        }
-    } uploadProgress:^(NSProgress *uploadProgress) {
+                            uploadProgress:^(NSProgress *uploadProgress) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         if (taskInterface.uploadProgress) {
             taskInterface.uploadProgress(uploadProgress);
@@ -123,28 +118,32 @@
         if (taskInterface.downloadProgress) {
             taskInterface.downloadProgress(downloadProgress);
         }
-    } didCreateURLRequest:^(NSMutableURLRequest *urlRequest) {
-        if (![urlRequest isKindOfClass:NSMutableURLRequest.class]) {
-            NSAssert(NO, @"必须为 NSMutableURLRequest类型");
-            return;
+    } didCreateFormData:^id(id formData) {
+        id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
+        if ([taskInterface.config respondsToSelector:@selector(constructingMultipartFormData:)]) {
+            [taskInterface.config constructingMultipartFormData:formData];
         }
+        return formData;
+    } didCreateURLRequest:^NSURLRequest *(NSURLRequest *urlRequest) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         /// 二进制的数据
         if (taskInterface && taskInterface.config.requestSerializerType == JSRequestSerializerTypeBinaryData) {
             id body = taskInterface.config.requestBody;
-            if ([body isKindOfClass:NSData.class]) {
-                [urlRequest setHTTPBody:body];
+            if ([body isKindOfClass:NSData.class] && [urlRequest isKindOfClass:NSMutableURLRequest.class]) {
+                [(NSMutableURLRequest *)urlRequest setHTTPBody:body];
             } else {
-                NSAssert(NO, @"必须为 NSData类型");
+                NSAssert(NO, @"请检查类型是否正确");
             }
         }
-        if ([taskInterface.config respondsToSelector:@selector(constructingMultipartURLRequest:)]) {
-            [taskInterface.config constructingMultipartURLRequest:urlRequest];
+        if ([taskInterface.config respondsToSelector:@selector(requestFinallyURLRequestWithURLRequest:)]) {
+            urlRequest = [taskInterface.config requestFinallyURLRequestWithURLRequest:urlRequest];
         }
-    } didCreateTask:^(__kindof NSURLSessionTask *task) {
+        return urlRequest;
+    } didCreateTask:^NSURLSessionTask *(NSURLSessionTask *task) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         [weakSelf performRequestOperation:taskInterface.request];
-    } didCompleted:^(id responseObject, NSError *error) {
+        return task;
+    } didCompleted:^(id _Nullable responseObject, NSError * _Nullable error) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         [weakSelf processingResponseForInterface:taskInterface
                               withResponseObject:responseObject

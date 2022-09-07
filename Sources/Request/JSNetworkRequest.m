@@ -20,12 +20,12 @@
 #pragma mark - JSNetworkRequestProtocol
 
 - (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-          multipartFormData:(void(^)(id formData))multipartFormDataBlock
-             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
-           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
-        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
-              didCreateTask:(void(^)(__kindof NSURLSessionTask *task))didCreateTaskBlock
-               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
+             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgress
+           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
+          didCreateFormData:(id(^)(id formData))didCreateFormData
+        didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
+              didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
+               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted {
     NSAssert(NO, @"需子类继承使用, 此方法不作任何事情");
 }
 

@@ -20,22 +20,20 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief 构建NSURLSessionTask
  *
  *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置类
- *  @param multipartFormDataBlock       拼接FormData
- *  @param uploadProgressBlock          上传进度
- *  @param downloadProgressBlock        下载进度
- *  @param didCreateURLRequestBlock     URLRRequest创建完毕
- *  @param didCreateTaskBlock           Task创建完毕
- *  @param didCompletedBlock            任务 <完全结束> 后的回调
- *
- *  @see JSNetworkRequest.m
+ *  @param uploadProgress         上传进度
+ *  @param downloadProgress       下载进度
+ *  @param didCreateFormData      创建FormData
+ *  @param didCreateURLRequest    创建URLRRequest
+ *  @param didCreateTask          创建Task
+ *  @param didCompleted           任务 <完全结束> 后的回调
  */
 - (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-          multipartFormData:(void(^)(id formData))multipartFormDataBlock
-             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
-           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
-        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
-              didCreateTask:(void(^)(__kindof NSURLSessionTask *task))didCreateTaskBlock
-               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock;
+             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgress
+           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
+          didCreateFormData:(id(^)(id formData))didCreateFormData
+        didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
+              didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
+               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted;
 
 /**
  *  @brief SessionTask

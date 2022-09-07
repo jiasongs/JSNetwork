@@ -22,12 +22,12 @@
 @implementation JSNetworkAFRequest
 
 - (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
-          multipartFormData:(void(^)(id formData))multipartFormDataBlock
-             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgressBlock
-           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgressBlock
-        didCreateURLRequest:(void(^)(NSMutableURLRequest *urlRequest))didCreateURLRequestBlock
-              didCreateTask:(void(^)(__kindof NSURLSessionTask *task))didCreateTaskBlock
-               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompletedBlock {
+             uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgress
+           downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
+          didCreateFormData:(id(^)(id formData))didCreateFormData
+        didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
+              didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
+               didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted {
     AFHTTPSessionManager *(^createSessionManager)(void) = ^AFHTTPSessionManager *{
         AFHTTPSessionManager *temporaryManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
         temporaryManager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -114,16 +114,19 @@
             break;
     }
     id requestBody = config.requestBody;
-    NSMutableURLRequest *request = nil;
+    NSURLRequest *request = nil;
     if (useFormData) {
+        void(^constructingBodyWithBlock)(id<AFMultipartFormData>) = ^(id<AFMultipartFormData> formData) {
+            didCreateFormData(formData);
+        };
         request = [requestSerializer multipartFormRequestWithMethod:method
-                                                          URLString:[[NSURL URLWithString:config.requestURLString] absoluteString]
+                                                          URLString:config.requestURLString
                                                          parameters:requestBody
-                                          constructingBodyWithBlock:multipartFormDataBlock
+                                          constructingBodyWithBlock:constructingBodyWithBlock
                                                               error:nil];
     } else {
         request = [requestSerializer requestWithMethod:method
-                                             URLString:[[NSURL URLWithString:config.requestURLString] absoluteString]
+                                             URLString:config.requestURLString
                                             parameters:requestBody
                                                  error:nil];
     }
@@ -133,32 +136,34 @@
                                       timeoutInterval:config.requestTimeoutInterval];
     }
     /// URLRequest创建完成时需要调用
-    didCreateURLRequestBlock(request);
+    request = didCreateURLRequest(request);
+    
+    NSURLSessionTask *sessionTask;
     /// 构建task
     if (config.requestSerializerType == JSRequestSerializerTypeFormData) {
-        _requestTask = [self.sessionManager uploadTaskWithStreamedRequest:request
-                                                                 progress:uploadProgressBlock
-                                                        completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        sessionTask = [self.sessionManager uploadTaskWithStreamedRequest:request
+                                                                progress:uploadProgress
+                                                       completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             [self handleResultWithSerializer:responseSerializer
                                  URLResponse:response
                               responseObject:responseObject
                                        error:error
-                                didCompleted:didCompletedBlock];
+                                didCompleted:didCompleted];
         }];
     } else {
-        _requestTask = [self.sessionManager dataTaskWithRequest:request
-                                                 uploadProgress:uploadProgressBlock
-                                               downloadProgress:downloadProgressBlock
-                                              completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        sessionTask = [self.sessionManager dataTaskWithRequest:request
+                                                uploadProgress:uploadProgress
+                                              downloadProgress:downloadProgress
+                                             completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             [self handleResultWithSerializer:responseSerializer
                                  URLResponse:response
                               responseObject:responseObject
                                        error:error
-                                didCompleted:didCompletedBlock];
+                                didCompleted:didCompleted];
         }];
     }
     /// Task创建完成时需要调用
-    didCreateTaskBlock(_requestTask);
+    _requestTask = didCreateTask(sessionTask);
 }
 
 - (NSURLSessionTask *)requestTask {

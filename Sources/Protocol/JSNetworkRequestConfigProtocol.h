@@ -70,11 +70,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSDictionary<NSString *, id> *)requestParameters;
 
 /**
- *  @brief 需要忽略的全局设置的参数
- */
-- (nullable NSArray<NSString *> *)ignoreGlobalParameterForKeys;
-
-/**
  *  @brief request中的HTTPBody
  */
 - (nullable id)requestBody;
@@ -105,27 +100,47 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
 /**
- *  @brief 筛选URL
+ *  @brief 最终的请求URL
  *
- *  @param URLString 需要筛选的URL
+ *  @param URLString 拼接好的URL
  *
  *  @return 返回新的URL
  */
-- (NSString *)requestURLStringFilterWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestUrlFilter(_:));
+- (NSString *)requestFinallyURLStringWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestFinallyUrl(_:));
+
+/**
+ *  @brief 最终的参数
+ *
+ *  @param parameters 拼接好的参数
+ *
+ *  @return 返回新的参数
+ */
+- (nullable NSDictionary<NSString *, id> *)requestFinallyParametersWithParameters:(NSDictionary<NSString *, id> *)parameters;
 
 /**
  *  @brief 拼接FormData
  *
- *  @param multipartFormData 可拼接的FormData, 如果外部使用AFN, 则是AFMultipartFormData
+ *  @param multipartFormData 可拼接的FormData
  */
 - (void)constructingMultipartFormData:(id)multipartFormData NS_SWIFT_NAME(constructingMultipart(formData:));
 
 /**
- *  @brief 拼接URLRequest
+ *  @brief 最终的请求头
  *
- *  @param urlRequest 可拼接的URLRequest
+ *  @param headerFieldValueDictionary 拼接好的请求头
+ *
+ *  @return 返回新的请求头
  */
-- (void)constructingMultipartURLRequest:(NSMutableURLRequest *)urlRequest NS_SWIFT_NAME(constructingMultipart(urlRequest:));
+- (nullable NSDictionary<NSString *, NSString *> *)requestFinallyHeaderWithHeader:(NSDictionary<NSString *, NSString *> *)headerFieldValueDictionary;
+
+/**
+ *  @brief 最终的请求
+ *
+ *  @param URLRequest 拼接好的请求
+ *
+ *  @return 返回新的请求
+ */
+- (NSURLRequest *)requestFinallyURLRequestWithURLRequest:(NSURLRequest *)URLRequest;
 
 /**
  *  @brief 内容类型
