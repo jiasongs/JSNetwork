@@ -43,10 +43,10 @@
     } else {
         self.sessionManager = createSessionManager();
     }
-    
     /// JSNetwork处理线程
     self.sessionManager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
-    /// 构建request、task
+    
+    /// 构建request
     BOOL useFormData = NO;
     __kindof AFHTTPRequestSerializer *requestSerializer = nil;
     switch (config.requestSerializerType) {
@@ -64,31 +64,10 @@
         default:
             break;
     }
-    __kindof AFHTTPResponseSerializer *responseSerializer = nil;
-    switch (config.responseSerializerType) {
-        case JSResponseSerializerTypeJSON:
-            responseSerializer = [AFJSONResponseSerializer serializer];
-            break;
-        case JSResponseSerializerTypeHTTP:
-            responseSerializer = [AFHTTPResponseSerializer serializer];
-            break;
-        case JSResponseSerializerTypeXMLParser:
-            responseSerializer = [AFXMLParserResponseSerializer serializer];
-            break;
-        default:
-            break;
-    }
+    requestSerializer.timeoutInterval = config.requestTimeoutInterval;
     NSDictionary *headers = config.requestHeaderFieldValueDictionary;
     for (NSString *headerField in headers.keyEnumerator) {
         [requestSerializer setValue:headers[headerField] forHTTPHeaderField:headerField];
-    }
-    requestSerializer.timeoutInterval = config.requestTimeoutInterval;
-    responseSerializer.acceptableStatusCodes = config.responseAcceptableStatusCodes;
-    NSSet<NSString *> *responseAcceptableContentTypes = config.responseAcceptableContentTypes;
-    if (responseAcceptableContentTypes) {
-        NSMutableSet *contentTypes = [NSMutableSet setWithSet:responseSerializer.acceptableContentTypes];
-        [contentTypes unionSet:responseAcceptableContentTypes];
-        responseSerializer.acceptableContentTypes = contentTypes.copy;
     }
     NSString *method = @"";
     switch (config.requestMethod) {
@@ -134,6 +113,34 @@
     }
     /// URLRequest创建完成时需要调用
     didCreateURLRequestBlock(request);
+    
+    __kindof AFHTTPResponseSerializer *responseSerializer = nil;
+    switch (config.responseSerializerType) {
+        case JSResponseSerializerTypeJSON:
+            responseSerializer = [AFJSONResponseSerializer serializer];
+            break;
+        case JSResponseSerializerTypeHTTP:
+            responseSerializer = [AFHTTPResponseSerializer serializer];
+            break;
+        case JSResponseSerializerTypeXMLParser:
+            responseSerializer = [AFXMLParserResponseSerializer serializer];
+            break;
+        default:
+            break;
+    }
+    NSIndexSet *responseAcceptableStatusCodes = config.responseAcceptableStatusCodes;
+    if (responseAcceptableStatusCodes) {
+        NSMutableIndexSet *acceptableStatusCodes = [[NSMutableIndexSet alloc] initWithIndexSet:responseSerializer.acceptableStatusCodes ? : NSIndexSet.indexSet];
+        [acceptableStatusCodes addIndexes:responseAcceptableStatusCodes];
+        responseSerializer.acceptableStatusCodes = acceptableStatusCodes.copy;
+    }
+    NSSet<NSString *> *responseAcceptableContentTypes = config.responseAcceptableContentTypes;
+    if (responseAcceptableContentTypes) {
+        NSMutableSet *acceptableContentTypes = [NSMutableSet setWithSet:responseSerializer.acceptableContentTypes ? : NSSet.set];
+        [acceptableContentTypes unionSet:responseAcceptableContentTypes];
+        responseSerializer.acceptableContentTypes = acceptableContentTypes.copy;
+    }
+
     /// 构建task
     if (config.requestSerializerType == JSRequestSerializerTypeFormData) {
         _requestTask = [self.sessionManager uploadTaskWithStreamedRequest:request
