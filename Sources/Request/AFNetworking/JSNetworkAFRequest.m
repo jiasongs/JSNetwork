@@ -24,7 +24,7 @@
 - (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
              uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgress
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
-          didCreateFormData:(id(^)(id formData))didCreateFormData
+       constructingFormData:(void(^)(id formData))constructingFormData
         didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
               didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted {
@@ -92,21 +92,20 @@
         default:
             break;
     }
-    id requestBody = config.requestBody;
     NSURLRequest *request = nil;
     if (useFormData) {
         void(^constructingBodyWithBlock)(id<AFMultipartFormData>) = ^(id<AFMultipartFormData> formData) {
-            didCreateFormData(formData);
+            constructingFormData(formData);
         };
         request = [requestSerializer multipartFormRequestWithMethod:method
                                                           URLString:config.requestURLString
-                                                         parameters:requestBody
+                                                         parameters:config.requestBody
                                           constructingBodyWithBlock:constructingBodyWithBlock
                                                               error:nil];
     } else {
         request = [requestSerializer requestWithMethod:method
                                              URLString:config.requestURLString
-                                            parameters:requestBody
+                                            parameters:config.requestBody
                                                  error:nil];
     }
     if (!request) {

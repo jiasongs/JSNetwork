@@ -32,8 +32,8 @@
         if ([config respondsToSelector:@selector(requestParameters)]) {
             [parameters addEntriesFromDictionary:config.requestParameters ? : @{}];
         }
-        if ([config respondsToSelector:@selector(requestFinallyParametersWithParameters:)]) {
-            [parameters setDictionary:[config requestFinallyParametersWithParameters:parameters]];
+        if ([config respondsToSelector:@selector(requestCompositeParametersWithParameters:)]) {
+            [parameters setDictionary:[config requestCompositeParametersWithParameters:parameters]];
         }
         _finalParameters = parameters;
         
@@ -44,8 +44,8 @@
             paths = config.requestPaths ? : @[];
         }
         NSString *finalURL = [url js_URLStringByAppendingPaths:paths parameters:parameters];
-        if ([config respondsToSelector:@selector(requestFinallyURLStringWithURLString:)]) {
-            finalURL = [config requestFinallyURLStringWithURLString:finalURL];
+        if ([config respondsToSelector:@selector(requestCompositeURLStringWithURLString:)]) {
+            finalURL = [config requestCompositeURLStringWithURLString:finalURL];
         }
         _finalURL = finalURL;
 
@@ -121,6 +121,10 @@
 
 - (nullable NSSet<NSString *> *)responseAcceptableContentTypes {
     return nil;
+}
+
+- (void)requestConstructingMultipartFormData:(id)multipartFormData {
+    
 }
 
 - (NSIndexSet *)responseAcceptableStatusCodes {

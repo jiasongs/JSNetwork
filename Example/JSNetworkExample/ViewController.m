@@ -32,10 +32,6 @@
         JSNetworkConfig.sharedConfig.debugLogEnabled = NO;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
         JSNetworkConfig.sharedConfig.networkInterface = ^id<JSNetworkInterfaceProtocol>(id<JSNetworkRequestConfigProtocol> config) {
-//            JSNetworkInterface *interface = [[JSNetworkInterface alloc] initWithRequest:[[JSNetworkAFRequest alloc] init] /// [[AlamofireRequest1 alloc] init]
-//                                                                            cancellable:[[JSNetworkRequestCancellable alloc] init]
-//                                                                               response:[[NetworkResponse alloc] init]
-//                                                                              diskCache:[[JSNetworkDiskCache alloc] init]];
             return nil;
         };
         [JSNetworkConfig.sharedConfig addURLParameters:@{@"app": @"1.0.0", @"token": @"token"}];

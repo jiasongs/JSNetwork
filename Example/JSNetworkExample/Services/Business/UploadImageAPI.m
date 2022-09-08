@@ -31,7 +31,7 @@
     return JSRequestSerializerTypeFormData;
 }
 
-- (void)constructingMultipartFormData:(id<AFMultipartFormData>)multipartFormData {
+- (void)requestConstructingMultipartFormData:(id<AFMultipartFormData>)multipartFormData {
     [multipartFormData appendPartWithFormData:NSData.data name:@"test"];
 }
 

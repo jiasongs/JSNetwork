@@ -22,7 +22,7 @@
 - (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
              uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgress
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
-          didCreateFormData:(id(^)(id formData))didCreateFormData
+       constructingFormData:(void(^)(id formData))constructingFormData
         didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
               didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted {

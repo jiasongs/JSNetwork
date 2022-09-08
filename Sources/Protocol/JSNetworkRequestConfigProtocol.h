@@ -12,7 +12,7 @@
 @protocol JSNetworkRequestProtocol;
 @protocol JSNetworkResponseProtocol;
 @protocol JSNetworkDiskCacheProtocol;
-@protocol JSNetworkRequestCancellableProtocol;
+@protocol JSNetworkRequestTokenProtocol;
 
 typedef NS_ENUM(NSInteger, JSRequestMethod) {
     JSRequestMethodGET     NS_SWIFT_NAME(get),
@@ -95,47 +95,47 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSDictionary<NSString *, NSString *> *)requestHeaderFieldValueDictionary;
 
 /**
- *  @brief 最终的请求URL
+ *  @brief 拼接FormData
+ *
+ *  @param multipartFormData 可拼接的FormData
+ */
+- (void)requestConstructingMultipartFormData:(id)multipartFormData;
+
+/**
+ *  @brief 合成的URL
  *
  *  @param URLString 拼接好的URL
  *
  *  @return 返回新的URL
  */
-- (NSString *)requestFinallyURLStringWithURLString:(NSString *)URLString NS_SWIFT_NAME(requestFinallyUrl(_:));
+- (NSString *)requestCompositeURLStringWithURLString:(NSString *)URLString;
 
 /**
- *  @brief 最终的参数
+ *  @brief 合成的参数
  *
  *  @param parameters 拼接好的参数
  *
  *  @return 返回新的参数
  */
-- (nullable NSDictionary<NSString *, id> *)requestFinallyParametersWithParameters:(NSDictionary<NSString *, id> *)parameters;
+- (nullable NSDictionary<NSString *, id> *)requestCompositeParametersWithParameters:(NSDictionary<NSString *, id> *)parameters;
 
 /**
- *  @brief 拼接FormData
- *
- *  @param multipartFormData 可拼接的FormData
- */
-- (void)constructingMultipartFormData:(id)multipartFormData NS_SWIFT_NAME(constructingMultipart(formData:));
-
-/**
- *  @brief 最终的请求头
+ *  @brief 合成的请求头
  *
  *  @param headerFieldValueDictionary 拼接好的请求头
  *
  *  @return 返回新的请求头
  */
-- (nullable NSDictionary<NSString *, NSString *> *)requestFinallyHeaderWithHeader:(NSDictionary<NSString *, NSString *> *)headerFieldValueDictionary;
+- (nullable NSDictionary<NSString *, NSString *> *)requestCompositeHeaderWithHeader:(NSDictionary<NSString *, NSString *> *)headerFieldValueDictionary;
 
 /**
- *  @brief 最终的请求
+ *  @brief 合成的请求
  *
  *  @param URLRequest 拼接好的请求
  *
  *  @return 返回新的请求
  */
-- (NSURLRequest *)requestFinallyURLRequestWithURLRequest:(NSURLRequest *)URLRequest;
+- (NSURLRequest *)requestCompositeURLRequestWithURLRequest:(NSURLRequest *)URLRequest;
 
 /**
  *  @brief 响应的数据解析方式，默认为JSResponseSerializerTypeJSON
@@ -158,9 +158,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (__kindof NSOperation<JSNetworkRequestProtocol> *)request;
 
 /**
- *  @brief 请求取消类
+ *  @brief 请求Token
  */
-- (id<JSNetworkRequestCancellableProtocol>)requestCancellable;
+- (id<JSNetworkRequestTokenProtocol>)requestToken;
 
 /**
  *  @brief 响应类

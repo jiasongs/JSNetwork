@@ -118,27 +118,28 @@
         if (taskInterface.downloadProgress) {
             taskInterface.downloadProgress(downloadProgress);
         }
-    } didCreateFormData:^id(id formData) {
+    } constructingFormData:^(id formData) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
-        if ([taskInterface.config respondsToSelector:@selector(constructingMultipartFormData:)]) {
-            [taskInterface.config constructingMultipartFormData:formData];
+        if ([taskInterface.config respondsToSelector:@selector(requestConstructingMultipartFormData:)]) {
+            [taskInterface.config requestConstructingMultipartFormData:formData];
         }
-        return formData;
     } didCreateURLRequest:^NSURLRequest *(NSURLRequest *urlRequest) {
+        NSMutableURLRequest *mutableURLRequest = [urlRequest isKindOfClass:NSMutableURLRequest.class] ? urlRequest : [urlRequest mutableCopy];
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         /// 二进制的数据
         if (taskInterface && taskInterface.config.requestSerializerType == JSRequestSerializerTypeBinaryData) {
             id body = taskInterface.config.requestBody;
-            if ([body isKindOfClass:NSData.class] && [urlRequest isKindOfClass:NSMutableURLRequest.class]) {
-                [(NSMutableURLRequest *)urlRequest setHTTPBody:body];
+            if ([body isKindOfClass:NSData.class]) {
+                [mutableURLRequest setHTTPBody:body];
             } else {
-                NSAssert(NO, @"请检查类型是否正确");
+                NSAssert(NO, @"body必须为NSData类型");
             }
         }
-        if ([taskInterface.config respondsToSelector:@selector(requestFinallyURLRequestWithURLRequest:)]) {
-            urlRequest = [taskInterface.config requestFinallyURLRequestWithURLRequest:urlRequest];
+        NSURLRequest *finallyURLRequest = mutableURLRequest;
+        if ([taskInterface.config respondsToSelector:@selector(requestCompositeURLRequestWithURLRequest:)]) {
+            finallyURLRequest = [taskInterface.config requestCompositeURLRequestWithURLRequest:finallyURLRequest];
         }
-        return urlRequest;
+        return finallyURLRequest;
     } didCreateTask:^NSURLSessionTask *(NSURLSessionTask *task) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         [weakSelf performRequestOperation:taskInterface.request];

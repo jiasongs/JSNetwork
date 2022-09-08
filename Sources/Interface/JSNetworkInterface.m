@@ -19,7 +19,7 @@
 @synthesize uploadProgress = _uploadProgress;
 @synthesize downloadProgress = _downloadProgress;
 @synthesize completionHandler = _completionHandler;
-@synthesize requestCancellable = _requestCancellable;
+@synthesize requestToken = _requestToken;
 @synthesize taskIdentifier = _taskIdentifier;
 
 - (void)dealloc {

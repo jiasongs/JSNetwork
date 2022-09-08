@@ -1,15 +1,15 @@
 //
-//  JSNetworkRequestCancellable.m
+//  JSNetworkRequestToken.m
 //  JSNetwork
 //
 //  Created by jiasong on 2021/4/14.
 //
 
-#import "JSNetworkRequestCancellable.h"
+#import "JSNetworkRequestToken.h"
 #import "JSNetworkManager.h"
 #import "JSNetworkInterfaceProtocol.h"
 
-@implementation JSNetworkRequestCancellable
+@implementation JSNetworkRequestToken
 @synthesize networkManager = _networkManager;
 @synthesize taskIdentifier = _taskIdentifier;
 

@@ -11,17 +11,8 @@ import Foundation
     
     private var task: URLSessionTask!
     
-    
     open override func requestTask() -> URLSessionTask {
         return self.task
     }
-    
-    override open func cancel() -> Void {
-        
-    }
-    
-    deinit {
-        
-    }
-    
+
 }

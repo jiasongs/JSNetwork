@@ -11,7 +11,7 @@
 @protocol JSNetworkInterfaceProtocol;
 @protocol JSNetworkRequestConfigProtocol;
 @protocol JSNetworkResponseProtocol;
-@protocol JSNetworkRequestCancellableProtocol;
+@protocol JSNetworkRequestTokenProtocol;
 @protocol JSNetworkDiskCacheProtocol;
 @protocol JSNetworkDiskCacheProtocol;
 @protocol JSNetworkRequestProtocol;
@@ -35,7 +35,7 @@ typedef void(^JSNetworkRequestCompletionHandler)(id<JSNetworkInterfaceProtocol> 
 /**
  *  @brief 请求取消类
  */
-@property (nonatomic, strong) id<JSNetworkRequestCancellableProtocol> requestCancellable;
+@property (nonatomic, strong) id<JSNetworkRequestTokenProtocol> requestToken;
 /**
  *  @brief 响应类
  */

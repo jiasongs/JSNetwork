@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param config 遵循<JSNetworkRequestConfigProtocol>的配置类
  *  @param uploadProgress         上传进度
  *  @param downloadProgress       下载进度
- *  @param didCreateFormData      创建FormData
+ *  @param constructingFormData   合成constructingFormData
  *  @param didCreateURLRequest    创建URLRRequest
  *  @param didCreateTask          创建Task
  *  @param didCompleted           任务 <完全结束> 后的回调
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)buildTaskWithConfig:(id<JSNetworkRequestConfigProtocol>)config
              uploadProgress:(void(^)(NSProgress *uploadProgress))uploadProgress
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
-          didCreateFormData:(id(^)(id formData))didCreateFormData
+       constructingFormData:(void(^)(id formData))constructingFormData
         didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
               didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted;
