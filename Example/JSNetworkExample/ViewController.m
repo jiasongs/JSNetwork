@@ -11,10 +11,10 @@
 #import <AFNetworking.h>
 #import "JSNetworkLoggerPlugin.h"
 #import "NetworkResponse.h"
-#import "JSNetworkAFRequest.h"
 #import "CNodeAPI.h"
 #import "DownloadAPI.h"
 #import "UploadImageAPI.h"
+#import "NetworkInterfaceBuilder.h"
 #import "JSNetworkExample-Swift.h"
 
 @interface ViewController ()
@@ -31,9 +31,7 @@
         /// 全局配置
         JSNetworkConfig.sharedConfig.debugLogEnabled = NO;
         JSNetworkConfig.sharedConfig.timeoutInterval = 5;
-        JSNetworkConfig.sharedConfig.networkInterface = ^id<JSNetworkInterfaceProtocol>(id<JSNetworkRequestConfigProtocol> config) {
-            return nil;
-        };
+        JSNetworkConfig.sharedConfig.interfaceBuilder = [[NetworkInterfaceBuilder alloc] init];
         [JSNetworkConfig.sharedConfig addURLParameters:@{@"app": @"1.0.0", @"token": @"token"}];
         [JSNetworkConfig.sharedConfig addURLParameters:@{@"other": @"other"}];
         [JSNetworkConfig.sharedConfig addHTTPHeaderFields:@{@"userName": @"123"}];

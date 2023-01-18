@@ -23,6 +23,7 @@
 		7A3968CC48DB5C07666C3259 /* Pods_JSNetworkExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A09027640755F8E1CE2621AE /* Pods_JSNetworkExampleUITests.framework */; };
 		7A98C863246FDD5800123894 /* DownloadAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C862246FDD5800123894 /* DownloadAPI.m */; };
 		7A98C869246FFD1500123894 /* UploadImageAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A98C868246FFD1500123894 /* UploadImageAPI.m */; };
+		7AE11DBB2977CEA4003AC117 /* NetworkInterfaceBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE11DBA2977CEA4003AC117 /* NetworkInterfaceBuilder.m */; };
 		7AFE30BF26E8BCF300354384 /* JSNetworkExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE30BE26E8BCF300354384 /* JSNetworkExampleUITests.swift */; };
 		7AFE30CD26E8BD3E00354384 /* JSNetworkExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFE30CC26E8BD3E00354384 /* JSNetworkExampleTests.swift */; };
 		98BE71BF735857902847A1ED /* Pods_JSNetworkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AEFA68872EF8F3A3339945E /* Pods_JSNetworkExample.framework */; };
@@ -77,6 +78,8 @@
 		7A98C862246FDD5800123894 /* DownloadAPI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadAPI.m; sourceTree = "<group>"; };
 		7A98C867246FFD1500123894 /* UploadImageAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UploadImageAPI.h; sourceTree = "<group>"; };
 		7A98C868246FFD1500123894 /* UploadImageAPI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UploadImageAPI.m; sourceTree = "<group>"; };
+		7AE11DB92977CEA4003AC117 /* NetworkInterfaceBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkInterfaceBuilder.h; sourceTree = "<group>"; };
+		7AE11DBA2977CEA4003AC117 /* NetworkInterfaceBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetworkInterfaceBuilder.m; sourceTree = "<group>"; };
 		7AFE30BC26E8BCF300354384 /* JSNetworkExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSNetworkExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AFE30BE26E8BCF300354384 /* JSNetworkExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSNetworkExampleUITests.swift; sourceTree = "<group>"; };
 		7AFE30C026E8BCF300354384 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -218,6 +221,8 @@
 		7A2684F0244E823B004A7C82 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				7AE11DB92977CEA4003AC117 /* NetworkInterfaceBuilder.h */,
+				7AE11DBA2977CEA4003AC117 /* NetworkInterfaceBuilder.m */,
 				7A2684F8244E8262004A7C82 /* NetworkResponse.h */,
 				7A2684F7244E8262004A7C82 /* NetworkResponse.m */,
 				7A2684FB244E8263004A7C82 /* NetworkToastPlugin.h */,
@@ -472,6 +477,7 @@
 				7A2684DA244E7700004A7C82 /* ViewController.m in Sources */,
 				7A2684F3244E824B004A7C82 /* BaseAPI.m in Sources */,
 				7A98C863246FDD5800123894 /* DownloadAPI.m in Sources */,
+				7AE11DBB2977CEA4003AC117 /* NetworkInterfaceBuilder.m in Sources */,
 				7A2684FF244E8263004A7C82 /* NetworkToastPlugin.m in Sources */,
 				7A2684D4244E7700004A7C82 /* AppDelegate.m in Sources */,
 				7A2684E5244E7701004A7C82 /* main.m in Sources */,

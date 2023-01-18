@@ -172,9 +172,17 @@
 - (instancetype)initWithTarget:(id<JSNetworkRequestConfigProtocol>)target {
     self = [super initWithTarget:target];
     if (self) {
+        NSAssert(!target.isProxy, @"target不能为NSProxy");
         _privateConfig = [[_JSNetworkRequestConfigPrivate alloc] initWithConfig:target];
     }
     return self;
+}
+
+- (NSString *)requestURLString {
+    if ([self __needForwardingPrivateConfigForSelector:_cmd]) {
+        return [_privateConfig requestURLString];
+    }
+    return [self.target requestURLString];
 }
 
 #pragma mark - NSProxy

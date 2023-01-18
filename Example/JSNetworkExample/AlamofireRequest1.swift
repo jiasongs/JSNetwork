@@ -9,17 +9,17 @@ import UIKit
 import Alamofire
 import JSNetwork
 
-@objc open class AlamofireRequest1: JSNetworkRequest {
+@objc public class AlamofireRequest1: JSNetworkRequest {
     
-    private var dataRequest: DataRequest?
-    private var task: URLSessionTask?
+    fileprivate var dataRequest: DataRequest?
+    fileprivate var task: URLSessionTask?
     
-    open override func buildTask(withConfig config: JSNetworkRequestConfigProtocol,
+    public override func buildTask(withConfig config: JSNetworkRequestConfigProtocol,
                                  uploadProgress: @escaping (Progress) -> Void,
                                  downloadProgress: @escaping (Progress) -> Void,
                                  constructingFormData: @escaping (Any) -> Void,
                                  didCreateURLRequest: @escaping (URLRequest) -> URLRequest,
-                                 didCreateTask: @escaping (URLSessionTask) -> URLSessionTask,
+                                 didCreateTask: @escaping (URLSessionTask) -> Void,
                                  didCompleted: @escaping (Any?, Error?) -> Void) {
         guard let url: URL = URL(string: config.requestUrlString()) else {
             let error: NSError = NSError(domain: "com.alamofire.error", code: 404, userInfo: nil)
@@ -48,30 +48,30 @@ import JSNetwork
         default:
             break
         }
-        let requestBody = config.requestBody?()
-        var responseSerializer =
-        let type: JSResponseSerializerType = config.responseSerializerType?() ?? .json
-        if type == .http {
-            responseSerializer =  StringResponseSerializer()
-        }
-        responseSerializer = JSONResponseSerializer()
-        let redirector = Redirector(behavior: .modify({ (task, request, response) -> URLRequest in
-            return didCreateURLRequest(request)
-        }))
-        let monitor = ClosureEventMonitor()
-        monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
-            self?.task = didCreateTask(task)
-        }
-        let session = Session(startRequestsImmediately: false, redirectHandler: redirector, eventMonitors: [monitor])
-        self.dataRequest = session.request(url,
-                                           method: method,
-                                           parameters: nil,
-                                           headers: nil,
-                                           interceptor: nil,
-                                           requestModifier: nil)
-        self.dataRequest?.response(responseSerializer: responseSerializer, completionHandler: { responseObject in
-            
-        })
+//        let requestBody = config.requestBody?()
+//        var responseSerializer: ResponseSerializer? = nil
+//        let type: JSResponseSerializerType = config.responseSerializerType?() ?? .json
+//        if type == .http {
+//            responseSerializer = StringResponseSerializer()
+//        }
+//        responseSerializer = JSONResponseSerializer()
+//        let redirector = Redirector(behavior: .modify({ (task, request, response) -> URLRequest in
+//            return didCreateURLRequest(request)
+//        }))
+//        let monitor = ClosureEventMonitor()
+//        monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
+//            self?.task = didCreateTask(task)
+//        }
+//        let session = Session(startRequestsImmediately: false, redirectHandler: redirector, eventMonitors: [monitor])
+//        self.dataRequest = session.request(url,
+//                                           method: method,
+//                                           parameters: nil,
+//                                           headers: nil,
+//                                           interceptor: nil,
+//                                           requestModifier: nil)
+//        self.dataRequest?.response(responseSerializer: responseSerializer, completionHandler: { responseObject in
+//
+//        })
     }
     
     open override func requestTask() -> URLSessionTask {

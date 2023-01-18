@@ -8,12 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol JSNetworkInterfaceBuilder;
 @protocol JSNetworkPluginProtocol;
-@protocol JSNetworkResponseProtocol;
-@protocol JSNetworkRequestProtocol;
-@protocol JSNetworkDiskCacheProtocol;
-@protocol JSNetworkInterfaceProtocol;
-@protocol JSNetworkRequestConfigProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -64,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief JSNetworkInterface的响应类
  */
-@property (nonatomic, copy) id<JSNetworkInterfaceProtocol>(^networkInterface)(id<JSNetworkRequestConfigProtocol> config);
+@property (nonatomic, strong) id<JSNetworkInterfaceBuilder> interfaceBuilder;
 
 /**
  *  @brief 单例

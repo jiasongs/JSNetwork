@@ -6,10 +6,11 @@
 //
 
 #import "JSNetworkProxy.h"
+#import "JSNetworkRequestConfigProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface JSNetworkRequestConfigProxy : JSNetworkProxy
+@interface JSNetworkRequestConfigProxy : JSNetworkProxy <JSNetworkRequestConfigProtocol>
 
 @end
 

@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
   s.default_subspec = "Core"
   s.subspec "Core" do |ss|
     ss.source_files = "Sources/**/*.{swift,h,m}"
+    ss.private_header_files = "Sources/Private/*.{h,m,swift}"
     ss.exclude_files = ["Sources/Extension/Swift", "Sources/Request/AFNetworking", "Sources/Request/Alamofire", "Sources/Plugins"]
   end
 

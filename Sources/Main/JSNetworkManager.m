@@ -7,6 +7,7 @@
 //
 
 #import "JSNetworkManager.h"
+#import "JSNetworkRequestConfigProxy.h"
 #import "JSNetworkRequestConfigProtocol.h"
 #import "JSNetworkResponseProtocol.h"
 #import "JSNetworkPluginProtocol.h"
@@ -54,6 +55,10 @@
 - (void)performRequestForInterface:(id<JSNetworkInterfaceProtocol>)interface {
     if (![self validateInterface:interface]) {
         return;
+    }
+    
+    if (!interface.config.isProxy) {
+        interface.config = [JSNetworkRequestConfigProxy proxyWithTarget:interface.config];
     }
     
     /// 首先需要添加interface
@@ -140,10 +145,9 @@
             finallyURLRequest = [taskInterface.config requestCompositeURLRequestWithURLRequest:finallyURLRequest];
         }
         return finallyURLRequest;
-    } didCreateTask:^NSURLSessionTask *(NSURLSessionTask *task) {
+    } didCreateTask:^(NSURLSessionTask *task) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         [weakSelf performRequestOperation:taskInterface.request];
-        return task;
     } didCompleted:^(id _Nullable responseObject, NSError * _Nullable error) {
         id<JSNetworkInterfaceProtocol> taskInterface = [weakSelf interfaceForTaskIdentifier:taskIdentifier];
         [weakSelf processingResponseForInterface:taskInterface

@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
        constructingFormData:(void(^)(id formData))constructingFormData
         didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
-              didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
+              didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTask
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted;
 
 /**

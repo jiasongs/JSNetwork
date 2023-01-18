@@ -79,14 +79,6 @@
 #import <JSNetwork/JSNetworkDiskCacheMetadata.h>
 #endif
 
-#if __has_include(<JSNetwork/JSNetworkProxy.h>)
-#import <JSNetwork/JSNetworkProxy.h>
-#endif
-
-#if __has_include(<JSNetwork/JSNetworkRequestConfigProxy.h>)
-#import <JSNetwork/JSNetworkRequestConfigProxy.h>
-#endif
-
 #if __has_include(<JSNetwork/JSNetworkUtil.h>)
 #import <JSNetwork/JSNetworkUtil.h>
 #endif
@@ -175,14 +167,6 @@
 
 #if __has_include("JSNetworkDiskCacheMetadata.h")
 #import "JSNetworkDiskCacheMetadata.h"
-#endif
-
-#if __has_include("JSNetworkProxy.h")
-#import "JSNetworkProxy.h"
-#endif
-
-#if __has_include("JSNetworkRequestConfigProxy.h")
-#import "JSNetworkRequestConfigProxy.h"
 #endif
 
 #if __has_include("JSNetworkUtil.h")

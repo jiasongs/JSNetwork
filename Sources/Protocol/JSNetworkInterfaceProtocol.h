@@ -65,4 +65,10 @@ typedef void(^JSNetworkRequestCompletionHandler)(id<JSNetworkInterfaceProtocol> 
 
 @end
 
+@protocol JSNetworkInterfaceBuilder <NSObject>
+
+- (id<JSNetworkInterfaceProtocol>)buildWithConfig:(id<JSNetworkRequestConfigProtocol>)config;
+
+@end
+
 NS_ASSUME_NONNULL_END

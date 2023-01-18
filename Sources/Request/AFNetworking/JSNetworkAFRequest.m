@@ -26,7 +26,7 @@
            downloadProgress:(void(^)(NSProgress *downloadProgress))downloadProgress
        constructingFormData:(void(^)(id formData))constructingFormData
         didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
-              didCreateTask:(NSURLSessionTask *(^)(NSURLSessionTask *task))didCreateTask
+              didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTask
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted {
     AFHTTPSessionManager *(^createSessionManager)(void) = ^AFHTTPSessionManager *{
         AFHTTPSessionManager *temporaryManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:nil];
@@ -168,7 +168,8 @@
         }];
     }
     /// Task创建完成时需要调用
-    _requestTask = didCreateTask(sessionTask);
+    _requestTask = sessionTask;
+    didCreateTask(sessionTask);
 }
 
 - (NSURLSessionTask *)requestTask {
