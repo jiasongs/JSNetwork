@@ -7,9 +7,8 @@
 //
 
 #import "ViewController.h"
-#import <JSNetwork.h>
-#import <AFNetworking.h>
-#import "JSNetworkLoggerPlugin.h"
+#import <JSNetwork/JSNetwork.h>
+#import <AFNetworking/AFNetworking.h>
 #import "NetworkResponse.h"
 #import "CNodeAPI.h"
 #import "DownloadAPI.h"

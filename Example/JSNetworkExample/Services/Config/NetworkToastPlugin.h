@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <JSNetworkPluginProtocol.h>
+#import <JSNetwork/JSNetworkPluginProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

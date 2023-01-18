@@ -10,9 +10,11 @@
 #import "JSNetworkManager.h"
 #import "JSNetworkConfig.h"
 #import "JSNetworkRequestConfigProxy.h"
-#import "JSNetworkRequestConfigProtocol.h"
-#import "JSNetworkRequestTokenProtocol.h"
-#import "JSNetworkInterfaceProtocol.h"
+#import "JSNetworkInterface.h"
+#import "JSNetworkRequest.h"
+#import "JSNetworkResponse.h"
+#import "JSNetworkRequestToken.h"
+#import "JSNetworkDiskCache.h"
 #import <objc/runtime.h>
 
 @interface JSNetworkProviderEntity : NSObject
@@ -146,33 +148,44 @@
     NSParameterAssert(config);
     id<JSNetworkRequestConfigProtocol> configProxy = [JSNetworkRequestConfigProxy proxyWithTarget:config];
     
+    /// interface
     id<JSNetworkInterfaceProtocol> interface = [JSNetworkConfig.sharedConfig.interfaceBuilder buildWithConfig:configProxy];
-    NSAssert(interface, @"请设置interface");
-    
-    if (!interface.config) {
+    if (interface == nil) {
+        interface = [[JSNetworkInterface alloc] init];
+    }
+    /// config
+    if (interface.config == nil) {
         interface.config = configProxy;
     }
-    
+    /// request
     if ([interface.config respondsToSelector:@selector(request)]) {
         interface.request = interface.config.request;
     }
-    NSAssert(interface.request, @"请设置request");
-    
+    if (interface.request == nil) {
+        interface.request = [[JSNetworkRequest alloc] init];
+    }
+    /// requestToken
     if ([interface.config respondsToSelector:@selector(requestToken)]) {
         interface.requestToken = interface.config.requestToken;
     }
-    NSAssert(interface.requestToken, @"请设置requestToken");
-    
+    if (interface.requestToken == nil) {
+        interface.requestToken = [[JSNetworkRequestToken alloc] init];
+    }
+    /// response
     if ([interface.config respondsToSelector:@selector(response)]) {
         interface.response = interface.config.response;
     }
-    NSAssert(interface.response, @"请设置response");
-    
+    if (interface.response == nil) {
+        interface.response = [[JSNetworkResponse alloc] init];
+    }
+    /// diskCache
     if ([interface.config respondsToSelector:@selector(cachePolicy)] && interface.config.cachePolicy == JSRequestCachePolicyUseCacheDataElseLoad) {
         if ([config respondsToSelector:@selector(diskCache)]) {
             interface.diskCache = config.diskCache;
         }
-        NSAssert(interface.diskCache, @"请设置diskCache");
+        if (interface.diskCache == nil) {
+            interface.diskCache = [[JSNetworkDiskCache alloc] init];
+        }
     }
     
     interface.uploadProgress = uploadProgress;

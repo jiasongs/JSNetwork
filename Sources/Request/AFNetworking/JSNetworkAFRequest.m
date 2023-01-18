@@ -142,7 +142,7 @@
         [acceptableContentTypes unionSet:responseAcceptableContentTypes];
         responseSerializer.acceptableContentTypes = acceptableContentTypes.copy;
     }
-
+    
     /// 构建task
     NSURLSessionTask *sessionTask;
     if (config.requestSerializerType == JSRequestSerializerTypeFormData) {

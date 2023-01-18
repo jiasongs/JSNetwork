@@ -7,7 +7,7 @@
 //
 
 #import "NetworkInterfaceBuilder.h"
-#import "JSNetworkAFRequest.h"
+#import <JSNetwork/JSNetwork.h>
 #import "NetworkResponse.h"
 
 @implementation NetworkInterfaceBuilder
@@ -16,8 +16,6 @@
     JSNetworkInterface *interface = [[JSNetworkInterface alloc] init];
     interface.request = [[JSNetworkAFRequest alloc] init];
     interface.response = [[NetworkResponse alloc] init];
-    interface.diskCache = [[JSNetworkDiskCache alloc] init];
-    interface.requestToken = [[JSNetworkRequestToken alloc] init];
     return interface;
 }
 

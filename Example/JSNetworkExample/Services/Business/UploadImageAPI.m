@@ -7,7 +7,7 @@
 //
 
 #import "UploadImageAPI.h"
-#import <AFNetworking.h>
+#import <AFNetworking/AFNetworking.h>
 
 @implementation UploadImageAPI
 

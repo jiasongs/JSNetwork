@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief JSNetworkInterface的响应类
  */
-@property (nonatomic, strong) id<JSNetworkInterfaceBuilder> interfaceBuilder;
+@property (nullable, nonatomic, strong) id<JSNetworkInterfaceBuilder> interfaceBuilder;
 
 /**
  *  @brief 单例

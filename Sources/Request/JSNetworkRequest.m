@@ -26,7 +26,7 @@
         didCreateURLRequest:(NSURLRequest *(^)(NSURLRequest *urlRequest))didCreateURLRequest
               didCreateTask:(void(^)(NSURLSessionTask *task))didCreateTask
                didCompleted:(void(^)(id _Nullable responseObject, NSError *_Nullable error))didCompleted {
-    NSAssert(NO, @"需子类继承使用, 此方法不作任何事情");
+    
 }
 
 - (NSURLSessionTask *)requestTask {

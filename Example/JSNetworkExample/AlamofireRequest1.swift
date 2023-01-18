@@ -22,7 +22,8 @@ import JSNetwork
                                  didCreateTask: @escaping (URLSessionTask) -> Void,
                                  didCompleted: @escaping (Any?, Error?) -> Void) {
         guard let url: URL = URL(string: config.requestUrlString()) else {
-            let error: NSError = NSError(domain: "com.alamofire.error", code: 404, userInfo: nil)
+            let userInfo = [NSLocalizedDescriptionKey: "url不存在"]
+            let error = NSError(domain: "com.alamofire.error", code: 404, userInfo: userInfo)
             return didCompleted(nil, error)
         }
         var method: HTTPMethod = .get
@@ -48,30 +49,37 @@ import JSNetwork
         default:
             break
         }
-//        let requestBody = config.requestBody?()
-//        var responseSerializer: ResponseSerializer? = nil
-//        let type: JSResponseSerializerType = config.responseSerializerType?() ?? .json
-//        if type == .http {
-//            responseSerializer = StringResponseSerializer()
-//        }
-//        responseSerializer = JSONResponseSerializer()
-//        let redirector = Redirector(behavior: .modify({ (task, request, response) -> URLRequest in
-//            return didCreateURLRequest(request)
-//        }))
-//        let monitor = ClosureEventMonitor()
-//        monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
-//            self?.task = didCreateTask(task)
-//        }
-//        let session = Session(startRequestsImmediately: false, redirectHandler: redirector, eventMonitors: [monitor])
-//        self.dataRequest = session.request(url,
-//                                           method: method,
-//                                           parameters: nil,
-//                                           headers: nil,
-//                                           interceptor: nil,
-//                                           requestModifier: nil)
-//        self.dataRequest?.response(responseSerializer: responseSerializer, completionHandler: { responseObject in
-//
-//        })
+        let requestBody = config.requestBody?()
+       
+        
+        let redirector = Redirector(behavior: .modify({ (task, request, response) -> URLRequest in
+            return didCreateURLRequest(request)
+        }))
+        let monitor = ClosureEventMonitor()
+        monitor.requestDidCreateTask = { [weak self](requst: Request, task: URLSessionTask) in
+            didCreateTask(task)
+        }
+        let session = Session(startRequestsImmediately: false, redirectHandler: redirector, eventMonitors: [monitor])
+        self.dataRequest = session.request(url,
+                                           method: method,
+                                           parameters: nil,
+                                           headers: nil,
+                                           interceptor: nil,
+                                           requestModifier: nil)
+        switch config.responseSerializerType?() {
+        case .http:
+            self.dataRequest?.responseString(completionHandler: { response in
+                
+            })
+            break
+        case .json:
+//            self.dataRequest?.responseDecodable(emptyRequestMethods: <#T##Set<HTTPMethod>#>, completionHandler: <#T##(DataResponse<Decodable, AFError>) -> Void#>)
+            break
+        case .xmlParser:
+            break
+        default:
+            break
+        }
     }
     
     open override func requestTask() -> URLSessionTask {

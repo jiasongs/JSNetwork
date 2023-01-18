@@ -8,7 +8,6 @@
 
 #import "CNodeAPI.h"
 #import "NetworkResponse.h"
-#import <JSNetworkConfig.h>
 
 @implementation CNodeAPI
 

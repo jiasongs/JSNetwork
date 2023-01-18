@@ -6,7 +6,7 @@
 //  Copyright © 2020 jiasong. All rights reserved.
 //
 
-#import <JSNetworkResponse.h>
+#import <JSNetwork/JSNetworkResponse.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
