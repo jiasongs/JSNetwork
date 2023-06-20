@@ -1,9 +1,9 @@
 //
 //  JSNetworkInterfaceProtocol.h
-//  ITHomeClient
+//  JSNetwork
 //
 //  Created by jiasong on 2020/4/20.
-//  Copyright © 2020 ruanmei. All rights reserved.
+//  Copyright © 2020 jiasong. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
