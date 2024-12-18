@@ -32,9 +32,12 @@
     NSParameterAssert(string != nil && [string length] > 0);
     const char *value = [string UTF8String];
     unsigned char outputBuffer[CC_MD5_DIGEST_LENGTH];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     CC_MD5(value, (CC_LONG)strlen(value), outputBuffer);
+#pragma clang diagnostic pop
     NSMutableString *outputString = [[NSMutableString alloc] initWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    for(NSInteger count = 0; count < CC_MD5_DIGEST_LENGTH; count++){
+    for (NSInteger count = 0; count < CC_MD5_DIGEST_LENGTH; count++) {
         [outputString appendFormat:@"%02x", outputBuffer[count]];
     }
     return outputString;

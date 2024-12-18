@@ -1,14 +1,13 @@
 
 Pod::Spec.new do |s|
   s.name         = "JSNetwork"
-  s.version      = "0.9.3"
+  s.version      = "0.9.5"
   s.summary      = "离散式网络框架，面向协议编程，类似Swift的Moya"
   s.homepage     = "https://github.com/jiasongs/JSNetwork"
   s.author       = { "jiasong" => "593908937@qq.com" }
-  s.platform     = :ios, "12.0"
-  s.swift_versions = ["4.2", "5.0"]
+  s.platform     = :ios, "13.0"
+  s.swift_versions = ["5.1"]
   s.source       = { :git => "https://github.com/jiasongs/JSNetwork.git", :tag => "#{s.version}" }
-  s.frameworks   = "Foundation"
   s.license      = "MIT"
   s.requires_arc = true
 

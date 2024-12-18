@@ -58,18 +58,10 @@
         JSNetworkDiskCacheMetadata *metadata = nil;
         NSString *filePath = [self cacheFilePathWithRequestConfig:config];
         if ([NSFileManager.defaultManager fileExistsAtPath:filePath]) {
-            if (@available(iOS 11.0, *)) {
-                NSData *data = [NSData dataWithContentsOfFile:filePath];
-                metadata = [NSKeyedUnarchiver unarchivedObjectOfClass:JSNetworkDiskCacheMetadata.class
-                                                             fromData:data
-                                                                error:NULL];
-            } else {
-                @try {
-                    metadata = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-                } @catch (NSException *exception) {
-                    NSLog(@"NSKeyedUnarchiver unarchive failed with exception: %@", exception);
-                }
-            }
+            NSData *data = [NSData dataWithContentsOfFile:filePath];
+            metadata = [NSKeyedUnarchiver unarchivedObjectOfClass:JSNetworkDiskCacheMetadata.class
+                                                         fromData:data
+                                                            error:NULL];
         }
         if (completed) {
             completed(metadata);
@@ -89,16 +81,8 @@
             metadata.appVersionString = [JSNetworkUtil appVersionString];
             metadata.cacheData = [JSNetworkUtil dataFromObject:cacheData];
             NSString *filePath = [self cacheFilePathWithRequestConfig:config];
-            if (@available(iOS 11.0, *)) {
-                NSData *newData = [NSKeyedArchiver archivedDataWithRootObject:metadata requiringSecureCoding:YES error:NULL];
-                [newData writeToFile:filePath atomically:YES];
-            } else {
-                @try {
-                    [NSKeyedArchiver archiveRootObject:metadata toFile:filePath];
-                } @catch (NSException *exception) {
-                    NSLog(@"NSKeyedArchiver archive failed with exception: %@", exception);
-                }
-            }
+            NSData *newData = [NSKeyedArchiver archivedDataWithRootObject:metadata requiringSecureCoding:YES error:NULL];
+            [newData writeToFile:filePath atomically:YES];
             if (completed) {
                 completed(metadata);
             }

@@ -17,7 +17,7 @@
 #import "JSNetworkRequestProtocol.h"
 
 FOUNDATION_STATIC_INLINE dispatch_queue_t
-JSNetworkTaskIdentifierQueue() {
+JSNetworkTaskIdentifierQueue(void) {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

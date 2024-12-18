@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic) dispatch_queue_t processingQueue;
 /**
- *  @brief 全局的回调处理所在的队列，默认主队列
+ *  @brief 全局的回调处理所在的队列
  */
 @property (nonatomic) dispatch_queue_t completionQueue;
 /**

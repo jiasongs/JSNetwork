@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc open class AlamofireRequest: JSNetworkRequest {
+@objc open class AlamofireRequest: JSNetworkRequest, @unchecked Sendable {
     
     private var task: URLSessionTask!
     

@@ -43,7 +43,7 @@
     } else {
         self.sessionManager = createSessionManager();
     }
-    /// JSNetwork处理线程
+    /// AFNetworking的处理线程
     self.sessionManager.completionQueue = JSNetworkConfig.sharedConfig.processingQueue;
     
     /// 构建request
